@@ -1,0 +1,91 @@
+<section class="myinfo">
+    <form th:action="@{/user/register}" method="post">
+        <table border="1">
+            <caption>회원정보 설정</caption>
+            <tr>
+                <td>아이디</td>
+                <td>
+                    <input type="text" name="uid" class="inputUid" placeholder="아이디 입력" readonly/>
+                </td>
+            </tr>
+            <tr>
+                <td>비밀번호</td>
+                <td><input type="password" name="pass" class="inputPass" placeholder="비밀번호 입력"/></td>
+
+            </tr>
+            <tr>
+                <td>비밀번호 확인</td>
+                <td>
+                    <input type="password" name="pass2" class="inputPass" placeholder="비밀번호 입력 확인"/>
+                    <button type="button" class="btn_modifty"><p>비밀번호 수정</p></button>
+                    <span id="resultPass"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>회원가입날짜</td>
+                <td><span>${sessUser.regDate }</span></td>
+            </tr>
+        </table>
+        <table border="1">
+            <caption>개인정보 수정</caption>
+            <tr>
+                <td>이름</td>
+                <td>
+                    <input type="text" name="name" class="inputName" placeholder="이름"/>
+                    <span id="resultName"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>별명</td>
+                <td>
+                    <p class="nickInfo">공백없는 한글, 영문, 숫자 입력</p>
+                    <input type="text" name="nick" class="inputNick" placeholder="별명"/>
+                    <button type="button" id="btnCheckNick" data-type="nick"><img th:src="@{/images/user/chk_id.gif}" alt="중복확인"/></button>
+                    <span id="resultNick"></span>
+                </td>
+            </tr>
+            <tr>
+                <td>E-Mail</td>
+                <td>
+                    <input type="email" name="email" class="inputEmail" placeholder="이메일 입력"/>
+                    <button type="button" id="btnCheckEmail"  data-type="email" ><img th:src="@{/images/user/chk_auth.gif}" alt="인증번호 받기"/></button>
+                    <span id="resultEmail"></span>
+                    <div class="auth">
+                        <input type="text" name="auth" class="inputEmailCode" placeholder="인증번호 입력"/>
+                        <button type="button" id="btnCheckEmailCode"  ><img th:src="@{/images/user/chk_confirm.gif}" alt="확인"/></button>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>휴대폰</td>
+                <td>
+                    <input type="text" name="hp" class="inputHp" placeholder="휴대폰 입력"/>
+                    <button type="button" id="btnCheckHp" data-type="hp"><img th:src="@{/images/user/chk_id.gif}" alt="중복확인"/></button>
+                    <span id="resultHp"></span>
+
+                </td>
+            </tr>
+            <tr>
+                <td>주소</td>
+                <td>
+                    <input type="text" name="zip" id="inputZip" placeholder="우편번호"/>
+                    <button type="button" class="btnZip" onclick="postcode()"><img th:src="@{/images/user/chk_post.gif}" alt=""></button>
+                    <input type="text" name="addr1" id="inputAddr1" placeholder="주소 검색"/>
+                    <input type="text" name="addr2" id="inputAddr2" placeholder="상세주소 입력"/>
+                </td>
+            </tr>
+            <tr>
+                <td>회원탈퇴</td>
+                <td class="form_group quit">
+                    <button type="button" class="btn_quit"><p>탈퇴하기</p></button>
+                </td>
+            </tr>
+        </table>
+
+            <div class="button_container">
+                <button type="button" class="btn-cancel">취소</button>
+                <button type="submit" class="btn_submit">회원정보 수정</button>
+            </div>
+    </form>
+
+</section>

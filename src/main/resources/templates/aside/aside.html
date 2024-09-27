@@ -1,0 +1,89 @@
+
+        <aside class="aside" layout:fragment="aside" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:if="${cate.cateGroup != 'user'}">
+            <!--community-->
+            <div  class="sidebar" th:if="${cate.cateGroup == 'community'}">
+                <div class="aside_cate">
+                    <img th:src="@{/images/sub_aside_cate5_tit.png}" alt="커뮤니티">
+                </div><!-- .aside_cate -->
+                <div class="aside_bg">
+                    <ul class="cate_lnb">
+                        <li><a th:href="@{/article/community/notice(content= 'list')}">공지사항</a></li>
+                        <li><a th:href="@{/article/community/menu(content= 'list')}">오늘의식단</a></li>
+                        <li><a th:href="@{/article/community/chef(content= 'list')}">나도요리사</a></li>
+                        <li><a th:href="@{/article/community/cs(content= 'list')}">1:1고객문의</a></li>
+                        <li><a th:href="@{/article/community/faq(content= 'list')}">자주묻는질문</a></li>
+                    </ul><!-- .cate_lnb -->
+                </div><!-- .aside_bg -->
+            </div><!-- .sidebar -->
+
+            <!--croptalk-->
+            <div class="sidebar" th:if="${cate.cateGroup == 'croptalk'}">
+                <div class="aside_cate">
+                    <img th:src="@{/images/sub_aside_cate3_tit.png}" alt="Croptalk 농작물이야기">
+                </div><!-- .aside_cate -->
+                <div class="aside_bg">
+                    <ul class="cate_lnb1">
+                        <li><a th:href="@{/article/croptalk/story(content= 'list')}" class="lnb1">농작물이야기</a></li>
+                        <li><a th:href="@{/article/croptalk/grow(content= 'list')}" class="lnb2">텃밭가꾸기</a></li>
+                        <li><a th:href="@{/article/croptalk/school(content= 'list')}" class="lnb3">귀농학교</a></li>
+                    </ul><!-- .cate_lnb -->
+                </div><!-- .aside_bg -->
+            </div><!-- .sidebar -->
+
+            <!--event-->
+            <div class="sidebar" th:if="${cate.cateGroup == 'event'}">
+                <link rel="stylesheet" th:href="@{/css/event.css}">
+                <div class="aside_cate">
+                    <img th:src="@{/images/sub_aside_cate4_tit.png}" alt="event">
+                </div><!-- .aside_cate -->
+                <div class="aside_bg">
+                    <ul class="cate_lnb1">
+                        <li><a th:href="@{/event/event(content= 'list')}" class="lnb1">이벤트</a></li>
+                    </ul><!-- .cate_lnb -->
+                </div><!-- .aside_bg -->
+            </div><!-- .sidebar -->
+
+            <!--introduction-->
+            <div class="sidebar" th:if="${cate.cateGroup == 'introduction'}">
+                <div class="aside_cate">
+                    <img th:src="@{/images/sub_aside_cate1_tit.png}" alt="팜스토리소개">
+                </div><!-- .aside_cate -->
+                <div class="aside_bg">
+                    <ul class="cate_lnb">
+                        <li> <a th:href="@{/category/introduction/intro}">인사말</a></li>
+                        <li> <a th:href="@{/category/introduction/direct}">찾아오는길</a></li>
+                    </ul><!-- .cate_lnb -->
+                </div><!-- .aside_bg -->
+            </div><!-- .sidebar -->
+
+<!--market-->
+            <div class="sidebar" th:if="${cate.cateGroup == 'market'}">
+                <div class="aside_cate">
+                    <img th:src="@{/images/sub_aside_cate2_tit.png}" alt="Buying in the Market 장보기">
+                </div><!-- .aside_cate -->
+                <div class="aside_bg">
+                    <ul class="cate_lnb_real">
+                        <li> <a th:href="@{/category/market/plist}">장보기</a></li>
+                    </ul><!-- .cate_lnb -->
+                </div><!-- .aside_bg -->
+            </div><!-- .sidebar -->
+
+            <!--myinfo-->
+            <div class="sidebar" th:if="${cate.cateGroup == 'myinfo'}">
+                <div class="aside_cate">
+                    <img th:src="@{/images/myinfo/myinfo_menu_tit.png}" alt="나의 정보 ">
+                </div><!-- .aside_cate -->
+                <div class="aside_bg">
+                    <ul class="cate_lnb1">
+                        <li><a th:href="@{/category/myInfo/cart}" class="lnb1">장바구니</a></li>
+                        <li><a th:href="@{/category/myInfo/orderitem}" class="lnb2">주문내역</a></li>
+                        <li><a th:href="@{/category/myInfo/myinfo}" class="lnb3">정보수정</a></li>
+                    </ul><!-- .cate_lnb -->
+                </div><!-- .aside_bg -->
+            </div><!-- .sidebar -->
+
+
+
+
+        </aside><!-- .aside -->
+

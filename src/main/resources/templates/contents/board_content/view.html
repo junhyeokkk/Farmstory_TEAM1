@@ -1,0 +1,75 @@
+<link rel="stylesheet" th:href="@{/css/board.css}">
+
+
+<section class="view" >
+				<h3>글보기</h3>
+				<table>
+					<tr>
+						<td>제목</td>
+						<input type="hidden" name="cateNo" th:value="${cate.cateNo}"/>
+                       	<input type="hidden" name="cateGroup" th:value="${cate.cateGroup}"/>
+						<td>
+							<input type="text" name="title" th:value="${article.title}" readonly />
+						</td>
+					</tr>
+					<!-- 첨부파일이 있으면 나타나게끔  -->
+						<tr>
+							<td>첨부파일</td>
+							<td>
+                                <p style="margin: 4px 0">
+                                    <a href="/">original name</a>
+                                    <span>0회 다운로드</span>
+                                </p>
+							</td>
+						</tr>
+					</c:if>
+					<tr>
+						<td>내용</td>
+						<td>
+							<textarea name="b_contents" readonly>[[${article.content}]]</textarea>
+						</td>
+					</tr>
+				</table>
+				 <div>
+	                    <a th:href="@{/}" class="btnDelete">삭제</a>
+	                    <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName} + '/' + ${article.articleNo}(content='modify')}" class="btnModify">수정</a>
+	                    <a th:href="@{/}" class="btnList">목록</a>
+	                 
+                </div>  
+
+				 <!-- 댓글리스트 -->
+                <section class="commentList">
+                    <h3>댓글목록</h3>
+	                    <article class="comment">
+		                   		 <span>
+		                            <span>nick</span>
+		                            <span>0000-00-00</span>
+		                        </span>
+	                        <textarea name="comment" readonly>댓글 내용</textarea>
+		                        <div>
+		                        	<!-- HTML 사용자 정의 속성을 이용한 삭제/수정 -->
+		                            <a th:href="@{/}" class="commentRemove" data-no="${comment.comNo}">삭제</a>
+		                            <a th:href="@{/}" class="commentModify" data-no="${comment.comNo}">수정</a>
+		                            <a th:href="@{/}" class="commentUpdate" data-no="${comment.comNo}" style="display:none;">수정완료</a>
+		                        </div>
+	                    </article>
+
+	                    <p class="empty">등록된 댓글이 없습니다.</p>
+
+				</section>
+
+				<!-- 댓글입력폼 -->
+				<section class="commentForm">
+					<h3>댓글쓰기</h3>
+					<form name="commentForm">
+						<input type="hidden" name="com_parent" value="articleNo" />
+                        <input type="hidden" name="com_writer" value="userid" />
+						<textarea name="comment"></textarea>
+						<div>
+							<a th:href="@{/}" class="btnCancel">취소</a>
+							<input type="submit" class="btnWrite" value="작성완료" />
+						</div>
+					</form>
+				</section>
+			</section>
+       

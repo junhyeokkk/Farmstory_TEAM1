@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lagn="ko"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<link rel="stylesheet" th:href="@{/css/admin_common.css}">
+<link rel="stylesheet" th:href="@{/css/admin_header.css}">
+<link rel="stylesheet" th:href="@{/css/admin_footer.css}">
+<link rel="stylesheet" th:href="@{/css/admin_sidebar.css}">
+<link rel="stylesheet" th:href="@{/css/admin_list.css}">
+<link rel="stylesheet" th:href="@{/css/admin_order.css}">
+<link rel="stylesheet" th:href="@{/css/admin_register.css}">
+<link rel="stylesheet" th:href="@{/css/admin_user.css}">
+<link rel="stylesheet" th:href="@{/css/admin_product.css}">
+
+<script type="text/javascript" th:src="@{/js/admin/prod_register.js}"></script>
+
+<body>
+<!-- header -->
+<header th:replace="~{include/admin_header::header}"></header>
+<!-- sidebar -->
+<div th:replace="~{include/admin_sidebar::sidebar}"></div>
+<!-- content -->
+  <th:block th:switch="${cate.cateName}">
+    <th:block th:case="'main'" th:include="~{contents/admin/list::list}"></th:block>
+    <th:block th:case="'product'" th:include="~{contents/admin/product::product}"></th:block>
+    <th:block th:case="'a_order'" th:include="~{contents/admin/order::order}"></th:block>
+    <th:block th:case="'register'" th:include="~{contents/admin/register::register}"></th:block>
+    <th:block th:case="'a_user'" th:include="~{contents/admin/user::user}"></th:block>
+  </th:block>
+<!-- footer -->
+<footer th:replace="~{include/admin_footer::footer}"></footer>
+</body>
+</html>

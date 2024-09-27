@@ -1,0 +1,57 @@
+<link rel="stylesheet" th:href="@{/css/board.css}">
+
+<section class="list">
+                        <h3>글목록</h3>
+                        <article>
+                            <table border="0">
+                                <tr>
+                                    <th>번호</th>
+                                    <th>제목</th>
+                                    <th>글쓴이</th>
+                                    <th>날짜</th>
+                                    <th>조회</th>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(articles)}">
+                                    <td colspan="5" class="td_first">등록된 게시물이 없습니다.</td>
+                                </tr>
+
+                                <tr th:each="article : ${articles}">
+                                    <td>[[${article.articleNo}]]</td>
+                                    <td>
+                                        <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName} + '/' + ${article.articleNo}(content='view')}">
+                                            [[${article.title}]]
+                                        </a>&nbsp;[[ '[' + ${article.hit} + ']' ]]
+
+                                    </td>
+                                    <td>[[${article.writer}]]</td>
+                                    <td>[[${article.date}]]</td>
+                                    <td>[[${article.hit}]]</td>
+                                </tr>
+                                    <!-- 한번 반복할때마다 pageStartNum을 1씩 차감 -->
+                            </table>
+                        </article>
+                        <!-- 페이지 네비게이션 -->
+                        <div class="paging">
+                            <!-- 이전 버튼: 페이지가 0보다 클 때만 표시 -->
+                            <span th:if="${currentPage > 0}">
+                                <a th:href="@{|/article/${cate.cateGroup}/${cate.cateName}(content='list',page=${currentPage - 1})|}" class="prev">이전</a>
+                            </span>
+
+                            <!-- 페이지 번호 링크: 페이지 범위만큼 표시 -->
+                            <span th:each="i : ${#numbers.sequence(startPage + 1, endPage + 1)}">
+                              <a th:href="@{|/article/${cate.cateGroup}/${cate.cateName}?content=list&page=${i - 1}|}"
+                                   th:text="${i}"
+                                   th:class="${i - 1 == currentPage} ? 'active' : ''">
+                                </a>
+                            </span>
+
+                            <!-- 다음 버튼: 마지막 페이지보다 작을 때만 표시 -->
+                            <span th:if="${currentPage < totalPages - 1}">
+                                <a th:href="@{|/article/${cate.cateGroup}/${cate.cateName}(content='list',page=${currentPage + 1})|}">다음</a>
+                            </span>
+                        </div>
+                        <!-- 글쓰기 버튼 -->
+                        [[${cate.cateGroup}]]
+                        [[${cate.cateName}]]
+                        <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName}(content='write')}" class="btnWrite">글쓰기</a>
+                    </section>

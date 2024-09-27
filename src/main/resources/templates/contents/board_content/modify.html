@@ -1,0 +1,46 @@
+<link rel="stylesheet" th:href="@{/css/board.css}">
+<title th:text="'게시판 수정'">게시판 수정</title>
+<section class="modify">
+		<h3>글수정</h3>
+		<article>
+			<form th:action="@{article/modify}" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="b_writer" value="${sessUser.uid}">
+				<table>
+					<tr>
+						<td>제목</td>
+						<input type="hidden" name="boardNo" value="${boardDTO.boardNo}" />
+						<input type="hidden" name="b_cateNo" value="${cate}"/>
+						<input type="hidden" name="group" value="${group}"/>
+						<td><input type="text" name="title" value="${boardDTO.title}" /></td>
+					</tr>
+					<tr>
+						<td>내용</td>
+						<td>
+							<textarea name="b_contents">${boardDTO.b_contents}</textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>첨부</td>
+						<td>
+							<p style="margin-bottom: 6px; ">
+								최대 2개 파일 첨부 가능, 각 파일당 최대 10MB 까지 업로드
+							</p>
+							<!-- 첨부파일이 있으면 나타나게끔  -->
+
+									<p style="margin: 4px 0">
+<!--														 <a th:href="@{" style="color:red;">X</a>-->
+									</p>
+						   >
+							<input type="file" name="file1"/>
+							<input type="file" name="file2"/>
+						</td>
+					</tr>
+				</table>
+				<div>
+					<a th:href="@{/article/list}" class="btnCancel">취소</a>
+					<input type="submit"  class="btnWrite" value="수정완료">
+				</div>
+			</form>
+		</article>
+	</section>
+           

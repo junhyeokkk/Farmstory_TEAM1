@@ -1,0 +1,51 @@
+<main th:fragment="user">
+        <div id="section2_main"  th:fragment="user">
+            <div id="section2_title">회원목록</div>
+            <div id="article_wrapper">
+                <div id="article1">
+                    <table id="u_prod_table">
+                        <tr>
+                            <th><input type="checkbox"></th>
+                            <th>아이디</th>
+                            <th>이름</th>
+                            <th>별명</th>
+                            <th>이메일</th>
+                            <th>휴대폰</th>
+                            <th>등급</th>
+                            <th>가입일</th>
+                            <th>확인</th>
+                        </tr>
+
+                        <tr th:each="user , i:${userPageResponseDTO.getUserList()}">
+                            <td><input type="checkbox"></td>
+                            <td>[[${user.uid}]]</td>
+                            <td>[[${user.name}]]</td>
+                            <td>[[${user.nick}]]</td>
+                            <td>[[${user.email}]]</td>
+                            <td>[[${user.hp}]]</td>
+                            <td>
+                                <select name="grade">
+                                    <option value="등급">2</option>
+                                </select>
+                            </td>
+                            <td>[[${user.regDate}]]</td>
+                            <td><a href="#">[상세확인]</a></td>
+                        </tr>
+
+                    </table>
+                </div>
+                <div id="list_num">
+                    <th:block th:if="${userPageResponseDTO.prev}">
+                        <a><</a>
+                    </th:block>
+                    <th:block th:each="num:${#numbers.sequence(userPageResponseDTO.start, userPageResponseDTO.end)}">
+                        <a href="#">&#91;[[${num}]]&#93;</a>
+                    </th:block>
+                    <th:block th:if="${userPageResponseDTO.next}">
+                        <a>></a>
+                    </th:block>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>

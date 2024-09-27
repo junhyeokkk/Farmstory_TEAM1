@@ -1,0 +1,102 @@
+<section class="findid-section">
+    <h2>아이디 찾기</h2>
+    <hr>
+    <form method="post" th:action="@{/user/findid}" id="findIdForm">
+        <div class="table">
+            <table>
+                <div>
+                    <label class="name" name="name">이름</label>
+                </div>
+                <div>
+                    <input class="nametext" type="text" name="name" id="name" placeholder="이름 입력" required>                </div>
+                <div>
+                    <label class="email" name="email">이메일</label>
+                </div>
+                <div>
+                    <input class="emailtext" type="email" placeholder="이메일 입력">
+                    <button class="getCodeBtn">인증번호 받기</button>
+
+                    <input class="verificationCodetext" type="text" placeholder="인증번호 입력">
+                    <button class="verificationCode">확인</button>
+
+                    <input class="emailtext" type="email" name="email" id="email" placeholder="이메일 입력" required>
+                    <button type="button" class="getCodeBtn" id="sendCodeBtn">인증번호 받기</button>
+
+                    <!-- 인증번호 입력 필드 -->
+                    <input class="verificationCodetext" type="text" id="verificationCode" placeholder="인증번호 입력" style="display: none;">
+
+                    <button type="button" class="verificationCode" id="verifyCodeBtn" style="display: none;">확인</button>
+
+                </div>
+            </table>
+        </div>
+        <div class="note">
+            회원가입시 이메일 주소와 입력한 이메일 주소가 같아야, 인증번호를 받을 수 있습니다.
+            <br>인증번호를 입력 후 확인 버튼을 누르세요.
+        </div>
+        <div class="bottom">
+            <button type="button" class="cancelBtn">취소</button>
+            <button type="button" class="nextBtn" id="nextBtn" disabled>다음</button>  <!-- 기본적으로 비활성화 -->
+        </div>
+    </form>
+</section>
+
+<script>
+    document.getElementById('sendCodeBtn').addEventListener('click', function() {
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        if (name && email) {
+            fetch('/api/user/findid', {  // 정적 경로가 아닌 API 경로로 수정
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name: name, email: email })
+            }).then(response => response.json())
+                .then(data => {
+                    document.getElementById('verificationCode').style.display = 'block';
+                    document.getElementById('verifyCodeBtn').style.display = 'block';
+
+
+                }).catch(error => {
+                console.error('Error:', error);
+                alert('인증번호 발송 중 오류가 발생했습니다.');
+            });
+        } else {
+            alert('이름과 이메일을 입력하세요.');
+        }
+    });
+
+    document.getElementById('verifyCodeBtn').addEventListener('click', function() {
+        const code = document.getElementById('verificationCode').value;
+        const name = document.getElementById('name').value;
+        const email = document.getElementById('email').value;
+
+        if (code) {
+            fetch('/api/user/findidresult', {  // 정적 경로가 아닌 API 경로로 수정
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ code: code, name: name, email: email })
+            }).then(response => response.json())
+                .then(data => {
+                    if (data.Uid) {
+                        document.getElementById('nextBtn').disabled = false;  // "다음" 버튼 활성화
+                        document.getElementById('nextBtn').addEventListener('click', function() {
+                            window.location.href = '/contents/user/findidresult?uid=' + data.Uid;
+                        });// 결과 페이지로 이동
+                    } else {
+                        alert('인증번호가 일치하지 않습니다.');
+                    }
+                }).catch(error => {
+                console.error('Error:', error);
+            });
+        } else {
+            alert('인증번호를 입력하세요.');
+        }
+    });
+
+</script>
+
