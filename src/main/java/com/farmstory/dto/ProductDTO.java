@@ -27,8 +27,10 @@ public class ProductDTO {
     private MultipartFile files2;
     private MultipartFile files3;
 
-    // product 이미지 파일 리스트
-    private pDescImgFileDTO pDescImgFile;
+
+    private String p_sName1;
+    private String p_sName2;
+    private String p_sName3;
 
     // 외래키 컬럼
     private String prodCateNo;

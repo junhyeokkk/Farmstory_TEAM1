@@ -37,4 +37,7 @@ public class Product {
     @JoinColumn(name="prodCateNo")
     private prodCate prodCateNo;
 
+    @OneToOne(mappedBy = "pNo", fetch = FetchType.LAZY)
+    private pDescImgFile pDescImgFile;
+
 }

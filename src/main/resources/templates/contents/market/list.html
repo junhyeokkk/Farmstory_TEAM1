@@ -2,10 +2,10 @@
 
 <div class="market_list">
   <ul class="tabs">
-    <li><a href="#" class="tabs_item">전체(10)</a></li>
-    <li><a href="#" class="tabs_item item">과일</a></li>
-    <li><a href="#" class="tabs_item item">야채</a></li>
-    <li><a href="#" class="tabs_item item item_last">곡류</a></li>
+    <li><a th:href="@{/market/plist}" th:class="${ProductPageResponseDTO.type eq null} ? 'tabs_item item item_current' : 'tabs_item item'" th:text="${ProductPageResponseDTO.type eq null} ? '전체('+ ${ProductPageResponseDTO.total} +')' : '전체'" >전체(10)</a></li>
+    <li><a th:href="@{/market/plist(type='1')}" th:class="${ProductPageResponseDTO.type eq '1'} ? 'tabs_item item item_current' : 'tabs_item item'" th:text="${ProductPageResponseDTO.type eq '1'} ? '과일('+ ${ProductPageResponseDTO.total} +')' : '과일'" >과일</a></li>
+    <li><a th:href="@{/market/plist(type='2')}" th:class="${ProductPageResponseDTO.type eq '2'} ? 'tabs_item item item_current' : 'tabs_item item'" th:text="${ProductPageResponseDTO.type eq '2'} ? '야채('+ ${ProductPageResponseDTO.total} +')' : '야채'" >야채</a></li>
+    <li><a th:href="@{/market/plist(type='3')}" th:class="${ProductPageResponseDTO.type eq '3'} ? 'tabs_item item item_current' : 'tabs_item item'" th:text="${ProductPageResponseDTO.type eq '3'} ? '곡류('+ ${ProductPageResponseDTO.total} +')' : '곡류'" >곡류</a></li>
   </ul>
   <table class="product_table">
     <colgroup>
@@ -27,14 +27,13 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
-    <tr th:each="product:${productList}">
+    <tr th:each="product, i:${ProductPageResponseDTO.getProductList}">
       <td class="pic">
-        <a th:href="@{/category/market/pview}"><img th:src="@{/images/market_item1.jpg}" alt="사과 500g"></a>
+        <a th:href="@{/market/pview/${product.pNo}}"><img th:src="@{${product.p_sName1}}" alt="상품 이미지"></a>
       </td>
       <td class="type" th:text="${product.prodCateNo}">분류</td>
       <td class="pro_name">
-        <a th:href="@{/category/market/pview}" th:text="${product.pName}">상품이름</a>
+        <a th:href="@{/market/pview/{pNo}(pNo=${product.pNo})}" th:text="${product.pName}">상품이름</a>
       </td>
       <td class="sale" th:text="${product.discount} + '%'">할인률</td>
       <td class="point" th:text="${product.point} + 'P'">포인트P</td>
@@ -42,64 +41,14 @@
         <strong th:text="${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0),0,0)} + '원'">할인된 가격</strong>
         <span class="original_price"  th:text="${product.price} + '원'">상품가격</span></td>
     </tr>
-    <tr>
-      <td class="pic">
-        <a th:href="@{/category/market/pview}"><img th:src="@{/images/market_item1.jpg}" alt="전남 완주 배 5kg"></a>
-      </td>
-      <td class="type">과일</td>
-      <td class="pro_name">
-        <a th:href="@{/category/market/pview}">전남 완주 배 5kg</a>
-      </td>
-      <td class="sale">10%</td>
-      <td class="point">400P</td>
-      <td class="price"><strong>3,600원</strong><span class="original_price">4,000원</span></td>
-    </tr>
-    <tr>
-      <td class="pic">
-        <a th:href="@{/category/market/pview}"><img th:src="@{/images/market_item2.jpg}" alt="방울 토마토"></a>
-      </td>
-      <td class="type">과일</td>
-      <td class="pro_name">
-        <a th:href="@{/category/market/pview}">방울 토마토</a>
-      </td>
-      <td class="sale">10%</td>
-      <td class="point">400P</td>
-      <td class="price"><strong>3,600원</strong><span class="original_price">4,000원</span></td>
-    </tr>
-    <tr>
-      <td class="pic">
-        <a th:href="@{/category/market/pview}"><img th:src="@{/images/market_item3.jpg}" alt="무농약 현미"></a>
-      </td>
-      <td class="type">곡류</td>
-      <td class="pro_name">
-        <a th:href="@{/category/market/pview}">무농약 현미</a>
-      </td>
-      <td class="sale">10%</td>
-      <td class="point">400P</td>
-      <td class="price"><strong>3,600원</strong><span class="original_price">4,000원</span></td>
-    </tr>
-    <tr>
-      <td class="pic">
-        <a th:href="@{/category/market/pview}"><img th:src="@{/images/market_item4.jpg}" alt="팜스토리 하루야채 샐러드"></a>
-      </td>
-      <td class="type">야채</td>
-      <td class="pro_name">
-        <a th:href="@{/category/market/pview}">팜스토리 하루야채 샐러드</a>
-      </td>
-      <td class="sale">10%</td>
-      <td class="point">400P</td>
-      <td class="price"><strong>3,600원</strong><span class="original_price">4,000원</span></td>
-    </tr>
-
     </tbody>
   </table>
   <div class="pages">
     <ul>
-      <li><a href="#" class="no current">&nbsp;[1]</a></li>
-      <li><a href="#" class="no">[2]</a></li>
-      <li><a href="#" class="no">[3]</a></li>
-      <li><a href="#" class="no">[4]</a></li>
-      <li><a href="#" class="no last_no">[5]&nbsp;</a></li>
+      <th:block th:each="num:${#numbers.sequence(ProductPageResponseDTO.start, ProductPageResponseDTO.end)}">
+        <li><a th:if="${ProductPageResponseDTO.type == null}" th:href="@{/market/plist(pg=${num})}" th:class="${num == ProductPageResponseDTO.pg} ? 'current' : 'no'">&#91;[[${num}]]&#93;</a></li>
+        <li><a th:if="${ProductPageResponseDTO.type != null}" th:href="@{/market/plist(pg=${num}, type=${ProductPageResponseDTO.type})}" th:class="${num == ProductPageResponseDTO.pg} ? 'current' : 'no'">&#91;[[${num}]]&#93;</a></li>
+      </th:block>
     </ul>
   </div>
 </div>
