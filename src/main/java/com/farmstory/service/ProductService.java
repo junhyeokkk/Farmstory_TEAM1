@@ -30,7 +30,7 @@ public class ProductService {
 
         Product product = modelMapper.map(productDTO, Product.class);
         prodCate prodcate = prodCate.builder()
-                .prodCateNo(Integer.parseInt(productDTO.getProdCateNo()))
+                .prodCateNo((productDTO.getProdCateNo()))
                 .build();
         product.setProdCateNo(prodcate);
         log.info(product);
