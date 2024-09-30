@@ -1,10 +1,45 @@
 <link rel="stylesheet" th:href="@{/css/market_view.css}">
+<script th:inline="javascript">
 
+  window.onload = function (){
+
+    const price = [[${productDTO.price}]];
+    const value = price * (1 - [[${productDTO.discount}]] / 100.0)
+    const delivery = [[${productDTO.delivery}]];
+
+    updateTotal();
+    const stockInput = document.querySelector('input[class="stock"]');
+    stockInput.addEventListener('input', function() {
+      updateTotal();
+    });
+
+
+    function updateTotal() {
+
+
+      console.log("price"+price);
+      console.log("delivery"+delivery);
+      const quantity = parseInt(document.querySelector('input[class="stock"]').value, 10);
+
+      if (!isNaN(price) && !isNaN(quantity)) {
+        const total = price * quantity;
+        if(total < 30000){
+          total + delivey;
+        }
+        document.querySelector('.sum').textContent = total+`원`;
+      } else {
+        // 가격이나 수량이 올바르지 않은 경우
+        document.querySelector('.sum').textContent = '0원';
+      }
+    }
+  }
+
+</script>
 <div class="market_view">
   <h3>기본정보</h3>
   <div class="product_info">
     <img th:src="@{${productDTO.p_sName1}}" alt="상품 이미지" />
-    <div class="product_details">
+    <div class="product_details" th:with="disPrice=${#numbers.formatDecimal(productDTO.price * (1 - productDTO.discount / 100.0),0,0)}">
       <table>
         <tr>
           <th>상품명</th>
@@ -16,21 +51,24 @@
         </tr>
         <tr>
           <th>배송비</th>
-          <td class="deliver">[[${productDTO.delivery}]]원 <span>3만원 이상 무료배송</span></td><td></td>
+          <td th:if="${disPrice}>30000" class="deliver"><span class="freeDelivery">[[${productDTO.delivery}]]원</span> <span class="freeDelivery">3만원 이상 무료배송</span></td>
+          <td th:if="${disPrice}<=30000" class="deliver"><span class="noneFreeDelivery">[[${productDTO.delivery}]]원</span> <span class="noneFreeDelivery">3만원 이상 무료배송</span></td>
         </tr>
         <tr>
           <th>판매가격</th>
-          <td class="sell_price" th:text="${productDTO.price}">가격</td>
+          <td th:if="${productDTO.discount}>0" class="sell_price"><span>[[${productDTO.price}]]원</span> <span>[[${productDTO.discount}]]%</span> <span>[[${disPrice}]]원</span></td>
+          <td th:if="${productDTO.discount}==0" class="sell_price" th:text="${productDTO.price}">가격</td>
         </tr>
         <tr>
-          <th>구매수량 (현재 : [[${productDTO.stock}]])</th>
+          <th>구매수량 (재고 : [[${productDTO.stock}]])</th>
           <td class="count">
-            <input type="number" value="1"  />
+            <input type="number" value="1" class="stock"/>
           </td>
         </tr>
         <tr>
           <th>합계</th>
-          <td class="sum" th:text="${productDTO.price} + '원'">합계 가격</td>
+          <td th:if="${disPrice}>30000" class="sum" th:text="${disPrice} + '원'">합계 가격</td>
+          <td th:if="${disPrice}<=30000" class="sum" th:text="${disPrice} + ${productDTO.delivery} + '원'">합계 가격</td>
         </tr>
       </table>
       <div class="buttons">

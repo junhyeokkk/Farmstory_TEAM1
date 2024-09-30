@@ -65,16 +65,37 @@
 
 }
 
-.deliver > span {
+.noneFreeDelivery:nth-of-type(2) {
     color: #777777;
 }
 
+.freeDelivery:nth-of-type(1){
+    text-decoration : line-through;
+    color: #777777;
+}
+
+.freeDelivery:nth-of-type(2){
+    text-decoration : none;
+    color: #c20a0a;
+}
 .sell_price {
     font-family: Inter;
     font-size: 10.69px;
     font-weight: 400;
     line-height: 12.93px;
     text-align: left;
+
+}
+.sell_price span:nth-of-type(1) {
+    text-decoration : line-through;
+    color: #777777;
+    font-size: 8px;
+}
+.sell_price span:nth-of-type(2) {
+    font-weight: bold;
+    color:red;
+}
+.sell_price span:nth-of-type(3){
 
 }
 
@@ -90,14 +111,14 @@ input:focus{outline: none;}
     font-size: 12px;
     font-weight: 400;
     line-height: 14.52px;
-    text-align: left; 
+    text-align: left;
 }
 
 /* input 증가 감소 없애기  */
 input[type='number']::-webkit-outer-spin-button,
 input[type='number']::-webkit-inner-spin-button {
-	  -webkit-appearance: none;
-	  margin: 0;
+    -webkit-appearance: none;
+    margin: 0;
 }
 
 
@@ -190,7 +211,7 @@ input[type='number']::-webkit-inner-spin-button {
     font-weight: 700;
     line-height: 19.36px;
     text-align: left;
-    
+
 }
 
 .table_change {
@@ -213,7 +234,7 @@ input[type='number']::-webkit-inner-spin-button {
     border-top: 1px;
     border-style: solid;
     border-color: #CCCCCC;
-    border-left: none; 
+    border-left: none;
 }
 
 .table_change tr:nth-of-type(1) > td {
@@ -224,7 +245,7 @@ input[type='number']::-webkit-inner-spin-button {
     border-top: 1px;
     border-style: solid;
     border-color: #CCCCCC;
-    border-right: none; 
+    border-right: none;
     padding-left: 24px;
 }
 
@@ -236,7 +257,7 @@ input[type='number']::-webkit-inner-spin-button {
     border-bottom: 1px;
     border-style: solid;
     border-color: #CCCCCC;
-    border-left: none; 
+    border-left: none;
 }
 
 .table_change tr:nth-of-type(2) > td {
@@ -247,7 +268,7 @@ input[type='number']::-webkit-inner-spin-button {
     border-bottom: 1px;
     border-style: solid;
     border-color: #CCCCCC;
-    border-right: none; 
+    border-right: none;
     padding-left: 24px;
-    
+
 }
