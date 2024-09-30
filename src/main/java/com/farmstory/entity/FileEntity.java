@@ -23,6 +23,7 @@ public class FileEntity {
     private String oName;
     private String sName;
     private int download;
+    private String csNo;
     @CreationTimestamp
     private LocalDateTime rdate;
 

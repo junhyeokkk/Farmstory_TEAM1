@@ -179,8 +179,15 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         return content;
     }
 
+    @Override
+    public List<Article> selectNotice(int cateNo) {
+        List<Article> content = queryFactory.select(qarticle)
+                                .from(qarticle)
+                                .where(qarticle.cateNo.eq(cateNo).and(qarticle.isNotice.eq(true)))
+                                .fetch();
 
-
+        return content;
+    }
 
 
 }

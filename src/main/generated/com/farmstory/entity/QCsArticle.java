@@ -22,6 +22,8 @@ public class QCsArticle extends EntityPathBase<CsArticle> {
 
     public final NumberPath<Integer> cateNo = createNumber("cateNo", Integer.class);
 
+    public final NumberPath<Integer> comment = createNumber("comment", Integer.class);
+
     public final ListPath<Comment, QComment> commentList = this.<Comment, QComment>createList("commentList", Comment.class, QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");

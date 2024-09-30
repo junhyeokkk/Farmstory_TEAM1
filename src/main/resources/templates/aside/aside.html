@@ -1,5 +1,5 @@
 
-        <aside class="aside" layout:fragment="aside" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" th:if="${cate.cateGroup != 'user'}">
+        <aside class="aside" layout:fragment="aside" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6" th:if="${cate.cateGroup != 'user'}">
             <!--community-->
             <div  class="sidebar" th:if="${cate.cateGroup == 'community'}">
                 <div class="aside_cate">
@@ -11,14 +11,14 @@
                         <li><a th:href="@{/article/community/menu(content= 'list')}" th:classappend ="${cateName =='menu' ? 'active' : ''}" class="lnb2">오늘의식단</a></li>
                         <li><a th:href="@{/article/community/chef(content= 'list')}" th:classappend ="${cateName =='chef' ? 'active' : ''}" class="lnb3">나도요리사</a></li>
 <!--                        //로그인시 -->
-                        <th:block th:if="${!#authentication.principal.equals('anonymousUser')}">
+                        <th:block sec:authorize="isAuthenticated()">
 <!--                            amdin이 아닌경우-->
-                            <li th:if="${#authentication.principal.user.role !='ADMIN'}"><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
+                            <li th:if="${!#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
 <!--                            admin인 경우 -->
-                            <li th:unless="${#authentication.principal.user.role!='ADMIN'}"><a th:href="@{/article/admin/community/cs(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
+                            <li th:unless="${!#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/article/admin/community/cs(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
                         </th:block>
 <!--                        //로그인 안된경우 -->
-                        <th:block th:unless="${!#authentication.principal.equals('anonymousUser')}">
+                        <th:block  sec:authorize="isAnonymous()">
                             <li><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4" onclick="alert('로그인이 필요합니다.');">1:1고객문의</a></li>
                         </th:block>
                         <li><a th:href="@{/article/community/faq(content= 'list')}" th:classappend ="${cateName =='faq' ? 'active' : ''}" class="lnb5">자주묻는질문</a></li>

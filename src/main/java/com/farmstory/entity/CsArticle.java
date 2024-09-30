@@ -32,8 +32,9 @@ public class CsArticle {
     private LocalDateTime createdate;   //작성일 now()
     private LocalDateTime updateDate;
     private String regIp;   //작성자ip
-    private int file = 0;
-    private int hit =0;
+    private int file;
+    private int hit;
+    private int comment;
 
 
     @Builder.Default
@@ -45,7 +46,7 @@ public class CsArticle {
 
 
 
-    @OneToMany(mappedBy = "ano", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "csNo", cascade = CascadeType.REMOVE)
     private List<FileEntity> fileList;
 
     @OneToMany(mappedBy = "parent",cascade =CascadeType.REMOVE )

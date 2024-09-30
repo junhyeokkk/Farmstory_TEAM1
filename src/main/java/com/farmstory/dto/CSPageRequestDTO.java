@@ -26,7 +26,7 @@ public class CSPageRequestDTO {
     private String type;
     private String keyword;
     @Builder.Default
-    private String content="list";
+    private String content="cslist";
     private String uid;
 
     private boolean isCompleted;

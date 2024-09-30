@@ -3,7 +3,7 @@
 <section class="write" >
                 	<h3>글쓰기</h3>
                 	<article>
-                        <form th:action="@{'/article/cs/writer'}" method="post" enctype="multipart/form-data"  onsubmit="return validateForm()">
+                        <form th:action="@{'/article/' + ${#authentication.principal.user.uid} + '/cs/writer'}" method="post" enctype="multipart/form-data"  onsubmit="return validateForm()">
                             <input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
                             <input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}">
                             <input type="hidden" name="b_writer" value="">
