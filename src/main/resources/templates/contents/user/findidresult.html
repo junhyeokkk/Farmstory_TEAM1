@@ -5,19 +5,19 @@
             <table class="idresult">
                 <tr>
                     <th>이름</th>
-                    <td th:text="${user.name}"></td> <!-- 동적 데이터 -->
+                    <td th:text="${session.user.name}"></td> <!-- 동적 데이터 -->
                 </tr>
                 <tr>
                     <th>아이디</th>
-                    <td th:text="${user.uid}"> </td> <!-- 동적 데이터 -->
+                    <td th:text="${session.user.uid}"> </td> <!-- 동적 데이터 -->
                 </tr>
                 <tr>
                     <th>이메일</th>
-                    <td th:text="${user.email}"> </td> <!-- 동적 데이터 -->
+                    <td th:text="${session.user.email}"> </td> <!-- 동적 데이터 -->
                 </tr>
                 <tr>
                     <th>가입일</th>
-                    <td th:text="${user.joinDate}"> </td> <!-- 동적 데이터 -->
+                    <td th:text="${session.user.regDate}"> </td> <!-- 동적 데이터 -->
                 </tr>
             </table>
             <h5>고객님의 정보와 일치하는 아이디입니다.</h5>

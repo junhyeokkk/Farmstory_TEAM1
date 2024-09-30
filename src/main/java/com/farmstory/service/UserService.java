@@ -147,21 +147,21 @@ public class UserService {
 
         // 3. 인증번호를 세션에 저장
         session.setAttribute("code", verificationCode);  // 세션에 인증번호 저장
-        session.setAttribute("userName", name);  // 세션에 사용자 이름 저장
-        session.setAttribute("userEmail", email);  // 세션에 사용자 이메일 저장
+        session.setAttribute("name", name);  // 세션에 사용자 이름 저장
+        session.setAttribute("email", email);  // 세션에 사용자 이메일 저장
 
-        // 4. Entity -> DTO 변환
-//        return modelMapper.map(user.get(), UserDTO.class);  // User 엔터티를 UserDTO로 변환 후 반환
+
     }
 
 
 
+
     // 인증번호 검증 및 아이디 반환
-    public String verifyCodeForUid(String verificationCode, String name, String email) {
+    public User verifyCodeForUser(String verificationCode, String name, String email) {
         // 1. 세션에서 저장된 인증번호 및 사용자 정보 가져오기
         String sessionCode = (String) session.getAttribute("code");  // 세션에 저장된 인증번호 가져오기
-        String sessionName = (String) session.getAttribute("userName");
-        String sessionEmail = (String) session.getAttribute("userEmail");
+        String sessionName = (String) session.getAttribute("name");
+        String sessionEmail = (String) session.getAttribute("email");
 
         // 2. 검증: 세션에 저장된 인증번호와 사용자 정보가 입력된 값과 일치하는지 확인
         if (sessionCode == null || !sessionCode.equals(verificationCode)
@@ -173,8 +173,9 @@ public class UserService {
         User user = userRepository.findByNameAndEmail(name, email)
                 .orElseThrow(() -> new RuntimeException("해당 이름과 이메일로 계정을 찾을 수 없습니다."));
 
-        return user.getUid();  // 유저의 아이디 반환
+        return user;  // 유저의 아이디 반환
     }
+
 
 
 
