@@ -1,6 +1,7 @@
 package com.farmstory.repository;
 
 import com.farmstory.entity.Product;
+
 import com.farmstory.repository.custom.ProductRepositoryCustom;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

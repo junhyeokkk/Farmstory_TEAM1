@@ -27,9 +27,13 @@ public class PageRequestDTO {
 
     private String type;
     private String keyword;
-    private String uid;
 
+    /////////////////////////////////////////
+    private String uid; // admin user list
+    private int pNo; // product list
+    /////////////////////////////////////////
 
+    // 정렬 요소, 페이지 사이즈 매개변수로 넣기 
     public Pageable getPageable(String sort,int size) {
         this.size=size;
         return PageRequest.of(this.pg-1,this.size, Sort.by(sort).descending());

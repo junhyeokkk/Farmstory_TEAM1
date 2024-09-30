@@ -42,7 +42,7 @@ public class ProductService2 {
 
     public ProductPageResponseDTO getAllProductsWithAllInfo(PageRequestDTO pageRequestDTO) {
 
-        Pageable pageable = pageRequestDTO.getPageable("pNo");
+        Pageable pageable = pageRequestDTO.getPageable("pNo" , 10);
 
 
         Page<Product> products = null;
