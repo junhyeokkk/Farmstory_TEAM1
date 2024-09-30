@@ -65,11 +65,11 @@ public class ProductService2 {
                     .delivery(product.getDelivery())
                     .rdate(product.getRdate().toString()) // 날짜 포맷 조정 필요시 변환
                     .pDesc(product.getPDesc())
-                    .prodCateNo(product.getProdCateNo() != null ? product.getProdCateNo().getProdCateName() : null) // 카테고리 이름 가져오기
+                    .prodCateName(product.getProdCateNo() != null ? product.getProdCateNo().getProdCateName() : null) // 카테고리 이름 가져오기
                     // 이미지 파일 정보 추가
-                    .p_sName1(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName1() : "/images/404이미지없음.png")
-                    .p_sName2(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName2() : null)
-                    .p_sName3(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName3() : null)
+                    .p_sName1(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName1() : "404이미지없음.png")
+                    .p_sName2(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName2() : "404이미지없음.png")
+                    .p_sName3(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName3() : "404이미지없음.png")
                     .build();
             return productDTO;
         }).collect(Collectors.toList());
@@ -96,7 +96,7 @@ public class ProductService2 {
                     .delivery(product.getDelivery())
                     .rdate(product.getRdate().toString()) // 날짜 포맷 조정 필요시 변환
                     .pDesc(product.getPDesc())
-                    .prodCateNo(product.getProdCateNo() != null ? product.getProdCateNo().getProdCateName() : null) // 카테고리 이름 가져오기
+                    .prodCateName(product.getProdCateNo() != null ? product.getProdCateNo().getProdCateName() : null) // 카테고리 이름 가져오기
                     // 이미지 파일 정보 추가
                     .p_sName1(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName1() : "/images/404이미지없음.png")
                     .p_sName2(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName2() : null)

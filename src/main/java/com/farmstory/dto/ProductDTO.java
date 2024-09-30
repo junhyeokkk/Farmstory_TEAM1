@@ -32,7 +32,7 @@ public class ProductDTO {
     private String p_sName3;
 
     // 외래키 컬럼
-    private String prodCateNo;
+    private String prodCateName;
 
     public List<MultipartFile> getMultipartFiles(){
         return List.of(files1,files2,files3);
