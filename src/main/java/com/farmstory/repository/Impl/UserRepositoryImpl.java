@@ -4,7 +4,6 @@ import com.farmstory.dto.PageRequestDTO;
 import com.farmstory.entity.QUser;
 import com.farmstory.entity.User;
 import com.farmstory.repository.custom.UserRepositoryCustom;
-import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

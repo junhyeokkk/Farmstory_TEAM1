@@ -25,4 +25,9 @@ public class FileEntity {
     private int download;
     @CreationTimestamp
     private LocalDateTime rdate;
+
+    public int setDownload() {
+
+        return download++;
+    }
 }

@@ -11,26 +11,24 @@ import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
- * QArticle is a Querydsl query type for Article
+ * QCsArticle is a Querydsl query type for CsArticle
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QArticle extends EntityPathBase<Article> {
+public class QCsArticle extends EntityPathBase<CsArticle> {
 
-    private static final long serialVersionUID = 1194800359L;
+    private static final long serialVersionUID = 1830005271L;
 
-    public static final QArticle article = new QArticle("article");
-
-    public final NumberPath<Integer> articleNo = createNumber("articleNo", Integer.class);
+    public static final QCsArticle csArticle = new QCsArticle("csArticle");
 
     public final NumberPath<Integer> cateNo = createNumber("cateNo", Integer.class);
-
-    public final NumberPath<Integer> com = createNumber("com", Integer.class);
 
     public final ListPath<Comment, QComment> commentList = this.<Comment, QComment>createList("commentList", Comment.class, QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");
 
-    public final DateTimePath<java.time.LocalDateTime> date = createDateTime("date", java.time.LocalDateTime.class);
+    public final DateTimePath<java.time.LocalDateTime> createdate = createDateTime("createdate", java.time.LocalDateTime.class);
+
+    public final StringPath csNo = createString("csNo");
 
     public final NumberPath<Integer> file = createNumber("file", Integer.class);
 
@@ -38,26 +36,28 @@ public class QArticle extends EntityPathBase<Article> {
 
     public final NumberPath<Integer> hit = createNumber("hit", Integer.class);
 
-    public final BooleanPath isNotice = createBoolean("isNotice");
+    public final NumberPath<Integer> inquiry = createNumber("inquiry", Integer.class);
 
-    public final NumberPath<Integer> noticeCate = createNumber("noticeCate", Integer.class);
+    public final BooleanPath isCompleted = createBoolean("isCompleted");
 
     public final StringPath regIp = createString("regIp");
 
     public final StringPath title = createString("title");
 
+    public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
+
     public final StringPath writer = createString("writer");
 
-    public QArticle(String variable) {
-        super(Article.class, forVariable(variable));
+    public QCsArticle(String variable) {
+        super(CsArticle.class, forVariable(variable));
     }
 
-    public QArticle(Path<? extends Article> path) {
+    public QCsArticle(Path<? extends CsArticle> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QArticle(PathMetadata metadata) {
-        super(Article.class, metadata);
+    public QCsArticle(PathMetadata metadata) {
+        super(CsArticle.class, metadata);
     }
 
 }

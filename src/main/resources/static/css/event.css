@@ -5,6 +5,6 @@
 }
 
 .aside_bg .cate_lnb1 li .lnb1:hover{background: url('../images/sub_cate4_lnb1_ov.png') no-repeat;  opacity: 50%;}
-
+.aside_bg .cate_lnb1 li .lnb1.active{background: url('../images/sub_cate4_lnb1_ov.png') no-repeat;}
 
 

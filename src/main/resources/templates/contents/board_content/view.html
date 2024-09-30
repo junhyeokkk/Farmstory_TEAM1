@@ -1,4 +1,5 @@
 <link rel="stylesheet" th:href="@{/css/board.css}">
+<script type="text/javascript" th:src="@{/js/commentJs.js}"></script>
 
 
 <section class="view" >
@@ -16,10 +17,9 @@
 						<tr>
 							<td>첨부파일</td>
 							<td>
-                                <p style="margin: 4px 0">
-                                    <a href="/">original name</a>
-                                    <span>0회 다운로드</span>
-                                </p>
+								<th:block th:each="file :${article.fileList}">
+									<a th:href="@{/file/download/{fno}(fno=${file.fno})}">[[${file.oName}]]</a>&nbsp;<span>[[${file.download}]]</span>회 다운로드<br>
+								</th:block>
 							</td>
 						</tr>
 					</c:if>
@@ -31,45 +31,51 @@
 					</tr>
 				</table>
 				 <div>
-	                    <a th:href="@{/}" class="btnDelete">삭제</a>
-	                    <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName} + '/' + ${article.articleNo}(content='modify')}" class="btnModify">수정</a>
-	                    <a th:href="@{/}" class="btnList">목록</a>
+
+					 <th:block th:if="${#authentication.principal != null and (#authentication.principal.user.uid.equals(article.writer) or #authentication.principal.user.role =='ADMIN')}">
+						 <a th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.articleNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
+						 <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName} + '/' + ${article.articleNo}(content='modify')}" class="btn btnModify">수정</a>
+						 <a th:if="${cate.cateNo ==504}" th:href="@{/article/cs/completed/${article.articleNo}}" class="btn btnComplete">완료</a>
+
+					 </th:block>
+	                    <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName}(content='list',pg=${pg})}" class="btn btnList">목록</a>
 	                 
                 </div>  
 
-				 <!-- 댓글리스트 -->
-                <section class="commentList">
-                    <h3>댓글목록</h3>
-	                    <article class="comment">
-		                   		 <span>
-		                            <span>nick</span>
-		                            <span>0000-00-00</span>
-		                        </span>
-	                        <textarea name="comment" readonly>댓글 내용</textarea>
-		                        <div>
-		                        	<!-- HTML 사용자 정의 속성을 이용한 삭제/수정 -->
-		                            <a th:href="@{/}" class="commentRemove" data-no="${comment.comNo}">삭제</a>
-		                            <a th:href="@{/}" class="commentModify" data-no="${comment.comNo}">수정</a>
-		                            <a th:href="@{/}" class="commentUpdate" data-no="${comment.comNo}" style="display:none;">수정완료</a>
-		                        </div>
-	                    </article>
+			<!-- 댓글목록 -->
+			<section class="commentList">
+				<h3>댓글목록</h3>
+				<p th:if="${article.commentList.size() == 0}" class="empty">등록된 댓글이 없습니다.</p>
 
-	                    <p class="empty">등록된 댓글이 없습니다.</p>
-
-				</section>
-
-				<!-- 댓글입력폼 -->
-				<section class="commentForm">
-					<h3>댓글쓰기</h3>
-					<form name="commentForm">
-						<input type="hidden" name="com_parent" value="articleNo" />
-                        <input type="hidden" name="com_writer" value="userid" />
-						<textarea name="comment"></textarea>
+				<th:block th:each="comment:${article.commentList}">
+					<article>
+						<span class="nick">[[${comment.user.nick}]]</span>
+						<span class="date">[[${comment.getSubStringRdate()}]]</span>
+						<p class="content">[[${comment.content}]]</p>
 						<div>
-							<a th:href="@{/}" class="btnCancel">취소</a>
-							<input type="submit" class="btnWrite" value="작성완료" />
+							<a th:href="@{/comment/delete(no=${comment.no},pg=${pg},writer=${comment.writer})}" class="remove btn">삭제</a>
+							<a href="/" class="modify btn">수정</a>
 						</div>
-					</form>
-				</section>
+					</article>
+				</th:block>
+
 			</section>
-       
+
+			<!-- 댓글쓰기 -->
+			<section class="commentForm">
+				<h3>댓글쓰기</h3>
+				<form name="commentForm" method="post">
+					<textarea name="content">댓글내용 입력</textarea>
+					<input type="hidden" name="parent" th:value="${article.articleNo}">
+					<input type="hidden" name="pg" th:value="${pg}">
+					<input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
+					<input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}"/>
+					<div>
+						<a href="#" class="btn btnCancel">취소</a>
+						<input type="submit" value="작성완료" class="btn btnComplete" id="btnComplete"/>
+					</div>
+				</form>
+			</section>
+
+</section>
+

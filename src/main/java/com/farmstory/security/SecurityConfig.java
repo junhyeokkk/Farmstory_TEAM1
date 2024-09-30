@@ -40,11 +40,13 @@ public class SecurityConfig {
                 .userInfoEndpoint(endpoint-> endpoint.userService(myOauth2UserService)));
         // 인가 설정
         http.authorizeHttpRequests(authorize -> authorize
-                                                    .requestMatchers("/").permitAll()
-                                                    .requestMatchers("/article/**").authenticated()
-                                                    .requestMatchers("/user/**").permitAll()
-                                                    .anyRequest().permitAll());
-
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/article/**").permitAll()
+                .requestMatchers("/category/**").permitAll()
+                .requestMatchers("/article/write").authenticated()
+                .requestMatchers("/article/delete/**").authenticated()
+                .requestMatchers("/user/**").permitAll()
+                .anyRequest().permitAll());
         // 기타 보안 설정
         http.csrf(AbstractHttpConfigurer::disable);
 
