@@ -27,7 +27,6 @@ public class ProductDTO {
     private MultipartFile files2;
     private MultipartFile files3;
 
-
     private String p_sName1;
     private String p_sName2;
     private String p_sName3;
