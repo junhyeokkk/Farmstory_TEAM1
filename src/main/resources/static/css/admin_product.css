@@ -150,11 +150,12 @@ td {
     border: none;
     font-weight: 700;
 }
-#list_num {
-    margin-top: 10px;
-}
-
-#list_num > a:nth-child(2) {
+#list_num > .current {
     font-weight: bold;
     text-decoration: underline;
+}
+
+
+#list_num {
+    margin-top: 10px;
 }

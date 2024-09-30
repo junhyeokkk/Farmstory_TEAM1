@@ -31,6 +31,8 @@ public class User {
     private String addr2;
     private String regip;
 
+    private int point;
+
     @CreationTimestamp
     private LocalDateTime regDate;
     private String leaveDate;

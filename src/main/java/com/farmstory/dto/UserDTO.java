@@ -16,7 +16,7 @@ public class UserDTO {
     private String nick;
     private String email;
     private String hp;
-
+    private int point;
 
     @Builder.Default
     private String role="USER";

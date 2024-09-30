@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" th:href="@{/css/market_order.css}">
 
 <div class="market_order">
@@ -23,26 +22,6 @@
       <th>포인트</th>
       <th>가격</th>
       <th>소계</th>
-    </tr>
-    <tr>
-      <td><img src="../images/market_item1.jpg" alt="사과 샘플"/></td>
-      <td>과일</td>
-      <td>사과 500g</td>
-      <td>1</td>
-      <td>10%</td>
-      <td>40p</td>
-      <td>4,000</td>
-      <td><strong>3,600</strong>원</td>
-    </tr>
-    <tr>
-      <td><img src="../images/market_item1.jpg" alt="사과 샘플"/></td>
-      <td>과일</td>
-      <td>사과 500g</td>
-      <td>1</td>
-      <td>10%</td>
-      <td>40p</td>
-      <td>4,000</td>
-      <td><strong>3,600</strong>원</td>
     </tr>
     <tr>
       <td><img src="../images/market_item1.jpg" alt="사과 샘플"/></td>
@@ -81,7 +60,7 @@
         <td class="use_point cf">
           <input type="text" class="point" placeholder="">
           <a href="#" class="point_btn">사용하기</a><br>
-          <div>사용가능 2,000</div>
+          <div>사용가능 <span>[[${#authentication.principal.user.point}]]</span></div>
         </td>
       </tr>
       <tr>
@@ -96,7 +75,7 @@
         <th class="delivery_addr">배송주소</th>
         <td class="cf">
           <input type="text" class="post_sch" placeholder="" title="우편번호 검색칸">
-          <a href="#"><img src="../images/btn_post_search.gif" alt="우편번호 검색" class="post_sch_btn"></a>
+          <a href="#"><img th:src="@{/images/user/btn_post_search.gif}" alt="우편번호 검색" class="post_sch_btn"></a>
           <input type="text" class="addr1" placeholder="기본주소 검색">
           <input type="text" class="addr2" placeholder="상세주소 입력">
         </td>
