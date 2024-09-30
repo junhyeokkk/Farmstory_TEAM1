@@ -4,6 +4,7 @@ import com.farmstory.dto.PageRequestDTO;
 import com.farmstory.dto.ProductDTO;
 import com.farmstory.dto.ProductPageResponseDTO;
 import com.farmstory.entity.Product;
+import com.farmstory.entity.prodCate;
 import com.farmstory.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -28,6 +29,10 @@ public class ProductService {
     public int insertProduct(ProductDTO productDTO) {
 
         Product product = modelMapper.map(productDTO, Product.class);
+        prodCate prodcate = prodCate.builder()
+                .prodCateNo(Integer.parseInt(productDTO.getProdCateNo()))
+                .build();
+        product.setProdCateNo(prodcate);
         log.info(product);
 
         // 상품 저장 후 저장한 product PNo 반환

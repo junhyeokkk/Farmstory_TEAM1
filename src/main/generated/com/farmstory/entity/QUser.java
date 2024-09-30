@@ -35,6 +35,8 @@ public class QUser extends EntityPathBase<User> {
 
     public final StringPath pass = createString("pass");
 
+    public final NumberPath<Integer> point = createNumber("point", Integer.class);
+
     public final DateTimePath<java.time.LocalDateTime> regDate = createDateTime("regDate", java.time.LocalDateTime.class);
 
     public final StringPath regip = createString("regip");
