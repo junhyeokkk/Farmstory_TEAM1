@@ -1,6 +1,7 @@
 package com.farmstory.controller.article;
 
 import com.farmstory.dto.*;
+import com.farmstory.repository.CsArticleRepository;
 import com.farmstory.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class ArticleController {
     private final UserService userService;
     private final EmailService emailService;
     private final FileService fileService;
+    private final CsArticleRepository csArticleRepository;
 
 
     // @GetMapping("/")
@@ -71,28 +73,61 @@ public class ArticleController {
 
     //cs
     @GetMapping("/{uid}/community/cs")
-    public String communityCsList(@PathVariable("uid") String uid, @RequestParam("content") String content,PageRequestDTO pageRequestDTO, Model model){
+    public String communityCsList(@PathVariable("uid") String uid, @RequestParam("content") String content,CSPageRequestDTO cspageRequestDTO, Model model){
         CateDTO  cate = categoryService.selectCateNo(504);
 
-        pageRequestDTO.setUid(uid);
-        pageRequestDTO.setCateNo(504);
+        cspageRequestDTO.setUid(uid);
+        cspageRequestDTO.setCateNo(504);
 
-        PageResponseDTO pageResponseDTO = articleService.getAllArticles(pageRequestDTO,504);
+        CSPageResponseDTO pageResponseDTO = articleService.selectCsArticleForUser(cspageRequestDTO);
 
         model.addAttribute("pageResponseDTO",pageResponseDTO);
         model.addAttribute("content", content);
         model.addAttribute("cate",cate);
+        log.info("content : "+ content);
+        log.info(content);
+        return "boardIndex";
+    }
+
+
+
+    //1:1 고객문의cswrite page
+    @PostMapping("/{uid}/community/cs")
+    public String communityCsWrite(@PathVariable("uid") String uid,
+                                   @RequestParam("content") String content,
+                                   CsArticleDTO csArticleDTO,
+                                   HttpServletRequest req,
+                                   Model model){
+        CateDTO cate = categoryService.selectCateNo(504);
+
+        csArticleDTO.setCateNo(504);
+        csArticleDTO.setWriter(uid);
+        csArticleDTO.setRegIp(req.getRemoteAddr());
+
+        //파일 업로드
+        List<FileDTO> uploadFiles = new ArrayList<>();
+        if (csArticleDTO.getFiles() != null && !csArticleDTO.getFiles().isEmpty()) {
+            uploadFiles = fileService.uploadFile(csArticleDTO); // Process file uploads
+        }
+
+
+        model.addAttribute("cate",cate);
+
+
         return "boardIndex";
     }
 
     @GetMapping("/admin/community/cs")
-    public String adminCs( @RequestParam("content") String content,PageRequestDTO pageRequestDTO, Model model){
+    public String adminCs( @RequestParam("content") String content,PageRequestDTO pageRequestDTO,Model model){
         CateDTO  cate = categoryService.selectCateNo(504);
 
         pageRequestDTO.setCateNo(504);
 
         PageResponseDTO pageResponseDTO = articleService.getAllArticles(pageRequestDTO,504);
-        return null;
+
+        model.addAttribute("cate",cate);
+        model.addAttribute("content", content);
+        return  "boardIndex";
     }
 
     @GetMapping("/{cateGroup}/{cateName}/{articleNo}")

@@ -1,6 +1,7 @@
 package com.farmstory.service;
 
 import com.farmstory.dto.ArticleDTO;
+import com.farmstory.dto.CsArticleDTO;
 import com.farmstory.dto.FileDTO;
 import com.farmstory.entity.FileEntity;
 import com.farmstory.repository.FileRepository;
@@ -82,6 +83,57 @@ public class FileService {
           }
 
       } //for문 종료
+        log.info(fileDTOs);
+
+        return fileDTOs;
+    }
+
+    //updateFile csArticle
+    //upload file
+    public List<FileDTO> uploadFile(CsArticleDTO articleDTO){
+
+        //파일 시스템 경로 구하기
+        File fileuploadpath = new File(uploadPath+"article/");
+        if(!fileuploadpath.exists()){
+            fileuploadpath.mkdirs();
+        }
+
+        String path=  fileuploadpath.getAbsolutePath();
+        //파일 정보객체 불러오기
+        List<MultipartFile> files = articleDTO.getFiles();
+        //파일 fl
+        List<FileDTO> fileDTOs = new ArrayList<>();
+        log.info("file size : "+files.size());
+        for(MultipartFile file : files){
+            log.info("file resource " + file.getResource());
+            String OName = file.getOriginalFilename();
+            if(OName != null && !OName.isEmpty()){
+
+                log.info("original name:"+OName);
+                //확장자
+                String ext = OName.substring(OName.lastIndexOf("."));
+                String Sname= UUID.randomUUID().toString()+ext;
+
+                //파일 저장
+                try {
+                    file.transferTo(new File(path,Sname));
+
+                    FileDTO fileDTO  =  FileDTO.builder()
+                            .oName(OName)
+                            .sName(Sname)
+                            .build();
+                    FileEntity savedFile= modelMapper.map(fileDTO, FileEntity.class);
+                    fileRepository.save(savedFile);
+                    fileDTOs.add(fileDTO);
+
+
+                } catch (IOException e) {
+                    log.error(e);
+                }
+
+            }
+
+        } //for문 종료
         log.info(fileDTOs);
 
         return fileDTOs;

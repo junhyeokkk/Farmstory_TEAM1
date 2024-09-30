@@ -7,7 +7,7 @@
                             <input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
                             <input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}">
                             <input type="hidden" name="b_writer" value="">
-                            <select th:if="${#authentication.principal.user.role=='ADMIN'}" name="inquiry" id="inquiry">
+                            <select name="inquiry" id="inquiry">
                                 <option value="0" selected>상품문의</option>
                                 <option value="1">배송문의</option>
                                 <option value="2">반품 및 교환문의</option>
