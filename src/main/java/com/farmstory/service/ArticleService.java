@@ -1,9 +1,8 @@
 package com.farmstory.service;
 
-import com.farmstory.dto.ArticleDTO;
-import com.farmstory.dto.PageRequestDTO;
-import com.farmstory.dto.PageResponseDTO;
+import com.farmstory.dto.*;
 import com.farmstory.entity.Article;
+import com.farmstory.entity.CsArticle;
 import com.farmstory.repository.ArticleRepository;
 import com.farmstory.repository.CateRepository;
 import com.farmstory.repository.CsArticleRepository;
@@ -85,16 +84,38 @@ public class  ArticleService {
     }
 
 
+    public CSPageResponseDTO selectCsArticleForUser(CSPageRequestDTO requestDTO) {
+        Pageable pageable = requestDTO.getPageable("csNo");
+        Page<Tuple> pageCsArticle = null;
+
+            pageCsArticle =csArticleRepository.selectCsForUser(requestDTO,pageable,requestDTO.getUid());
+
+            List<CsArticleDTO> csArticleList= pageCsArticle.stream().map(tuple -> {
+                CsArticle csArticle = tuple.get(0,CsArticle.class);
+                String nick = tuple.get(1,String.class);
+                csArticle.setNick(nick);
+                return modelMapper.map(csArticle,CsArticleDTO.class);
+            }).toList();
+
+        int total = (int)pageCsArticle.getTotalElements();
+
+        return CSPageResponseDTO.builder()
+                .csArticleDTOS(csArticleList)
+                .total(total)
+                .cspageRequestDTO(requestDTO)
+                .build();
+
+    }
+
+
     public PageResponseDTO getAllArticles(PageRequestDTO pageRequestDTO,int cateNo) {
 
         Pageable pageable = pageRequestDTO.getPageable("articleNo",10);
         Page<Tuple> pageArticle =null;
         if(pageRequestDTO.getKeyword()==null) {
-            if(pageRequestDTO.getUid()!=null) {
-                pageArticle= articleRepository.selectArticleAllForListOnlyUid(pageRequestDTO,pageable,cateNo);
-            }else {
+
                 pageArticle = articleRepository.selectArticleAllForList(pageRequestDTO, pageable, cateNo);
-            }
+
 
         }else{
             pageArticle = articleRepository.selectArticleForSearch(pageRequestDTO, pageable,cateNo);
@@ -122,38 +143,38 @@ public class  ArticleService {
     }
 
 
-//    public CSPageResponseDTO selectCSByAdmin(CSPageRequestDTO pageRequestDTO) {
-//
-//        Pageable pageable = pageRequestDTO.getPageable("articleNo",10);
-//        Page<Tuple> pageArticle =null;
-//        if(pageRequestDTO.getKeyword()==null) {
-//
-//            pageArticle = csArticleRepository.selectCSForAdmin(pageRequestDTO, pageable, 504);
-//
-//        }else{
-//            pageArticle = csArticleRepository.selectCSForAdmin(pageRequestDTO, pageable,504);
-//        }
-//
-//        List<CsArticleDTO> articleList = pageArticle.stream().map(tuple ->{
-//                    CsArticle article = tuple.get(0,CsArticle.class);
-//                    String nick=tuple.get(1,String.class);
-//                    article.setNick(nick);
-//                    return modelMapper.map(article, CsArticleDTO.class);
-//                }
-//        ).toList();
-//
-//
-//        int total = (int)pageArticle.getTotalElements();
-//
-//        log.info("total : "+total);
-//        return CSPageResponseDTO.builder()
-//                .csArticleDTOS(articleList)
-//                .total(total)
-//                .cspageRequestDTO(pageRequestDTO)
-//                .build();
-//
-//
-//    }
+    public CSPageResponseDTO selectCSByAdmin(CSPageRequestDTO pageRequestDTO) {
+
+        Pageable pageable = pageRequestDTO.getPageable("articleNo",10);
+        Page<Tuple> pageArticle =null;
+        if(pageRequestDTO.getKeyword()==null) {
+
+            pageArticle = csArticleRepository.selectCsForAdmin(pageRequestDTO, pageable, 504);
+
+        }else{
+            pageArticle = csArticleRepository.selectCsForAdmin(pageRequestDTO, pageable,504);
+        }
+
+        List<CsArticleDTO> articleList = pageArticle.stream().map(tuple ->{
+                    CsArticle article = tuple.get(0,CsArticle.class);
+                    String nick=tuple.get(1,String.class);
+                    article.setNick(nick);
+                    return modelMapper.map(article, CsArticleDTO.class);
+                }
+        ).toList();
+
+
+        int total = (int)pageArticle.getTotalElements();
+
+        log.info("total : "+total);
+        return CSPageResponseDTO.builder()
+                .csArticleDTOS(articleList)
+                .total(total)
+                .cspageRequestDTO(pageRequestDTO)
+                .build();
+
+
+    }
 
 
 

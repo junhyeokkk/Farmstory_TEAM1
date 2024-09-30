@@ -8,4 +8,6 @@ import org.springframework.data.domain.Pageable;
 public interface CsArticleRepositoryCustom {
     public Page<Tuple> selectCsForAdmin(CSPageRequestDTO cspagerequestDTO, Pageable pageable, int cateNo);
 
+    public Page<Tuple>  selectCsForUser(CSPageRequestDTO cspagerequestDTO, Pageable pageable, String uid);
+
 }

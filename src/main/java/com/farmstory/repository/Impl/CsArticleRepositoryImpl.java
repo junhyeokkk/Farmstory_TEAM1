@@ -33,6 +33,8 @@ public class CsArticleRepositoryImpl implements CsArticleRepositoryCustom  {
             List<Tuple> content = queryFactory
                     .select(qcsArticle,quser.nick)
                     .from(qcsArticle)
+                    .join(quser)
+                    .on(qcsArticle.writer.eq(quser.uid))
                     .where(qcsArticle.isCompleted.eq(false))
                     .offset(pageable.getOffset())
                     .limit(pageable.getPageSize())
@@ -46,5 +48,30 @@ public class CsArticleRepositoryImpl implements CsArticleRepositoryCustom  {
                     .fetchOne();
 
             return  new PageImpl<Tuple>(content,pageable,total);
+    }
+
+    @Override
+    public Page<Tuple> selectCsForUser(CSPageRequestDTO cspagerequestDTO, Pageable pageable, String uid) {
+        List<Tuple> content = queryFactory
+                .select(qcsArticle,quser.nick)
+                .from(qcsArticle)
+                .join(quser)
+                .on(qcsArticle.writer.eq(quser.uid))
+                .where(qcsArticle.writer.eq(uid))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(qcsArticle.createdate.asc(), qcsArticle.updateDate.asc())
+                .fetch();
+
+        Long total = queryFactory
+                .select(qcsArticle.count())
+                .from(qcsArticle)
+                .join(quser)
+                .on(qcsArticle.writer.eq(quser.uid))
+                .where(qcsArticle.writer.eq(uid))
+                .fetchOne();
+
+
+        return new PageImpl<Tuple>(content,pageable,total);
     }
 }

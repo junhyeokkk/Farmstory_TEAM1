@@ -16,7 +16,10 @@ public class UserDTO {
     private String nick;
     private String email;
     private String hp;
-    private String role;
+
+
+    @Builder.Default
+    private String role="USER";
     private String zip;
     private String addr1;
     private String addr2;
