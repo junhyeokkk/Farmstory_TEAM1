@@ -26,7 +26,7 @@ public class ProductController {
     public String register(ProductDTO productDTO, Model model) {
 
         log.info("register product : "  + productDTO.toString());
-        log.info("register product : "  + productDTO.getProdCateNo());
+        log.info("register product : "  + productDTO.getProdCateName());
 
         // 파일 업로드
         pDescImgFileDTO uploadFile = descImgFileService.uploadpDescImgFile(productDTO);
