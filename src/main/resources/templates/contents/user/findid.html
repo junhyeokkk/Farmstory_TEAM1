@@ -1,4 +1,4 @@
-<section class="findid-section">
+<section>
     <h2>아이디 찾기</h2>
     <hr>
     <form method="post" th:action="@{/user/findid}" id="findIdForm">
@@ -8,7 +8,7 @@
                     <label class="name" name="name">이름</label>
                 </div>
                 <div>
-                    <input class="nametext" type="text" name="name" id="name" placeholder="이름 입력" required>                </div>
+                    <input class="nametext" type="text" name="name" id="name" placeholder="이름 입력" required></div>
                 <div>
                     <label class="email" name="email">이메일</label>
                 </div>
@@ -17,15 +17,16 @@
                     <button class="getCodeBtn">인증번호 받기</button>
 
                     <input class="verificationCodetext" type="text" placeholder="인증번호 입력">
-                    <button class="verificationCode">확인</button>
+                    <button type="button" class="verificationCode">확인</button>
 
                     <input class="emailtext" type="email" name="email" id="email" placeholder="이메일 입력" required>
                     <button type="button" class="getCodeBtn" id="sendCodeBtn">인증번호 받기</button>
 
                     <!-- 인증번호 입력 필드 -->
-                    <input class="verificationCodetext" type="text" id="verificationCode" placeholder="인증번호 입력" style="display: none;">
+                    <input class="verificationCodetext" type="text" id="verificationCode" placeholder="인증번호 입력"
+                           style="display: none;">
 
-                    <button type="button" class="verificationCode" id="verifyCodeBtn" style="display: none;">확인</button>
+                    <button class="verificationCode" type="button" id="verifyCodeBtn" style="display: none;">확인</button>
 
                 </div>
             </table>
@@ -42,7 +43,9 @@
 </section>
 
 <script>
-    document.getElementById('sendCodeBtn').addEventListener('click', function() {
+    document.getElementById('sendCodeBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
 
@@ -52,23 +55,29 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ name: name, email: email })
-            }).then(response => response.json())
-                .then(data => {
-                    document.getElementById('verificationCode').style.display = 'block';
-                    document.getElementById('verifyCodeBtn').style.display = 'block';
+                body: JSON.stringify({name: name, email: email})
+            }).then(response => {
+                if(!response.ok)
+                {
+                    throw new Error("인증코드 보내기 실패")
+                }
 
+                document.getElementById('verificationCode').style.display = 'block';
+                document.getElementById('verifyCodeBtn').style.display = 'block';
 
-                }).catch(error => {
-                console.error('Error:', error);
-                alert('인증번호 발송 중 오류가 발생했습니다.');
-            });
+            })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('인증번호 발송 중 오류가 발생했습니다.');
+                });
         } else {
             alert('이름과 이메일을 입력하세요.');
         }
     });
 
-    document.getElementById('verifyCodeBtn').addEventListener('click', function() {
+    document.getElementById('verifyCodeBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
         const code = document.getElementById('verificationCode').value;
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
@@ -79,20 +88,21 @@
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ code: code, name: name, email: email })
-            }).then(response => response.json())
-                .then(data => {
-                    if (data.Uid) {
-                        document.getElementById('nextBtn').disabled = false;  // "다음" 버튼 활성화
-                        document.getElementById('nextBtn').addEventListener('click', function() {
-                            window.location.href = '/contents/user/findidresult?uid=' + data.Uid;
-                        });// 결과 페이지로 이동
-                    } else {
-                        alert('인증번호가 일치하지 않습니다.');
-                    }
-                }).catch(error => {
-                console.error('Error:', error);
-            });
+                body: JSON.stringify({code: code, name: name, email: email})
+            }).then(response => {
+                if(!response.ok)
+                {
+                    throw new Error("인증코드 검증 실패")
+                }
+
+                document.getElementById('nextBtn').disabled = false;  // "다음" 버튼 활성화
+                document.getElementById('nextBtn').addEventListener('click', function () {
+                    window.location.href = '/category/user/findresult';
+                });// 결과 페이지로 이동
+            }).catch(error => {
+                console.error(error)
+                alert('인증번호가 일치하지 않습니다.');
+            })
         } else {
             alert('인증번호를 입력하세요.');
         }
