@@ -41,7 +41,7 @@ public class UserService {
     public UserPageResponseDTO selectUserAll(PageRequestDTO pageRequestDTO) {
 
         log.info("서비스 들어갔나여????????????????????????????????????? ");
-        Pageable pageable = pageRequestDTO.getPageable("uid");
+        Pageable pageable = pageRequestDTO.getPageable("uid",10);
 
         Page<User> users = userRepository.selectUserAllForList(pageRequestDTO, pageable);
         log.info(users.toString());

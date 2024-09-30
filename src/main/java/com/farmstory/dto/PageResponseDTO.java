@@ -6,48 +6,50 @@ import java.util.List;
 
 @Getter
 @Setter
-@ToString
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class PageResponseDTO {
 
     private List<ArticleDTO> dtoList;
+    private int cateNo;
 
-    private String cate;
     private int pg;
-    private int size;
     private int total;
+    private int size;
     private int startNo;
     private int start, end;
-    private boolean prev, next;
+    private boolean prev,next;
+
+    private int pageSize=10;
+
 
     private String type;
     private String keyword;
 
-    @Builder
-    public PageResponseDTO(PageRequestDTO pageRequestDTO ,List<ArticleDTO> dtoList, int total) {
-        this.cate = pageRequestDTO.getCate();
-        this.pg = pageRequestDTO.getPg();
-        this.size = pageRequestDTO.getSize();
-        this.total = total;
-        this.dtoList = dtoList;
 
+    @Builder
+    public PageResponseDTO(PageRequestDTO pageRequestDTO,List<ArticleDTO> dtoList, int total){
+        this.cateNo = pageRequestDTO.getCateNo();
+
+        this.pg = pageRequestDTO.getPg();
+        this.total = total;
+        this.size = pageRequestDTO.getSize();
+        this.dtoList = dtoList;
+        this.startNo = total - ((pg-1)*size);  //개시물 시작번호
+        this.end =(int) (Math.ceil(this.pg/5.0))*5;
+        this.start = this.end -4;
+        int last = (int)(Math.ceil(total/(double)size));
+        this.end = end > last? last:end;
+        this.prev = this.start>1;
+        this.next = total > this.end *this.size;
         this.type = pageRequestDTO.getType();
         this.keyword = pageRequestDTO.getKeyword();
-
-        this.startNo = total - ((pg - 1) * size);
-        this.end = (int) (Math.ceil(this.pg / 10.0)) * 10;
-        this.start = this.end - 9;
-
-        int last  = (int) (Math.ceil(total / (double) size));
-
-        this.end = end > last ? last : end;
-        // end가 start보다 작을 때 end가 0 되는것 방지
-        if(this.start > this.end) {
-            this.end = this.start;
+        // Ensure `end` is at least 1 if `start` is 1
+        if (this.start == 1 && this.end == 0) {
+            this.end = 0;
         }
-        this.prev = this.start > 1;
-        this.next = total > this.end * this.size;
+
 
     }
 

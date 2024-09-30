@@ -7,11 +7,17 @@
                 </div><!-- .aside_cate -->
                 <div class="aside_bg">
                     <ul class="cate_lnb">
-                        <li><a th:href="@{/article/community/notice(content= 'list')}">공지사항</a></li>
-                        <li><a th:href="@{/article/community/menu(content= 'list')}">오늘의식단</a></li>
-                        <li><a th:href="@{/article/community/chef(content= 'list')}">나도요리사</a></li>
-                        <li><a th:href="@{/article/community/cs(content= 'list')}">1:1고객문의</a></li>
-                        <li><a th:href="@{/article/community/faq(content= 'list')}">자주묻는질문</a></li>
+                        <li><a th:href="@{/article/community/notice(content= 'list')}" th:classappend ="${cateName =='notice' ? 'active' : ''}" class="lnb1">공지사항</a></li>
+                        <li><a th:href="@{/article/community/menu(content= 'list')}" th:classappend ="${cateName =='menu' ? 'active' : ''}" class="lnb2">오늘의식단</a></li>
+                        <li><a th:href="@{/article/community/chef(content= 'list')}" th:classappend ="${cateName =='chef' ? 'active' : ''}" class="lnb3">나도요리사</a></li>
+                        <th:block th:if="${!#authentication.principal.equals('anonymousUser')}">
+                            <li th:if="${!#authentication.principal.user.role=='ADMIN'}"><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'list')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
+                            <li th:unless="${!#authentication.principal.user.role=='ADMIN'}"><a th:href="@{/article/admin/community/cs(content= 'list')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
+                        </th:block>
+                        <th:block th:unless="${!#authentication.principal.equals('anonymousUser')}">
+                            <li><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'list')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4" onclick="alert('로그인이 필요합니다.');">1:1고객문의</a></li>
+                        </th:block>
+                        <li><a th:href="@{/article/community/faq(content= 'list')}" th:classappend ="${cateName =='faq' ? 'active' : ''}" class="lnb5">자주묻는질문</a></li>
                     </ul><!-- .cate_lnb -->
                 </div><!-- .aside_bg -->
             </div><!-- .sidebar -->
@@ -22,10 +28,10 @@
                     <img th:src="@{/images/sub_aside_cate3_tit.png}" alt="Croptalk 농작물이야기">
                 </div><!-- .aside_cate -->
                 <div class="aside_bg">
-                    <ul class="cate_lnb1">
-                        <li><a th:href="@{/article/croptalk/story(content= 'list')}" class="lnb1">농작물이야기</a></li>
-                        <li><a th:href="@{/article/croptalk/grow(content= 'list')}" class="lnb2">텃밭가꾸기</a></li>
-                        <li><a th:href="@{/article/croptalk/school(content= 'list')}" class="lnb3">귀농학교</a></li>
+                    <ul class="cate_lnb">
+                        <li><a th:href="@{/article/croptalk/story(content= 'list')}"  th:classappend ="${cateName =='story' ? 'active' : ''}" class="lnb1">농작물이야기</a></li>
+                        <li><a th:href="@{/article/croptalk/grow(content= 'list')}"  th:classappend ="${cateName =='grow' ? 'active' : ''}" class="lnb2">텃밭가꾸기</a></li>
+                        <li><a th:href="@{/article/croptalk/school(content= 'list')}"  th:classappend ="${cateName =='school' ? 'active' : ''}" class="lnb3">귀농학교</a></li>
                     </ul><!-- .cate_lnb -->
                 </div><!-- .aside_bg -->
             </div><!-- .sidebar -->
@@ -38,7 +44,7 @@
                 </div><!-- .aside_cate -->
                 <div class="aside_bg">
                     <ul class="cate_lnb1">
-                        <li><a th:href="@{/event/event(content= 'list')}" class="lnb1">이벤트</a></li>
+                        <li><a th:href="@{/event/event(content= 'list')}" class="lnb1 active">이벤트</a></li>
                     </ul><!-- .cate_lnb -->
                 </div><!-- .aside_bg -->
             </div><!-- .sidebar -->
@@ -50,8 +56,8 @@
                 </div><!-- .aside_cate -->
                 <div class="aside_bg">
                     <ul class="cate_lnb">
-                        <li> <a th:href="@{/category/introduction/intro}">인사말</a></li>
-                        <li> <a th:href="@{/category/introduction/direct}">찾아오는길</a></li>
+                        <li> <a th:href="@{/category/introduction/intro}" th:classappend ="${cateName =='intro' ? 'active' : ''}" class="lnb1">인사말</a></li>
+                        <li> <a th:href="@{/category/introduction/direct}" th:classappend ="${cateName =='direct' ? 'active' : ''}" class="lnb2">찾아오는길</a></li>
                     </ul><!-- .cate_lnb -->
                 </div><!-- .aside_bg -->
             </div><!-- .sidebar -->
@@ -63,7 +69,7 @@
                 </div><!-- .aside_cate -->
                 <div class="aside_bg">
                     <ul class="cate_lnb_real">
-                        <li> <a th:href="@{/category/market/plist}">장보기</a></li>
+                        <li> <a th:href="@{/category/market/plist}" class="lnb1 active" active>장보기</a></li>
                     </ul><!-- .cate_lnb -->
                 </div><!-- .aside_bg -->
             </div><!-- .sidebar -->
@@ -75,9 +81,9 @@
                 </div><!-- .aside_cate -->
                 <div class="aside_bg">
                     <ul class="cate_lnb1">
-                        <li><a th:href="@{/category/myInfo/cart}" class="lnb1">장바구니</a></li>
-                        <li><a th:href="@{/category/myInfo/orderitem}" class="lnb2">주문내역</a></li>
-                        <li><a th:href="@{/category/myInfo/myinfo}" class="lnb3">정보수정</a></li>
+                        <li><a th:href="@{/category/myInfo/cart}" th:classappend ="${cateName =='cart' ? 'active' : ''}" class="lnb1">장바구니</a></li>
+                        <li><a th:href="@{/category/myInfo/orderitem}" th:classappend ="${cateName =='orderitem' ? 'active' : ''}" class="lnb2">주문내역</a></li>
+                        <li><a th:href="@{/category/myInfo/myinfo}" th:classappend ="${cateName =='myinfo' ? 'active' : ''}" class="lnb3">정보수정</a></li>
                     </ul><!-- .cate_lnb -->
                 </div><!-- .aside_bg -->
             </div><!-- .sidebar -->

@@ -1,9 +1,7 @@
 package com.farmstory.repository.custom;
 
 import com.farmstory.dto.PageRequestDTO;
-
 import com.farmstory.entity.User;
-import com.querydsl.core.Tuple;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

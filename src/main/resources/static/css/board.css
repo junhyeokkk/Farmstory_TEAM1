@@ -70,11 +70,44 @@
     right: 0;
 }
 
+
+
+.list > #search_input{
+    overflow: hidden;
+    box-sizing: border-box;
+    height: auto;
+}
+.list > #search_input > .listTit{
+    float: left;
+    padding-top: 7px;
+}
+
+.list > #search_input > .search{
+    float: right;
+    height: auto;
+
+}
+.list  .search > select.select_type{
+    height: 25px;
+}
+.list  .search > input[type="text"] {
+    height: 22px;
+    width: 180px;
+}
+.list  .search > input.keySubmit{
+    height: 25px;
+    width: 40px;
+}
+
+
+
+
+
 /* 글쓰기 */
 .write {
     position: relative;
     width: 762px;
-    margin: 60px auto;
+    margin: 40px auto;
     margin-left: 0px;
 }
 
@@ -129,7 +162,7 @@
 .view {
     position: relative;
     width: 762px;
-    margin: 60px auto;
+    margin: 40px auto;
     margin-left :0px;
 }
 
@@ -229,7 +262,7 @@
 .modify {
     position: relative;
     width: 762px;
-    margin: 60px auto;
+    margin: 40px auto;
     margin-left:0px;
 }
 
@@ -290,3 +323,8 @@
 .btnDelete { display: inline-block; padding: 8px; border: 1px solid #bebebe; background: #fdfdfd; color: #111;}
 .btnModify { display: inline-block; padding: 8px; border: 1px solid #bebebe; background: #fdfdfd; color: #111;}
 .btnList   { display: inline-block; padding: 8px; border: 1px solid #bebebe; background: #fdfdfd; color: #111;}
+.btnComplete{display: inline-block; padding: 8px; border: 1px solid #bebebe; background: #fdfdfd; color: #111;}
+.btn:hover {
+    background:#4b545e;
+    color: #fdfdfd;
+}
