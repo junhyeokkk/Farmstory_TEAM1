@@ -16,7 +16,7 @@
               </tr>
               <tr class="p_tr2"  th:each="product , i:${productPageResponseDTO.productList}">
                 <td><input type="checkbox"></td>
-                <td><img id="sample_img" th:src="@{/uploads/product/}+${product.p_sName1}" alt="sample"></td>
+                <td><img id="sample_img" th:src="@{'/uploads/product/'+${product.p_sName1}}" alt="sample"></td>
                 <td>[[${product.pNo}]]</td>
                 <td>[[${product.pName}]]</td>
                 <td>[[${product.prodCateName}]]</td>
