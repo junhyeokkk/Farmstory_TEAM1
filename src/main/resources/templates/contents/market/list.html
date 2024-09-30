@@ -44,11 +44,17 @@
     </tbody>
   </table>
   <div class="pages">
+    <th:block th:if="${ProductPageResponseDTO.prev}">
+      <a><</a>
+    </th:block>
     <ul>
       <th:block th:each="num:${#numbers.sequence(ProductPageResponseDTO.start, ProductPageResponseDTO.end)}">
         <li><a th:if="${ProductPageResponseDTO.type == null}" th:href="@{/market/plist(pg=${num})}" th:class="${num == ProductPageResponseDTO.pg} ? 'current' : 'no'">&#91;[[${num}]]&#93;</a></li>
         <li><a th:if="${ProductPageResponseDTO.type != null}" th:href="@{/market/plist(pg=${num}, type=${ProductPageResponseDTO.type})}" th:class="${num == ProductPageResponseDTO.pg} ? 'current' : 'no'">&#91;[[${num}]]&#93;</a></li>
       </th:block>
     </ul>
+    <th:block th:if="${ProductPageResponseDTO.next}">
+      <a>></a>
+    </th:block>
   </div>
 </div>
