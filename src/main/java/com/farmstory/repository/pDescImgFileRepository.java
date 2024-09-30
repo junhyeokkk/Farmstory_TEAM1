@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface pDescImgFileRepository extends JpaRepository<pDescImgFile, Long> {
+
 }
