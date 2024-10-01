@@ -18,7 +18,9 @@
 
                 <input class="verificationCodetext" type="text" id="verificationCode" placeholder="인증번호 입력">
                 <button class="verificationCode" type="button"  id="verifyCodeBtn" style="display: none;">확인</button>
+                <span id="resultEmail" class="validationMessage"></span>
             </div>
+
             </table>
         </div>
         <div class="note">
@@ -32,89 +34,99 @@
         </div>
 </section>
 <script>
-    console.log('bbbbbbbb')
+    console.log('bbbbbbbb');
+
     document.getElementById('sendCodeBtn').addEventListener('click', function (e) {
         e.preventDefault();
 
         const uid = document.getElementById('uid').value;
         const email = document.getElementById('email').value;
 
-        // sendCodeBtn이 존재할 때만 이벤트 리스너 추가
-        if (sendCodeBtn) {
-            sendCodeBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                console.log("AAAA")
-                const uid = document.getElementById('uid').value;
-                const email = document.getElementById('email').value;
-                console.log('uid' + uid)
-                console.log('email' + email)
-                if (uid && email) {
-                    fetch('/api/user/findpass', {  // 비밀번호 찾기 경로로 수정
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({uid: uid, email: email})
-                    }).then(response => {
-                        if (!response.ok) {
-                            throw new Error("인증코드 보내기 실패");
-                        }
-
-                        document.getElementById('verificationCode').style.display = 'block';  // 인증번호 입력란 표시
-                        document.getElementById('verifyCodeBtn').style.display = 'block';  // 인증번호 검증 버튼 표시
-
-                    }).catch(error => {
-                        console.error('Error:', error);
-                        alert('인증번호 발송 중 오류가 발생했습니다.');
-                    });
-                } else {
-                    alert('아이디와 이메일을 입력하세요.');
+        if (uid && email) {
+            fetch('/api/user/findpass', {  // 비밀번호 찾기 경로로 수정
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({uid: uid, email: email})
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error("인증코드 보내기 실패");
                 }
+
+                // 인증번호 입력란 및 인증 버튼 표시
+                document.getElementById('verificationCode').style.display = 'block';
+                document.getElementById('verifyCodeBtn').style.display = 'block';
+
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('인증번호 발송 중 오류가 발생했습니다.');
             });
         } else {
-            console.error('sendCodeBtn 요소를 찾을 수 없습니다.');
+            alert('아이디와 이메일을 입력하세요.');
         }
-    })
-    document.getElementById('verifyCodeBtn').addEventListener('click', function (e) {
-        // verifyCodeBtn이 존재할 때만 이벤트 리스너 추가
-        if (verifyCodeBtn) {
-            verifyCodeBtn.addEventListener('click', function (e) {
-                e.preventDefault();
+    });
 
-                const code = document.getElementById('verificationCode').value;
-                const uid = document.getElementById('uid').value;
-                const email = document.getElementById('email').value;
+    // 인증번호 입력 필드에 대한 포커스아웃 이벤트 리스너 추가
+    const verificationCodeField = document.getElementById('verificationCode'); // 인증번호 입력 필드
+    verificationCodeField.addEventListener('focusout', () => {
+        const code = document.getElementById('verificationCode').value;
+        const uid = document.getElementById('uid').value;
+        const email = document.getElementById('email').value;
+        const resultEmail = document.getElementById('resultEmail'); // 결과 메시지를 표시할 span
 
-                if (code && uid && email) {
-                    fetch('/api/user/verifypass', {  // 비밀번호 변경 경로로 수정
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({code: code, uid: uid, email: email})
-                    }).then(response => {
-                        if (!response.ok) {
-                            throw new Error("인증코드 검증 실패");
-                        }
+        if (code && uid && email) {
+            // 서버로 인증코드 검증 요청 전송
+            fetch('/api/user/verifypass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({code: code, uid: uid, email: email})
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("인증코드 검증 실패");
+                    }
+                    return response.json(); // 응답을 JSON으로 변환
+                })
+                .then(data => {
+                    if (!data.result) {
+                        // 인증 실패 메시지 표시
+                        showResultInvalid(resultEmail, '인증코드가 일치하지 않습니다.');
+                    } else {
+                        // 인증 성공 메시지 표시
+                        showResultValid(resultEmail, '이메일이 인증되었습니다.');
+                        isPassOk = true;
 
-                        document.getElementById('nextBtn').disabled = false;  // "다음" 버튼 활성화
+                        // "다음" 버튼 활성화
+                        document.getElementById('nextBtn').disabled = false;
 
-                        nextBtn.addEventListener('click', function () {
+                        // "다음" 버튼 클릭 시 이벤트 등록
+                        document.getElementById('nextBtn').addEventListener('click', function () {
                             window.location.href = '/category/user/changepass';  // 비밀번호 변경 페이지로 이동
                         });
-
-                    }).catch(error => {
-                        console.error('Error:', error);
-                        alert('인증번호가 일치하지 않습니다.');
-                    });
-                } else {
-                    alert('인증번호를 입력하세요.');
-                }
-            });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showResultInvalid(resultEmail, '인증번호 검증 중 오류가 발생했습니다.');
+                });
         } else {
-            console.error('verifyCodeBtn 요소를 찾을 수 없습니다.');
+            showResultInvalid(resultEmail, '인증번호를 입력하세요.');
         }
-    })
+    });
+
+    // 유효성 검사 메시지 출력 함수
+    function showResultInvalid(element, message) {
+        element.textContent = message;
+        element.style.color = 'red';
+    }
+
+    function showResultValid(element, message) {
+        element.textContent = message;
+        element.style.color = 'green';
+    }
 
 
 </script>

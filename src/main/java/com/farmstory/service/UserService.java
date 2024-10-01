@@ -238,7 +238,11 @@ public class UserService {
     }
 
 
+
+/*    // 인증번호 검증 및 비밀번호 변경
+
     // 인증번호 검증 및 비밀번호 변경
+
     public User verifyResetCode(String verificationCode, String uid, String email, String newpass) {
         // 1. 세션에서 저장된 인증번호 및 사용자 정보 가져오기
         String sessionCode = (String) session.getAttribute("code");  // 세션에 저장된 인증번호 가져오기
@@ -265,5 +269,34 @@ public class UserService {
 
         // 6. 비밀번호 변경 완료 후, 유저 정보 반환 (필요한 경우)
         return user;
+
+    }*/
+
+
+    // 인증번호 검증 및 비밀번호 변경
+    public User verifyResetCode(String uid, String newpass) {
+        // 1. 사용자가 존재하는지 확인 (UID와 Email로 조회)
+        User user = userRepository.findById(uid)
+                .orElseThrow(() -> new RuntimeException("해당 사용자 정보를 찾을 수 없습니다."));
+
+//        // 2. 세션에 저장된 인증번호와 클라이언트에서 입력한 인증번호 비교
+//        String sessionCode = (String) session.getAttribute("code");  // 세션에 저장된 인증번호 가져오기
+//        if (sessionCode == null || !sessionCode.equals(verificationCodeFromClient)) {
+//            throw new RuntimeException("인증번호가 일치하지 않습니다.");
+//        }
+
+        // 3. 비밀번호 암호화
+        String encodedPassword = passwordEncoder.encode(newpass);
+
+        // 4. 유저의 비밀번호를 암호화된 비밀번호로 업데이트
+        user.setPass(encodedPassword);
+        userRepository.save(user);  // 비밀번호 저장
+
+        // 5. 비밀번호 변경 완료 후, 유저 정보 반환 (필요한 경우)
+        return user;
     }
-}
+
+
+
+    }
+

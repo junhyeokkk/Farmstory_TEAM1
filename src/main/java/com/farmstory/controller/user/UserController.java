@@ -228,22 +228,27 @@ public class UserController {
     @ResponseBody
     @PostMapping("/api/user/changepass")
     public ResponseEntity<?> resetPassword(HttpSession session, @RequestBody Map<String, String> jsonData) {
-        String verificationCode = jsonData.get("code");
+//        String verificationCode = jsonData.get("code");
         String uid = jsonData.get("uid");
-        String email = jsonData.get("email");
+//        String email = jsonData.get("email");
         String newpass = jsonData.get("newpass");
 
         // 세션에서 인증번호 및 사용자 정보 가져오기
         String sessionCode = (String) session.getAttribute("code");
         String sessionUid = (String) session.getAttribute("uid");
-        String sessionEmail = (String) session.getAttribute("email");
+//        String sessionEmail = (String) session.getAttribute("email");
+
+//        System.out.println("sessionCode = " + sessionCode);
+//        System.out.println("verificationCode = " + verificationCode);
+        System.out.println("sessionUid = " + sessionUid);
+        System.out.println("uid = " + uid);
+//        System.out.println("sessionEmail = " + sessionEmail);
+//        System.out.println("email = " + email);
 
         // 인증번호 및 사용자 정보 검증
-        if (sessionCode != null && sessionCode.equals(verificationCode)
-                && sessionUid.equals(uid) && sessionEmail.equals(email)) {
-
+        if (sessionUid.equals(uid)) {
             // 인증 성공: 비밀번호 변경 서비스 호출
-            userService.verifyResetCode(verificationCode, uid, email, newpass);
+            userService.verifyResetCode(uid, newpass);
 
             // 성공 응답
             return ResponseEntity.status(HttpStatus.OK).body("비밀번호가 성공적으로 변경되었습니다.");

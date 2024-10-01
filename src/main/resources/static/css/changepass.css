@@ -22,20 +22,22 @@ table {
 }
 
 th, td {
+
+    width: 30%; /* th 너비를 더 줄여서 좁은 영역 확보 */
     padding: 12px;
     text-align: left;
-    vertical-align: top;
+    vertical-align: middle;
     border-bottom: 1px solid #ddd;
 }
 
-td {
-    border-left: 1px dotted #ddd;
-    font-weight: bolder;
+th {
+    width: 20%; /* th를 더 좁게 설정 */
+    font-weight: bold;
 }
 
-p {
+td {
+    width: 85%; /* td 너비 조정 */
     font-weight: normal;
-    float: left;
 }
 .note{
     font-weight: bold;
