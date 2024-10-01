@@ -16,6 +16,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -71,6 +74,8 @@ public class  ArticleService {
 
 
     }
+
+
     public List<ArticleDTO> selectArticles() { return null;}
     public void updateArticle(Article article,int cateNo) {}
     public int deleteArticle(int articleNo) {
@@ -84,8 +89,23 @@ public class  ArticleService {
     }
 
 
+    public List<ArticleDTO> selectNotice(int cateNo){
+       List<Article> articles = articleRepository.selectNotice(cateNo);
+       List<ArticleDTO> articleDTOs = new ArrayList<>();
+        if(!articles.isEmpty()) {
+            for(Article article : articles) {
+                ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
+                articleDTOs.add(articleDTO);
+            }
+            return articleDTOs;
+        }
+
+
+        return null;
+    }
+
     public CSPageResponseDTO selectCsArticleForUser(CSPageRequestDTO requestDTO) {
-        Pageable pageable = requestDTO.getPageable("csNo");
+        Pageable pageable = requestDTO.getPageable("csNo",10);
         Page<Tuple> pageCsArticle = null;
 
             pageCsArticle =csArticleRepository.selectCsForUser(requestDTO,pageable,requestDTO.getUid());
@@ -145,14 +165,15 @@ public class  ArticleService {
 
     public CSPageResponseDTO selectCSByAdmin(CSPageRequestDTO pageRequestDTO) {
 
-        Pageable pageable = pageRequestDTO.getPageable("articleNo",10);
+        Pageable pageable = pageRequestDTO.getPageable("csNo",10);
         Page<Tuple> pageArticle =null;
         if(pageRequestDTO.getKeyword()==null) {
+            pageArticle = csArticleRepository.selectCsForAdmin(pageRequestDTO, pageable,504);
 
-            pageArticle = csArticleRepository.selectCsForAdmin(pageRequestDTO, pageable, 504);
 
         }else{
-            pageArticle = csArticleRepository.selectCsForAdmin(pageRequestDTO, pageable,504);
+            pageArticle = csArticleRepository.selectCsSearchForAdmin(pageRequestDTO, pageable, 504);
+
         }
 
         List<CsArticleDTO> articleList = pageArticle.stream().map(tuple ->{
@@ -174,6 +195,61 @@ public class  ArticleService {
                 .build();
 
 
+    }
+
+    public String insertCsArticle(CsArticleDTO csArticleDTO,HttpServletRequest req) {
+        log.info("article controller :"+csArticleDTO.toString());
+
+        //첨부파일 객체 가져오기
+        List<MultipartFile>  files = csArticleDTO.getFiles();
+        int filesize = 0;
+        if(files != null && !files.isEmpty()) {
+            filesize =files.size();
+        }
+
+
+        int no = csArticleRepository.findAll().size();
+
+        csArticleDTO.setRegIp(req.getRemoteAddr());
+        log.info("article controller2 :"+csArticleDTO.toString());
+
+        CsArticle article = modelMapper.map(csArticleDTO, CsArticle.class);
+
+        log.info("CsArticle : "+article);
+        article.setFile(filesize);
+        article.setCsNo("cs"+(no+1));
+        CsArticle savedArticle = csArticleRepository.save(article);
+
+        return savedArticle.getCsNo();
+
+    }
+
+    public CsArticleDTO selectCsArticle(String csNo) {
+        Optional<CsArticle> opt = csArticleRepository.findById(csNo);
+
+        if(opt.isPresent()) {
+            CsArticle article = opt.get();
+            article.setHit(article.getHit() + 1);
+            CsArticle hitupdateArticle = csArticleRepository.save(article);
+
+            return modelMapper.map(hitupdateArticle, CsArticleDTO.class);
+        }
+        return null;
+    }
+
+
+
+    public String updateCsCompleted(String csNo){
+        Optional<CsArticle> opt = csArticleRepository.findById(csNo);
+        if(opt.isPresent()) {
+            CsArticle article = opt.get();
+            article.setCompleted(true);
+            article.setUpdateDate(LocalDateTime.now());
+            CsArticle savedArticle = csArticleRepository.save(article);
+
+            return savedArticle.getCsNo();
+        }
+        return null;
     }
 
 

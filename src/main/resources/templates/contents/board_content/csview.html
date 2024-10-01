@@ -9,7 +9,15 @@
 						<td>제목</td>
 						<input type="hidden" name="cateNo" th:value="${cate.cateNo}"/>
                        	<input type="hidden" name="cateGroup" th:value="${cate.cateGroup}"/>
-						<td>[[${article.inquiry}]]
+						<select name="inquiry" id="inquiry" th:disabled="${isReadOnly}">
+							<option value="0" th:selected="${article.inquiry == 0}">상품문의</option>
+							<option value="1" th:selected="${article.inquiry == 1}">배송문의</option>
+							<option value="2" th:selected="${article.inquiry == 2}">반품 및 교환문의</option>
+							<option value="3" th:selected="${article.inquiry == 3}">환불문의</option>
+							<option value="4" th:selected="${article.inquiry == 4}">기타문의</option>
+						</select>
+
+						<td>
 							<input type="text" name="title" th:value="${article.title}" readonly />
 						</td>
 					</tr>
@@ -26,19 +34,18 @@
 					<tr>
 						<td>내용</td>
 						<td>
-							<textarea name="b_contents" readonly>[[${article.content}]]</textarea>
+							<textarea name="content" readonly>[[${article.content}]]</textarea>
 						</td>
 					</tr>
 				</table>
 				 <div>
 
-					 <th:block th:if="${#authentication.principal != null and (#authentication.principal.user.uid.equals(article.writer) or #authentication.principal.user.role =='ADMIN')}">
-						 <a th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.articleNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
-						 <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName} + '/' + ${article.articleNo}(content='modify')}" class="btn btnModify">수정</a>
-						 <a th:if="${cate.cateNo ==504}" th:href="@{/article/cs/completed/${article.articleNo}}" class="btn btnComplete">완료</a>
 
+						 <a th:if="${article.isCompleted == 0}" th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.csNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
+					 <th:block th:if="${#authentication.principal.user.role =='ADMIN'}">
+						 <a th:if="${cate.cateNo ==504}" th:href="@{'/article/cs/completed/'+${article.csNo}}" class="btn btnComplete">완료</a>
 					 </th:block>
-	                    <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName}(content='list',pg=${pg})}" class="btn btnList">목록</a>
+	                    <a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist',pg=${pg})}" class="btn btnList">목록</a>
 	                 
                 </div>  
 
@@ -66,7 +73,7 @@
 				<h3>댓글쓰기</h3>
 				<form name="commentForm" method="post">
 					<textarea name="content">댓글내용 입력</textarea>
-					<input type="hidden" name="parent" th:value="${article.articleNo}">
+					<input type="hidden" name="parent" th:value="${article.csNo}">
 					<input type="hidden" name="pg" th:value="${pg}">
 					<input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
 					<input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}"/>

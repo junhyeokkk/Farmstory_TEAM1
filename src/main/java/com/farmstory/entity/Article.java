@@ -25,8 +25,10 @@ public class Article {
 
     private int cateNo;
     private String title;  //제목
+
     @Column(columnDefinition = "LongText")
     private String content;  //내용
+
     private String writer;  //작성자
     @CreationTimestamp
     private LocalDateTime date;   //작성일 now()

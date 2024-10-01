@@ -52,12 +52,15 @@ public class ArticleController {
         List<ArticleDTO> articles = null;
         if ((cateNo >= 300 && cateNo < 400) || (cateNo >= 500 && cateNo < 600)) {
 
+            articleService.selectNotice(cateNo);
             PageResponseDTO pageResponseDTO = articleService.getAllArticles(pageRequestDTO,cateNo);
 
+            List<ArticleDTO> notices = articleService.selectNotice(cateNo);
             log.info("start : "+pageResponseDTO.getStart());
             log.info("end : " +pageResponseDTO.getEnd());
 
             log.info(pageResponseDTO.getDtoList());
+            model.addAttribute("notices", notices);
             model.addAttribute("pageResponseDTO",pageResponseDTO);
 
 
@@ -81,6 +84,7 @@ public class ArticleController {
 
         CSPageResponseDTO pageResponseDTO = articleService.selectCsArticleForUser(cspageRequestDTO);
 
+        log.info(pageResponseDTO.getDtoList().size());
         model.addAttribute("pageResponseDTO",pageResponseDTO);
         model.addAttribute("content", content);
         model.addAttribute("cate",cate);
@@ -92,13 +96,14 @@ public class ArticleController {
 
 
     //1:1 고객문의cswrite page
-    @PostMapping("/{uid}/community/cs")
+    @PostMapping("/{uid}/cs/writer")
     public String communityCsWrite(@PathVariable("uid") String uid,
-                                   @RequestParam("content") String content,
                                    CsArticleDTO csArticleDTO,
                                    HttpServletRequest req,
                                    Model model){
+
         CateDTO cate = categoryService.selectCateNo(504);
+        log.info("csArticleDTO : "+csArticleDTO);
 
         csArticleDTO.setCateNo(504);
         csArticleDTO.setWriter(uid);
@@ -109,22 +114,56 @@ public class ArticleController {
         if (csArticleDTO.getFiles() != null && !csArticleDTO.getFiles().isEmpty()) {
             uploadFiles = fileService.uploadFile(csArticleDTO); // Process file uploads
         }
+        csArticleDTO.setFile(uploadFiles.size());
+        String csNo = articleService.insertCsArticle(csArticleDTO,req);
 
+        log.info(csNo);
+        //글 저장
+        //파일 저장
+        if(!uploadFiles.isEmpty()){
+            for(FileDTO fileDTO : uploadFiles){
+                fileDTO.setCsNo(csNo);
+                int fno = fileService.insertFile(fileDTO);
+            }
+        }
 
+        String content="cslist";
         model.addAttribute("cate",cate);
-
+        model.addAttribute("content",content);
 
         return "boardIndex";
     }
 
+
+    @GetMapping("/504/{csNo}")
+    public String csView(@PathVariable("csNo") String csNo,
+                         @RequestParam("content") String content,
+                         @RequestParam(value="pg" ,defaultValue = "0") int pg, Model model){
+
+
+        CateDTO cate = categoryService.selectCateNo(504);
+
+        CsArticleDTO articleDTO =  articleService.selectCsArticle(csNo);
+
+        model.addAttribute("pg",pg);
+        model.addAttribute("cate", cate);
+        model.addAttribute("content", content);
+        model.addAttribute("article", articleDTO);
+
+        return  "boardIndex";
+    }
+
+
     @GetMapping("/admin/community/cs")
-    public String adminCs( @RequestParam("content") String content,PageRequestDTO pageRequestDTO,Model model){
+    public String adminCs( @RequestParam(value="content",defaultValue = "cslist") String content,CSPageRequestDTO pageRequestDTO,Model model){
         CateDTO  cate = categoryService.selectCateNo(504);
 
         pageRequestDTO.setCateNo(504);
 
-        PageResponseDTO pageResponseDTO = articleService.getAllArticles(pageRequestDTO,504);
+        CSPageResponseDTO cspageResponseDTO = articleService.selectCSByAdmin(pageRequestDTO);
 
+
+        model.addAttribute("pageResponseDTO",cspageResponseDTO);
         model.addAttribute("cate",cate);
         model.addAttribute("content", content);
         return  "boardIndex";
@@ -209,6 +248,19 @@ public class ArticleController {
 
 
 
+
+    @GetMapping("/cs/completed/{csNo}")
+    public String completed(@PathVariable("csNo") String csNo){
+
+        String updateCsCompleted = articleService.updateCsCompleted(csNo);
+
+        if(updateCsCompleted != null){
+            return "redirect:/article/admin/community/cs";
+
+        }
+        return "redirect:/article/504/"+csNo+"?content=csview";
+
+    }
 
 
 

@@ -13,7 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class CsArticleDTO {
-    private int CsNo;
+    private String CsNo;
     @Builder.Default//board no  autoincrement
     private int cateNo=504; // croptalk={story,garden,re}, event = {event}, community={notice,today,cook,cs,faq}
     private String title;
@@ -27,6 +27,8 @@ public class CsArticleDTO {
     private int file = 0;
     @Builder.Default
     private int hit =0;
+    @Builder.Default
+    private int comment=0;
 
     @Builder.Default
     private boolean isCompleted=false;
@@ -45,12 +47,11 @@ public class CsArticleDTO {
     private List<CommentDTO> commentList;
     private int pgCsArticleDTO;
 
-    public String getSubStringRdate() {
-        if(createdate ==null){
-            return createdate;
+    public String getSubStringRdate(String date) {
+        if(date ==null){
+            return "";
         }else{
-            createdate =  createdate.substring(0,10);
-            return createdate;
+            return date.substring(0,10);
         }
     }
 

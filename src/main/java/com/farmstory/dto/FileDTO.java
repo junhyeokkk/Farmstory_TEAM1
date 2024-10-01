@@ -17,5 +17,7 @@ public class FileDTO {
     private String sName;
     private int download;
     private String rdate;
+    private String csNo;
+
 
 }

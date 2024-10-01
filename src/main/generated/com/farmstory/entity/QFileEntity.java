@@ -21,6 +21,8 @@ public class QFileEntity extends EntityPathBase<FileEntity> {
 
     public final NumberPath<Integer> ano = createNumber("ano", Integer.class);
 
+    public final StringPath csNo = createString("csNo");
+
     public final NumberPath<Integer> download = createNumber("download", Integer.class);
 
     public final NumberPath<Integer> fno = createNumber("fno", Integer.class);
