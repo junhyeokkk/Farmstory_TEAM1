@@ -16,6 +16,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -181,11 +182,30 @@ public class UserService {
         Optional<User> optUser = userRepository.findById(uid);
         if (optUser.isPresent()) {
             User user = optUser.get();
+            log.info("usudusdfusfudsufusudfuswu" + user);
+
+            UserDTO dto  = modelMapper.map(user, UserDTO.class);
+            log.info("asfddddddddddddd" + dto.toString());
+
             return modelMapper.map(user, UserDTO.class);
         }
         return null;
     }
 
+
+
+    public UserDTO modifyUser(UserDTO userDTO) {
+        Boolean result = userRepository.existsById(userDTO.getUid());
+
+        if(result) {
+            User user = modelMapper.map(userDTO, User.class);
+            user.setRegDate(LocalDateTime.parse(userDTO.getRegDate()));
+            log.info("이유저인가>?" + user);
+            User savedUser = userRepository.save(user);
+            UserDTO resultUser = modelMapper.map(savedUser, UserDTO.class);
+            return resultUser;
+        }
+        return null;
 
 
 
