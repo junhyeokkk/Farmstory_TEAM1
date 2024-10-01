@@ -84,4 +84,7 @@ processResources {
 	filesMatching('**/application.yml') {
 		expand(project.properties)
 	}
+	filesMatching('**/application-prod.yml') {
+		expand(project.properties)
+	}
 }
