@@ -16,5 +16,5 @@ public interface ArticleRepositoryCustom {
 
     public List<Tuple> selectArticleById(int no);
 
-    public List<Article> selectNotice(int cateNo);
+    public List<Tuple> selectNotice(int cateNo);
 }

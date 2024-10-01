@@ -3,20 +3,22 @@
 <section class="modify">
 		<h3>글수정</h3>
 		<article>
-			<form th:action="@{article/modify}" method="post" enctype="multipart/form-data">
-				<input type="hidden" name="b_writer" value="${sessUser.uid}">
+			<form th:action="@{'/article/modify/'+${cateNo}+'/'+${article.articleNo}(pg=${pg})}" method="post" enctype="multipart/form-data">
+				<input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
+				<input type="hidden" name="date" th:value="${article.date}">
+				<input type="hidden" name="regIp" th:value="${article.regIp}">
+				<input type="hidden" name="com" th:value="${article.com}">
 				<table>
 					<tr>
 						<td>제목</td>
-						<input type="hidden" name="boardNo" value="${boardDTO.boardNo}" />
-						<input type="hidden" name="b_cateNo" value="${cate}"/>
-						<input type="hidden" name="group" value="${group}"/>
-						<td><input type="text" name="title" value="${boardDTO.title}" /></td>
+						<input type="hidden" name="articleNo" th:value="${article.articleNo}" />
+						<input type="hidden" name="cateNo" th:value="${cate.cateNo}"/>
+						<td><input type="text" name="title" th:value="${article.title}" /></td>
 					</tr>
 					<tr>
 						<td>내용</td>
 						<td>
-							<textarea name="b_contents">${boardDTO.b_contents}</textarea>
+							<textarea name="content">[[${article.content}]]</textarea>
 						</td>
 					</tr>
 					<tr>
@@ -25,22 +27,34 @@
 							<p style="margin-bottom: 6px; ">
 								최대 2개 파일 첨부 가능, 각 파일당 최대 10MB 까지 업로드
 							</p>
-							<!-- 첨부파일이 있으면 나타나게끔  -->
-
-									<p style="margin: 4px 0">
-<!--														 <a th:href="@{" style="color:red;">X</a>-->
-									</p>
-						   >
-							<input type="file" name="file1"/>
-							<input type="file" name="file2"/>
+							<th:block th:each="file :${article.fileList}">
+								<a th:href="@{/file/download/{fno}(fno=${file.fno})}">[[${file.oName}]]</a>&nbsp;<span>[[${file.download}]]</span>회 다운로드<br>
+							</th:block>
+							<input type="file" name="files" class="file1" hidden/>
+							<input type="file" name="files" class="file2" hidden/>
 						</td>
 					</tr>
 				</table>
 				<div>
-					<a th:href="@{/article/list}" class="btnCancel">취소</a>
+					<a th:href="@{'/article/'+${cate.cateGroup}+'/'+${cate.cateName}(content='list',pg=${pg})}" class="btnCancel">취소</a>
 					<input type="submit"  class="btnWrite" value="수정완료">
 				</div>
 			</form>
 		</article>
 	</section>
-           
+<script>
+	window.addEventListener('DOMContentLoaded', function() {
+		// Check if there are any files in article.fileList
+		let fileList = /*[[${#lists.size(article.fileList)}]]*/ 0;
+
+		console.log(fileList);
+		if (fileList === 0) {
+			// If no files are attached, show the hidden file inputs
+			document.querySelector('input[class="file1"]').removeAttribute('hidden');
+			document.querySelector('input[class="file2"]').removeAttribute('hidden');
+		}else if (fileListSize === 1) {
+			// If one file is attached, show only one additional file input
+			document.querySelector('input[class="file1"]').removeAttribute('hidden');
+		}
+	});
+</script>

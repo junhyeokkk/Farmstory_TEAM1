@@ -151,4 +151,12 @@
     opacity: 0.8;
 }
 
+.btn_modifty{
+    background: #2E658A;
+    width: 85px;
+    height: 27px;
+    color: white;
+    text-align: center;
+    align-content: center;
 
+}

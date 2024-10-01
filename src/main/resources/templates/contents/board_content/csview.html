@@ -22,7 +22,7 @@
 						</td>
 					</tr>
 					<!-- 첨부파일이 있으면 나타나게끔  -->
-						<tr>
+						<tr th:if="${!article.fileList.isEmpty()}">
 							<td>첨부파일</td>
 							<td>
 								<th:block th:each="file :${article.fileList}">
@@ -30,7 +30,7 @@
 								</th:block>
 							</td>
 						</tr>
-					</c:if>
+
 					<tr>
 						<td>내용</td>
 						<td>

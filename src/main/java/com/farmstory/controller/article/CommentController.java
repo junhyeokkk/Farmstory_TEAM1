@@ -35,12 +35,14 @@ public class CommentController {
     }
 
     @GetMapping("/comment/delete")
-    public String delete(@RequestParam int no, @RequestParam int pg, @RequestParam String uid) {
+    public String delete(@RequestParam int no, @RequestParam int pg, @RequestParam("writer") String writer) {
+       boolean delete=  commentService.deleteComment(no);
+     if(delete){
+         return "redirect:/article/view?no="+no+"&pg="+pg;
 
-        commentService.selectCommentByuid(no, uid);
+     }
+        return "redirect:/article/view?no="+no+"&pg="+pg+"&success=false";
 
-        commentService.deleteComment(no);
-        return "redirect:/article/view?no="+no+"&pg="+pg;
     }
 
 

@@ -77,7 +77,28 @@ public class  ArticleService {
 
 
     public List<ArticleDTO> selectArticles() { return null;}
-    public void updateArticle(Article article,int cateNo) {}
+    public int updateArticle(ArticleDTO articleDTO,int cateNo) {
+
+
+            //첨부파일 객체 가져오기
+            List<MultipartFile>  files = articleDTO.getFiles();
+            int filesize = 0;
+            if(files != null && !files.isEmpty()) {
+                filesize =files.size();
+            }
+            Article article = modelMapper.map(articleDTO, Article.class);
+            article.setFile(filesize);
+            article.setDate(LocalDateTime.parse(articleDTO.getDate()));
+            article.setRegIp(articleDTO.getRegIp());
+            article.setCateNo(cateNo);
+            article.setUpdateDate(LocalDateTime.now());
+            Article savedArticle = articleRepository.save(article);
+
+            return savedArticle.getArticleNo();
+
+
+
+    }
     public int deleteArticle(int articleNo) {
         boolean exists =  articleRepository.existsById(articleNo);
         int result=0;
@@ -89,19 +110,24 @@ public class  ArticleService {
     }
 
 
+    //공지사항 가져오기
     public List<ArticleDTO> selectNotice(int cateNo){
-       List<Article> articles = articleRepository.selectNotice(cateNo);
-       List<ArticleDTO> articleDTOs = new ArrayList<>();
-        if(!articles.isEmpty()) {
-            for(Article article : articles) {
-                ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
-                articleDTOs.add(articleDTO);
-            }
-            return articleDTOs;
-        }
+       List<Tuple> articles = articleRepository.selectNotice(cateNo);
+       log.info(articles);
+        List<ArticleDTO> articleList = articles.stream().map(tuple ->{
+                    Article article = tuple.get(0,Article.class);
+                    String nick=tuple.get(1,String.class);
+                    article.setNick(nick);
+
+                    ArticleDTO articleDTO = modelMapper.map(article,ArticleDTO.class);
+                    articleDTO.getSubStringRdate();
+                    return  articleDTO;
+                }
+        ).toList();
 
 
-        return null;
+
+        return articleList;
     }
 
     public CSPageResponseDTO selectCsArticleForUser(CSPageRequestDTO requestDTO) {
@@ -145,7 +171,10 @@ public class  ArticleService {
                     Article article = tuple.get(0,Article.class);
                     String nick=tuple.get(1,String.class);
                     article.setNick(nick);
-                    return modelMapper.map(article, ArticleDTO.class);
+
+                    ArticleDTO articleDTO = modelMapper.map(article,ArticleDTO.class);
+                    articleDTO.getSubStringRdate();
+                    return  articleDTO;
                 }
         ).toList();
 
