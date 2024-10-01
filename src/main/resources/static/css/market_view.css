@@ -76,7 +76,8 @@
 
 .freeDelivery:nth-of-type(2){
     text-decoration : none;
-    color: #c20a0a;
+    color: red;
+    font-weight: 800;
 }
 .sell_price {
     font-family: Inter;

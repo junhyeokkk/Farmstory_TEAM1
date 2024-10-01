@@ -38,6 +38,7 @@ public class Product {
     private prodCate prodCateNo;
 
     @OneToOne(mappedBy = "pNo", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private pDescImgFile pDescImgFile;
 
 }

@@ -1,6 +1,8 @@
 package com.farmstory.controller.market;
 
 import com.farmstory.dto.*;
+import com.farmstory.entity.Product;
+import com.farmstory.service.CartService;
 import com.farmstory.service.CategoryService;
 import com.farmstory.service.ProductService2;
 import lombok.RequiredArgsConstructor;
@@ -9,17 +11,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RequiredArgsConstructor
@@ -29,6 +31,7 @@ public class MarketController {
 
     private final CategoryService categoryService;
     private final ProductService2 productService;
+    private final CartService cartService;
     @Value("${spring.servlet.multipart.location}")
     private String uploadedPath;
 
@@ -64,5 +67,42 @@ public class MarketController {
         return "boardIndex";
     }
 
+    @GetMapping("/cart/{uid}")
+    public String cart(@RequestParam(value = "content", required = false) String content
+            ,@PathVariable String uid
+            ,Model model){
+        CateDTO cate = categoryService.selectCategory("market","cart");
+        log.info("cate : "+cate);
 
+        List<CartResponceDTO> cartList = cartService.selectALLWithUid(uid);
+
+        model.addAttribute("cate", cate);
+        model.addAttribute("content", content);
+        model.addAttribute("cartList", cartList);
+        return "boardIndex";
+    }
+
+    @PostMapping("/cart")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> cartInsert(@RequestParam(value = "content", required = false) String content
+            , Model model
+            , @RequestBody CartDTO cartDTO){
+        Map<String, Object> response = new HashMap<>();
+        log.info("!!!!!!!!cartInsert : "+cartDTO);
+        try{
+            ProductDTO product = productService.selectProductById(cartDTO.getProdNum());
+            cartDTO.setProdNo(product);
+            boolean success = cartService.insertCart(cartDTO);
+            if(success){
+                response.put("result", 1);
+            }
+            else{
+                response.put("result", 0);
+            }
+            return ResponseEntity.ok(response);
+        }catch(Exception e){
+            response.put("result", 0);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
 }
