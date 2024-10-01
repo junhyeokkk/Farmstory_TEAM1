@@ -25,7 +25,12 @@ public class Cart {
     //외래키 목록
     private String uid;    // 유저 아이디
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "prodNo")
-    private Product prodNo; // 상품 번호
+
+
+    // 준혁 추가필드
+    // 할인율 적용된 price
+    private int prodNo; // 상품 번호
+    private int delprice;
+    private int totalprice;
+    private int cart_delivery;
 }

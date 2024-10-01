@@ -9,6 +9,9 @@ import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,6 +24,7 @@ public class CartService {
     private final CartRepository cartRepository;
     private final ModelMapper modelMapper;
 
+    /*
     public boolean insertCart(CartDTO cartDTO){
         Cart cart = modelMapper.map(cartDTO, Cart.class);
         log.info("Insert cart " + cartDTO);
@@ -55,6 +59,27 @@ public class CartService {
         }).toList();
 
         return cartResponceDTOList;
+    }
+*/
+    public boolean insertCart1(CartDTO cartDTO){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String uid = (authentication != null && authentication.getPrincipal() instanceof UserDetails)
+                ? ((UserDetails) authentication.getPrincipal()).getUsername()
+                : null;
+
+        log.info("현재 로그인한 사용자 uid: " + uid);
+
+        cartDTO.setUid(uid);
+
+        Cart cart = modelMapper.map(cartDTO, Cart.class);
+        log.info("Insert cart " + cartDTO);
+
+        Cart savedCart = cartRepository.save(cart);
+        if(savedCart.getCartNo() != 0){
+            return true;
+        }else{
+            return false;
+        }
     }
 
 }

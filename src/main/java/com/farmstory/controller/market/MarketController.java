@@ -66,7 +66,7 @@ public class MarketController {
         model.addAttribute("productDTO", productDTO);
         return "boardIndex";
     }
-
+/*
     @GetMapping("/cart/{uid}")
     public String cart(@RequestParam(value = "content", required = false) String content
             ,@PathVariable String uid
@@ -104,5 +104,18 @@ public class MarketController {
             response.put("result", 0);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
+    }
+
+*/
+    @PostMapping("/cart1")
+    public String cart1(@RequestBody CartDTO cartDTO, Model model){
+        log.info("cart 들어왔나? : "+cartDTO.toString());
+
+        cartService.insertCart1(cartDTO);
+
+        CateDTO cate= categoryService.selectCategory("market","cart");
+        model.addAttribute("cate", cate);
+
+        return "boardIndex";
     }
 }
