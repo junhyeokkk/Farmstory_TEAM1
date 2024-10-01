@@ -36,7 +36,7 @@
               <a><</a>
             </th:block>
             <th:block th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
-              <a href="#">&#91;[[${num}]]&#93;</a>
+              <a th:href="@{/admin/product(pg=${num})}" th:class="${num == productPageResponseDTO.pg} ? 'num current' : 'num'">&#91;[[${num}]]&#93;</a>
             </th:block>
             <th:block th:if="${productPageResponseDTO.next}">
               <a>></a>

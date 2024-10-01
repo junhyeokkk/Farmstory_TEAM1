@@ -64,7 +64,6 @@ public class UserService {
 
 
 
-
     public String loginUser(String uid, String password) {
        String endcodedpassword = passwordEncoder.encode(password);
 
@@ -116,7 +115,7 @@ public class UserService {
     public void deleteUser(){}
 
 
-//terms
+    //terms
     public TermsDTO selectTemrs(){
 
         List<Terms> termsList = termsRepository.findAll();
@@ -124,12 +123,6 @@ public class UserService {
 
 
     }
-
-
-
-
-
-
 
     // 아이디 찾기 서비스 추가
     public void receiveCode(String name, String email) {
@@ -153,9 +146,6 @@ public class UserService {
 
     }
 
-
-
-
     // 인증번호 검증 및 아이디 반환
     public User verifyCodeForUser(String verificationCode, String name, String email) {
         // 1. 세션에서 저장된 인증번호 및 사용자 정보 가져오기
@@ -176,9 +166,13 @@ public class UserService {
         return user;  // 유저의 아이디 반환
     }
 
-
-
-
-
-
+    // 아이디로 회원 엔티티 불러오기
+    public UserDTO selectUser(String uid) {
+        Optional<User> optUser = userRepository.findById(uid);
+        if (optUser.isPresent()) {
+            User user = optUser.get();
+            return modelMapper.map(user, UserDTO.class);
+        }
+        return null;
+    }
 }
