@@ -30,6 +30,7 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
     private final CategoryService categoryService;
+    private String email;
 
     @GetMapping("/admin/a_user")
     public String list(Model model, PageRequestDTO pageRequestDTO) {
@@ -171,6 +172,90 @@ public class UserController {
             return ResponseEntity.badRequest().body(resultMap);
         }
     }
+
+
+
+
+
+
+    @ResponseBody
+    @PostMapping("/api/user/findpass")
+    public ResponseEntity<?> findUserByUidAndEmail(HttpSession session, @RequestBody Map<String, String> jsonData) {
+        String uid = jsonData.get("uid");
+        String email = jsonData.get("email");
+
+        // 비밀번호 찾기 서비스 호출 (아이디와 이메일을 받아서 인증 코드를 전송)
+        String verificationCode = userService.resetCode(uid, email);
+
+        // 세션에 인증번호 저장
+        session.setAttribute("code", verificationCode);
+        session.setAttribute("uid", uid);
+        session.setAttribute("email", email);
+
+        // 응답으로 인증번호 발송 완료 메시지 전송
+        return ResponseEntity.status(HttpStatus.OK).body("비밀번호 재설정 인증 코드가 이메일로 전송되었습니다.");
+    }
+
+    @ResponseBody
+    @PostMapping("/api/user/verifypass")
+    public ResponseEntity<?> verifypass(HttpSession session, @RequestBody Map<String, String> jsonData) {
+        String verificationCode = jsonData.get("code");
+        String uid = jsonData.get("uid");
+        String email = jsonData.get("email");
+
+        // 세션에서 인증번호 및 사용자 정보 가져오기
+        String sessionCode = (String) session.getAttribute("code");
+        String sessionUid = (String) session.getAttribute("uid");
+        String sessionEmail = (String) session.getAttribute("email");
+
+        // 인증번호 및 사용자 정보 검증
+        if (sessionCode != null && sessionCode.equals(verificationCode)
+                && sessionUid.equals(uid) && sessionEmail.equals(email)
+        ) {
+
+
+
+            // 성공 응답
+            return ResponseEntity.status(HttpStatus.OK).build();
+
+        } else {
+            // 실패 응답
+
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @ResponseBody
+    @PostMapping("/api/user/changepass")
+    public ResponseEntity<?> resetPassword(HttpSession session, @RequestBody Map<String, String> jsonData) {
+        String verificationCode = jsonData.get("code");
+        String uid = jsonData.get("uid");
+        String email = jsonData.get("email");
+        String newpass = jsonData.get("newpass");
+
+        // 세션에서 인증번호 및 사용자 정보 가져오기
+        String sessionCode = (String) session.getAttribute("code");
+        String sessionUid = (String) session.getAttribute("uid");
+        String sessionEmail = (String) session.getAttribute("email");
+
+        // 인증번호 및 사용자 정보 검증
+        if (sessionCode != null && sessionCode.equals(verificationCode)
+                && sessionUid.equals(uid) && sessionEmail.equals(email)) {
+
+            // 인증 성공: 비밀번호 변경 서비스 호출
+            userService.verifyResetCode(verificationCode, uid, email, newpass);
+
+            // 성공 응답
+            return ResponseEntity.status(HttpStatus.OK).body("비밀번호가 성공적으로 변경되었습니다.");
+
+        } else {
+            // 실패 응답
+            Map<String, Object> resultMap = new HashMap<>();
+            resultMap.put("message", "인증번호가 일치하지 않거나 사용자 정보가 올바르지 않습니다.");
+            return ResponseEntity.badRequest().body(resultMap);
+        }
+    }
+
 
 
 

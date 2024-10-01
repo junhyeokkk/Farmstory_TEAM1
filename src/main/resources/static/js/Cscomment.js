@@ -10,14 +10,14 @@ window.onload = function () {
 
         const jsonData = {
             "writer": commentForm.writer.value,
-            "parent": commentForm.parent.value,
+            "csParent": commentForm.csParent.value,
             "content": commentForm.content.value,
             "user" : {
                 "uid": commentForm.writer.value,
                 "nick": commentForm.nick.value
             }
         }
-        const type='article';
+        const type='cs';
         const data = await fetchPost('/comment/write', jsonData)
 
         if(data.no){
@@ -27,7 +27,7 @@ window.onload = function () {
             console.log(commentForm.commentSize.value);
 
             if(commentForm.commentSize.value <= 0){
-                location.href = "/article/" + commentForm.cateGroup.value + "/" + commentForm.cateName.value + "/" + commentForm.parent.value + "?content=view&pg=" + commentForm.pg.value;
+                location.href = "/article/504/" + data.csParent+ "?content=csview&pg=" + commentForm.pg.value;
             }else {
                 // 동적 태그 생성
                 const commentArticle = `<article>

@@ -13,9 +13,11 @@ public interface UserRepository extends JpaRepository<User, String>, UserReposit
    // 이름과 이메일로 유저 검색
    public Optional<User> findByNameAndEmail(String name, String email);
 
+
    public Optional<User> findByEmail(String email);
 
    public Optional<User> findByUidAndPass(String uid, String pass);
+   public Optional<User> findByUidAndEmail(String uid, String email);
 
    public int countByUid(String uid);
    public int countByNick(String nick);

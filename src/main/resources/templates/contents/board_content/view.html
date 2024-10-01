@@ -34,8 +34,6 @@
 					 <th:block th:if="${#authentication.principal != null and (#authentication.principal.user.uid.equals(article.writer) or #authentication.principal.user.role =='ADMIN')}">
 						 <a th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.articleNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
 						 <a th:href="@{'/article/modify/' + ${cate.cateNo} + '/' + ${article.articleNo}(pg=${pg})}" class="btn btnModify">수정</a>
-						 <a th:if="${cate.cateNo ==504}" th:href="@{/article/cs/completed/${article.articleNo}}" class="btn btnComplete">완료</a>
-
 					 </th:block>
 	                    <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName}(content='list',pg=${pg})}" class="btn btnList">목록</a>
 	                 
@@ -53,7 +51,7 @@
 						<p class="content">[[${comment.content}]]</p>
 
 						<div th:if="${comment.user.uid == #authentication.principal.user.uid}">
-							<a  th:href="@{/comment/delete(no=${comment.no},pg=${pg},writer=${comment.user.uid})}" class="remove btn">삭제</a>
+							<a  th:href="@{'/comment/delete/'+${cate.cateNo}(no=${comment.no},pg=${pg},writer=${comment.user.uid})}" class="remove btn">삭제</a>
 							<a  href="/" class="modify btn">수정</a>
 						</div>
 					</article>

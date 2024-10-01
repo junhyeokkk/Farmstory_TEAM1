@@ -18,6 +18,8 @@ public class CommentDTO {
     private String writer;
     private String regip;
     private String date;
+    private String CsParent;
+
 
     //추가필드
     private String nick;

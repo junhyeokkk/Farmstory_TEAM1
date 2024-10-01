@@ -1,18 +1,24 @@
+<script type="text/javascript" defer th:src="@{/js/changepw.js}"></script>
 <section>
-    <form>
-        <h5>비밀번호 변경</h5>
+    <form id="passwordChangeForm">
+        <h2>비밀번호 변경</h2>
+
         <table>
             <tr>
-                <th>아이디</th>
-                <td>홍길동</td>
+                <th class="id" name="id">아이디</th>
+                <td th:text="${session.uid}"> </td> <!-- 동적 데이터 -->
             </tr>
             <tr>
                 <th>새 비밀번호</th>
-                <td><input type="text" name="password" placeholder="새 비밀번호 입력"></td>
+                <td><input type="password" id="newPassword" name="password" placeholder="새 비밀번호 입력"></td>
+            </tr>
             </tr>
             <tr>
                 <th>새 비밀번호 확인</th>
-                <td><input type="text" name="password" placeholder="새 비밀번호 입력"></td>
+                <td>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="새 비밀번호 확인">
+                    <span id="resultPass"  class="validationMessage"></span>
+                </td>
             </tr>
         </table>
     </form>
@@ -21,7 +27,8 @@
     </h5>
 
     <div class="btn-group">
-        <button><a href="#" class="btn">취소</a></button>
-        <button><a href="#" class="btn">다음</a></button>
+        <button type="button" class="btnCancel" onclick="history.back();">취소</button>
+        <button type="button" class="btnNext" onclick="submitPasswordChangeForm()">다음</button>
     </div>
 </section>
+

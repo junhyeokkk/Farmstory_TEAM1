@@ -75,6 +75,33 @@ public class  ArticleService {
 
     }
 
+    //comment update
+    public int updateCommentCount(int parentNo, boolean upanddown){
+
+        int result =0;
+        //up ==ture
+        Optional<Article> optional = articleRepository.findById(parentNo);
+        if(upanddown){
+            if (optional.isPresent()){
+                Article article = optional.get();
+                article.setCom(article.getCom() + 1);
+                articleRepository.save(article);
+                result=1;
+            }
+        }else{
+            if (optional.isPresent()){
+                Article article = optional.get();
+                article.setCom(article.getCom() - 1);
+                articleRepository.save(article);
+                result =-1;
+            }
+            //down false
+        }
+
+
+        return result;
+    }
+
 
     public List<ArticleDTO> selectArticles() { return null;}
     public int updateArticle(ArticleDTO articleDTO,int cateNo) {
@@ -170,6 +197,9 @@ public class  ArticleService {
         List<ArticleDTO> articleList = pageArticle.stream().map(tuple ->{
                     Article article = tuple.get(0,Article.class);
                     String nick=tuple.get(1,String.class);
+                    Long com =tuple.get(2,Long.class);
+                    int commentCount = com.intValue();  // Convert Long to int if needed
+                    article.setCom(commentCount);
                     article.setNick(nick);
 
                     ArticleDTO articleDTO = modelMapper.map(article,ArticleDTO.class);

@@ -30,6 +30,7 @@ public class Comment {
 
     @CreationTimestamp
     private LocalDateTime date;
+    private String csParent;
 
 
 

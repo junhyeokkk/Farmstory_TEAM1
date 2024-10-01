@@ -13,20 +13,12 @@
                     <label class="email" name="email">이메일</label>
                 </div>
                 <div>
-                    <input class="emailtext" type="email" placeholder="이메일 입력">
-                    <button class="getCodeBtn">인증번호 받기</button>
-
-                    <input class="verificationCodetext" type="text" placeholder="인증번호 입력">
-                    <button type="button" class="verificationCode">확인</button>
-
-                    <input class="emailtext" type="email" name="email" id="email" placeholder="이메일 입력" required>
+                    <input class="emailtext" id="email" type="email" placeholder="이메일 입력">
                     <button type="button" class="getCodeBtn" id="sendCodeBtn">인증번호 받기</button>
 
-                    <!-- 인증번호 입력 필드 -->
-                    <input class="verificationCodetext" type="text" id="verificationCode" placeholder="인증번호 입력"
-                           style="display: none;">
+                    <input class="verificationCodetext" id="verificationCode" type="text" placeholder="인증번호 입력">
+                    <button type="button" class="verificationCode" id="verifyCodeBtn">확인</button>
 
-                    <button class="verificationCode" type="button" id="verifyCodeBtn" style="display: none;">확인</button>
 
                 </div>
             </table>
@@ -45,10 +37,11 @@
 <script>
     document.getElementById('sendCodeBtn').addEventListener('click', function (e) {
         e.preventDefault();
-
+        console.log("AAAA")
         const name = document.getElementById('name').value;
         const email = document.getElementById('email').value;
-
+        console.log('name:'+name)
+        console.log('email:'+email)
         if (name && email) {
             fetch('/api/user/findid', {  // 정적 경로가 아닌 API 경로로 수정
                 method: 'POST',

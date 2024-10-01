@@ -91,6 +91,7 @@ public class ArticleController {
 
         ArticleDTO articleDTO =  articleService.selectArticle(articleNo);
         log.info("articleDTO : "+articleDTO);
+        log.info("content: "+content);
         model.addAttribute("pg",pg);
         model.addAttribute("cate", cate);
         model.addAttribute("content", content);
@@ -140,7 +141,8 @@ public class ArticleController {
 
     @GetMapping("/modify/{cateNo}/{articleNo}")
     public String modifty(@PathVariable("cateNo") int cateNO,
-                          @PathVariable("articleNo") int articleNo, @RequestParam("pg") int pg, Model model){
+                          @PathVariable("articleNo") int articleNo, @RequestParam("pg") int pg,
+                          Model model){
         String content = "modify";
         CateDTO cate = categoryService.selectCateNo(cateNO);
 
@@ -178,7 +180,7 @@ public class ArticleController {
             }
         }
 
-        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view,pg="+pg;
+        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view&pg="+pg;
     }
 
     @GetMapping("/delete/{cateNo}/{articleNo}")
@@ -192,7 +194,7 @@ public class ArticleController {
             return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"?content=list";
         }
 
-        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view,pg="+pg;
+        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view&pg="+pg;
     }
 
 

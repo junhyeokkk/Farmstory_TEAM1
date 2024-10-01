@@ -28,7 +28,9 @@
 								최대 2개 파일 첨부 가능, 각 파일당 최대 10MB 까지 업로드
 							</p>
 							<th:block th:each="file :${article.fileList}">
-								<a th:href="@{/file/download/{fno}(fno=${file.fno})}">[[${file.oName}]]</a>&nbsp;<span>[[${file.download}]]</span>회 다운로드<br>
+								<a th:href="@{/file/download/{fno}(fno=${file.fno})}">[[${file.oName}]]</a>&nbsp;<span>[[${file.download}]]</span>회 다운로드
+								<a th:href="@{/file/delete/{fno}(fno=${file.fno})}" class="filedDeleteBtn">X</a>
+								<br>
 							</th:block>
 							<input type="file" name="files" class="file1" hidden/>
 							<input type="file" name="files" class="file2" hidden/>
@@ -45,7 +47,7 @@
 <script>
 	window.addEventListener('DOMContentLoaded', function() {
 		// Check if there are any files in article.fileList
-		let fileList = /*[[${#lists.size(article.fileList)}]]*/ 0;
+		let fileList = Number(document.getElementById('fileListSize').value);
 
 		console.log(fileList);
 		if (fileList === 0) {
