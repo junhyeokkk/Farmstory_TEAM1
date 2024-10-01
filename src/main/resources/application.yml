@@ -38,7 +38,11 @@ spring:
     servlet:
         multipart:
             location: uploads/
-            max-file-size: 10MB
+    web:
+        resources:
+            static-locations:
+                - classpath:/static/
+                - file:uploads/
     thymeleaf:
         cache: false
         check-template-location: true

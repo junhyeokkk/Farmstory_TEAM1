@@ -1,5 +1,9 @@
 package com.farmstory.dto;
 
+import com.farmstory.entity.Product;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.*;
 
 import java.util.List;
@@ -18,6 +22,7 @@ public class pDescImgFileDTO {
     private String rdate;
 
     // 외래키 컬럼
-    private int pNo;
-
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="pNo")
+    private Product pNo;
 }

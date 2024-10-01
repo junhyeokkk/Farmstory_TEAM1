@@ -14,15 +14,15 @@
                 <th>재고</th>
                 <th>등록일</th>
               </tr>
-              <tr class="p_tr2">
+              <tr class="p_tr2"  th:each="product , i:${productPageResponseDTO.productList}">
                 <td><input type="checkbox"></td>
-                <td><img id="sample_img" th:src="@{/admin_images/admin_logo}" alt="sample"></td>
-                <td>1011</td>
-                <td>사과 500g</td>
-                <td>과일</td>
-                <td>4,000원</td>
-                <td>100</td>
-                <td>2023-01-01</td>
+                <td><img id="sample_img" th:src="@{'/uploads/product/'+${product.p_sName1}}" alt="sample"></td>
+                <td>[[${product.pNo}]]</td>
+                <td>[[${product.pName}]]</td>
+                <td>[[${product.prodCateName}]]</td>
+                <td>[[${product.price}]]</td>
+                <td>[[${product.stock}]]</td>
+                <td>[[${product.rdate}]]</td>
               </tr>
             </table>
           </div>
@@ -31,13 +31,16 @@
             <a href="#" id="p_prod_reg">상품등록</a>
           </div>
           <div id="list_num">
-            <a><</a>
-            <a href="#">[1]</a>
-            <a href="#">[2]</a>
-            <a href="#">[3]</a>
-            <a href="#">[4]</a>
-            <a href="#">[5]</a>
-            <a>></a>
+
+            <th:block th:if="${productPageResponseDTO.prev}">
+              <a><</a>
+            </th:block>
+            <th:block th:each="num:${#numbers.sequence(productPageResponseDTO.start, productPageResponseDTO.end)}">
+              <a href="#">&#91;[[${num}]]&#93;</a>
+            </th:block>
+            <th:block th:if="${productPageResponseDTO.next}">
+              <a>></a>
+            </th:block>
           </div>
         </div>
       </div>

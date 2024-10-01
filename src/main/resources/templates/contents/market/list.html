@@ -29,9 +29,9 @@
     <tbody>
     <tr th:each="product, i:${ProductPageResponseDTO.getProductList}">
       <td class="pic">
-        <a th:href="@{/market/pview/${product.pNo}}"><img th:src="@{${product.p_sName1}}" alt="상품 이미지"></a>
+        <a th:href="@{/market/pview/{pNo}(pNo=${product.pNo})}"><img th:src="@{/uploads/product/}+${product.p_sName1}" alt="상품 이미지"></a>
       </td>
-      <td class="type" th:text="${product.prodCateNo}">분류</td>
+      <td class="type" th:text="${product.prodCateName}">분류</td>
       <td class="pro_name">
         <a th:href="@{/market/pview/{pNo}(pNo=${product.pNo})}" th:text="${product.pName}">상품이름</a>
       </td>
@@ -44,11 +44,17 @@
     </tbody>
   </table>
   <div class="pages">
+    <th:block th:if="${ProductPageResponseDTO.prev}">
+      <a><</a>
+    </th:block>
     <ul>
       <th:block th:each="num:${#numbers.sequence(ProductPageResponseDTO.start, ProductPageResponseDTO.end)}">
         <li><a th:if="${ProductPageResponseDTO.type == null}" th:href="@{/market/plist(pg=${num})}" th:class="${num == ProductPageResponseDTO.pg} ? 'current' : 'no'">&#91;[[${num}]]&#93;</a></li>
         <li><a th:if="${ProductPageResponseDTO.type != null}" th:href="@{/market/plist(pg=${num}, type=${ProductPageResponseDTO.type})}" th:class="${num == ProductPageResponseDTO.pg} ? 'current' : 'no'">&#91;[[${num}]]&#93;</a></li>
       </th:block>
     </ul>
+    <th:block th:if="${ProductPageResponseDTO.next}">
+      <a>></a>
+    </th:block>
   </div>
 </div>
