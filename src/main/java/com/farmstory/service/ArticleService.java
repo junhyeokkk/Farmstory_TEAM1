@@ -95,6 +95,7 @@ public class  ArticleService {
         if(!articles.isEmpty()) {
             for(Article article : articles) {
                 ArticleDTO articleDTO = modelMapper.map(article, ArticleDTO.class);
+                articleDTO.getSubStringRdate();
                 articleDTOs.add(articleDTO);
             }
             return articleDTOs;
