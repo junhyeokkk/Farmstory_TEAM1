@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public AppInfo getAppInfo() {
-        return  new AppInfo();
+    public AppInfoProd getAppInfo() {
+        return  new AppInfoProd();
     }
 
 

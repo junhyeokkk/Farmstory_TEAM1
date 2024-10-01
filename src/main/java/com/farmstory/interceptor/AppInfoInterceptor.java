@@ -3,6 +3,7 @@ package com.farmstory.interceptor;
 
 
 import com.farmstory.config.AppInfo;
+import com.farmstory.config.AppInfoProd;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class AppInfoInterceptor implements HandlerInterceptor {
         - HTTP 요청을 가로채고, 요청이 컨트롤러에 도달전과 후에 추가 작업 수행
      */
 
-    private final AppInfo appInfo;
+    private final AppInfoProd appInfo;
 
 
     //postHandle은  controller의 요청 메서드에서

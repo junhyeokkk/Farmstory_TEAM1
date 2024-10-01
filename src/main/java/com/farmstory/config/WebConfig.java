@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Autowired
-    private AppInfo appInfo;
+    private AppInfoProd appInfo;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
