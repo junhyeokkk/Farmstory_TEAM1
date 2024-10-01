@@ -6,6 +6,12 @@
     const price = [[${productDTO.price}]];
     const value = price * (1 - [[${productDTO.discount}]] / 100.0)
     const delivery = [[${productDTO.delivery}]];
+    const stock = [[${productDTO.stock}]];
+
+    const delitag = document.getElementsByClassName("deliver")[0].getElementsByClassName("deli");
+    const deliprice = delitag[0];
+    const delispan = delitag[1];
+    const uid = document.getElementsByClassName("uid")[0].innerText;
 
     updateTotal();
     const stockInput = document.querySelector('input[class="stock"]');
@@ -13,21 +19,25 @@
       updateTotal();
     });
 
-
     function updateTotal() {
+      var quantity = parseInt(document.querySelector('input[class="stock"]').value, 10);
 
-
-      console.log("price"+price);
-      console.log("price"+value);
-      console.log("delivery"+delivery);
-      const quantity = parseInt(document.querySelector('input[class="stock"]').value, 10);
+      if(quantity > stock) {
+        stockInput.value = stock;
+        quantity = stock;
+      }
 
       if (!isNaN(price) && !isNaN(quantity)) {
         var total = value * quantity;
         if(total < 30000){
+          deliprice.classList.replace('freeDelivery', 'noneFreeDelivery');
+          delispan.classList.replace('freeDelivery', 'noneFreeDelivery');
           console.log("배달비 청구!!");
           total = total + delivery;
-
+        }
+        else{
+          deliprice.classList.replace('noneFreeDelivery', 'freeDelivery');
+          delispan.classList.replace('noneFreeDelivery', 'freeDelivery');
         }
         document.querySelector('.sum').textContent = total+`원`;
       } else {
@@ -35,6 +45,52 @@
         document.querySelector('.sum').textContent = '0원';
       }
     }
+
+
+    document.addEventListener('click', function(e) {
+      if (e.target.classList.contains('add_to_cart')) {
+        e.preventDefault();
+        if (uid == ""){
+          alert('로그인이 필요합니다.');
+          return;
+        }
+
+
+        const prono = [[${productDTO.pNo}]];
+        const cartProdQty = parseInt(document.querySelector('input[class="stock"]').value, 10);
+
+        const data = {
+          uid: uid,
+          prodNum: prono,
+          cartProdQty: cartProdQty
+        };
+
+        fetch('/market/cart', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data)
+        })
+                .then(resp => resp.json())
+                .then(data => {
+                  console.log(data);
+                  if (data.result != 0) {
+                    if (confirm('장바구니에 상품을 담았습니다.\n 장바구니로 이동하시겠습니까?')) {
+                      location.href = "/market/cart/"+uid;
+                    } else {
+                      updateTotal();
+                    }
+                  } else {
+                    alert('장바구니에 상품을 담지 못했습니다.');
+                  }
+                })
+                .catch(err => {
+                  alert('오류가 발생했습니다. 관리자에게 문의하세요.');
+                  console.log(err);
+                });
+      } // 장바구니 END
+    });
   }
 
 </script>
@@ -43,6 +99,8 @@
   <div class="product_info">
     <img th:src="@{/uploads/product/}+${productDTO.p_sName1}" alt="상품 이미지" />
     <div class="product_details" th:with="disPrice=${#numbers.formatDecimal(productDTO.price * (1 - productDTO.discount / 100.0),0,0)}">
+        <p th:if="${!#authentication.principal.equals('anonymousUser')}" class="uid" hidden>[[${#authentication.principal.user.uid}]]</p>
+        <p th:if="${#authentication.principal.equals('anonymousUser')}" class="uid" hidden></p>
       <table>
         <tr>
           <th>상품명</th>
@@ -54,8 +112,8 @@
         </tr>
         <tr>
           <th>배송비</th>
-          <td th:if="${disPrice}>30000" class="deliver"><span class="freeDelivery">[[${productDTO.delivery}]]원</span> <span class="freeDelivery">3만원 이상 무료배송</span></td>
-          <td th:if="${disPrice}<=30000" class="deliver"><span class="noneFreeDelivery">[[${productDTO.delivery}]]원</span> <span class="noneFreeDelivery">3만원 이상 무료배송</span></td>
+          <td th:if="${disPrice}>30000" class="deliver"><span class="deli freeDelivery">[[${productDTO.delivery}]]원</span> <span class="deli freeDelivery">3만원 이상 무료배송</span></td>
+          <td th:if="${disPrice}<=30000" class="deliver"><span class="deli noneFreeDelivery">[[${productDTO.delivery}]]원</span> <span class="deli noneFreeDelivery">3만원 이상 무료배송</span></td>
         </tr>
         <tr>
           <th>판매가격</th>
@@ -75,7 +133,7 @@
         </tr>
       </table>
       <div class="buttons">
-        <a th:href="@{/category/market/cart}" type="button" class="add_to_cart">장바구니</a>
+        <a href="#" type="button" class="add_to_cart">장바구니</a>
         <a th:href="@{/category/market/order}"  type="button" class="buy_now">바로구매</a>
       </div> <!-- .buttons -->
     </div> <!-- .product_info -->
