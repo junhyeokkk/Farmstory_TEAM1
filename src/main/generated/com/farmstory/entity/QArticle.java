@@ -46,6 +46,8 @@ public class QArticle extends EntityPathBase<Article> {
 
     public final StringPath title = createString("title");
 
+    public final DateTimePath<java.time.LocalDateTime> updateDate = createDateTime("updateDate", java.time.LocalDateTime.class);
+
     public final StringPath writer = createString("writer");
 
     public QArticle(String variable) {

@@ -1,5 +1,5 @@
 <link rel="stylesheet" th:href="@{/css/board.css}">
-<script type="text/javascript" th:src="@{/js/commentJs.js}"></script>
+<script type="text/javascript" th:src="@{/js/comment.js}"></script>
 
 
 <section class="view" >
@@ -14,7 +14,7 @@
 						</td>
 					</tr>
 					<!-- 첨부파일이 있으면 나타나게끔  -->
-						<tr>
+						<tr th:if="${article.fileList.size() != 0 }">
 							<td>첨부파일</td>
 							<td>
 								<th:block th:each="file :${article.fileList}">
@@ -22,7 +22,6 @@
 								</th:block>
 							</td>
 						</tr>
-					</c:if>
 					<tr>
 						<td>내용</td>
 						<td>
@@ -34,7 +33,7 @@
 
 					 <th:block th:if="${#authentication.principal != null and (#authentication.principal.user.uid.equals(article.writer) or #authentication.principal.user.role =='ADMIN')}">
 						 <a th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.articleNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
-						 <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName} + '/' + ${article.articleNo}(content='modify')}" class="btn btnModify">수정</a>
+						 <a th:href="@{'/article/modify/' + ${cate.cateNo} + '/' + ${article.articleNo}(pg=${pg})}" class="btn btnModify">수정</a>
 						 <a th:if="${cate.cateNo ==504}" th:href="@{/article/cs/completed/${article.articleNo}}" class="btn btnComplete">완료</a>
 
 					 </th:block>
@@ -52,9 +51,10 @@
 						<span class="nick">[[${comment.user.nick}]]</span>
 						<span class="date">[[${comment.getSubStringRdate()}]]</span>
 						<p class="content">[[${comment.content}]]</p>
-						<div>
-							<a th:href="@{/comment/delete(no=${comment.no},pg=${pg},writer=${comment.writer})}" class="remove btn">삭제</a>
-							<a href="/" class="modify btn">수정</a>
+
+						<div th:if="${comment.user.uid == #authentication.principal.user.uid}">
+							<a  th:href="@{/comment/delete(no=${comment.no},pg=${pg},writer=${comment.user.uid})}" class="remove btn">삭제</a>
+							<a  href="/" class="modify btn">수정</a>
 						</div>
 					</article>
 				</th:block>
@@ -66,7 +66,10 @@
 				<h3>댓글쓰기</h3>
 				<form name="commentForm" method="post">
 					<textarea name="content">댓글내용 입력</textarea>
+					<input type="hidden" name="commentSize" th:value="${article.commentList.size()}">
 					<input type="hidden" name="parent" th:value="${article.articleNo}">
+					<input type="hidden" name="cateGroup" th:value="${cate.cateGroup}">
+					<input type="hidden" name="cateName" th:value="${cate.cateName}">
 					<input type="hidden" name="pg" th:value="${pg}">
 					<input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
 					<input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}"/>

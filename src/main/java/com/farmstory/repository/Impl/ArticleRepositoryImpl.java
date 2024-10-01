@@ -142,7 +142,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
                 .where(qcate.cateNo.eq(cateNo).and(expression))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(qarticle.articleNo.desc())
+                .orderBy(qarticle.updateDate.desc(), qarticle.articleNo.desc())
                 .fetch();
 
         long total = queryFactory
@@ -180,9 +180,11 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     }
 
     @Override
-    public List<Article> selectNotice(int cateNo) {
-        List<Article> content = queryFactory.select(qarticle)
+    public List<Tuple> selectNotice(int cateNo) {
+        List<Tuple> content = queryFactory.select(qarticle,quser.nick)
                                 .from(qarticle)
+                                .join(quser)
+                                .on(qarticle.writer.eq(quser.uid))
                                 .where(qarticle.cateNo.eq(cateNo).and(qarticle.isNotice.eq(true)))
                                 .fetch();
 

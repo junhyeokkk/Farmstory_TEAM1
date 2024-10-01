@@ -31,7 +31,7 @@
                                        <td colspan="5" class="td_first"><a  th:href="@{/article/list(pg=1)}">일치하는 내용이 없습니다.</a></td>
                                    </tr>
                                 </th:block>
-                                <th:block th:if="${notices.size()>0}">
+                                <th:block th:if="${notices != null}">
                                     <tr th:each="notice,i:${notices}">
                                         <td>공지</td>
                                         <td>
@@ -41,7 +41,7 @@
 
                                         </td>
                                         <td>[[${notice.nick}]]</td>
-                                        <td>[[${notice.getSubString()}]]</td>
+                                        <td>[[${notice.subStringRdate}]]</td>
                                         <td>[[${notice.hit}]]</td>
                                     </tr>
                                 </th:block>
@@ -55,7 +55,7 @@
 
                                     </td>
                                     <td>[[${article.nick}]]</td>
-                                    <td>[[${article.date}]]</td>
+                                    <td>[[${article.subStringRdate}]]</td>
                                     <td>[[${article.hit}]]</td>
                                 </tr>
                                     <!-- 한번 반복할때마다 pageStartNum을 1씩 차감 -->

@@ -27,8 +27,7 @@ public class ArticleController {
     private final CsArticleRepository csArticleRepository;
 
 
-    // @GetMapping("/")
-
+    //
     @GetMapping("/{cateGroup}/{cateName}")
     public String list(@PathVariable("cateGroup") String group,
                            @PathVariable("cateName") String cateName,
@@ -74,7 +73,133 @@ public class ArticleController {
     }
 
 
-    //cs
+    //article view
+    @GetMapping("/{cateGroup}/{cateName}/{articleNo}")
+    public String view(@PathVariable("cateGroup") String group,
+                       @PathVariable("cateName") String cateName,
+                       @PathVariable("articleNo") int articleNo,
+                       @RequestParam(value = "pg",defaultValue = "0") int pg,
+                       @RequestParam(value = "content", required = false) String content,
+                       Model model){
+
+        log.info("pg : "+pg);
+
+        CateDTO cate = categoryService.selectCategory(group,cateName);
+
+
+
+
+        ArticleDTO articleDTO =  articleService.selectArticle(articleNo);
+        log.info("articleDTO : "+articleDTO);
+        model.addAttribute("pg",pg);
+        model.addAttribute("cate", cate);
+        model.addAttribute("content", content);
+        model.addAttribute("article", articleDTO);
+        return "boardIndex";
+    }
+
+
+    @PostMapping("/{cateNo}/writer")
+    public String writer(@PathVariable("cateNo") int cateNo,ArticleDTO articleDTO,  @RequestParam("writer") String writer, HttpServletRequest req){
+        log.info("noticeCate : "+articleDTO.getNoticeCate());
+
+        CateDTO cate = categoryService.selectCateNo(cateNo);
+
+        articleDTO.setCateNo(cate.getCateNo());
+        articleDTO.setRegIp(req.getRemoteAddr());
+
+        //파일 업로드
+        List<FileDTO> uploadFiles = new ArrayList<>();
+        if (articleDTO.getFiles() != null && !articleDTO.getFiles().isEmpty()) {
+            uploadFiles = fileService.uploadFile(articleDTO); // Process file uploads
+        }
+        int ano;
+        if(cate.getCateNo()==501 || articleDTO.getNoticeCate() != 0){
+            articleDTO.setNotice(true);
+            ano =articleService.insertArticle(articleDTO,cateNo,req);
+        }else {
+            ano = articleService.insertArticle(articleDTO, cateNo, req);
+        }
+        //글 저장
+        //파일 저장
+        if(!uploadFiles.isEmpty()){
+            for(FileDTO fileDTO : uploadFiles){
+                fileDTO.setAno(ano);
+                int fno = fileService.insertFile(fileDTO);
+            }
+        }
+
+
+
+        if(ano>0){
+            return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"?content=list";
+        }
+        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"?content=write&success=300";
+
+    }
+
+    @GetMapping("/modify/{cateNo}/{articleNo}")
+    public String modifty(@PathVariable("cateNo") int cateNO,
+                          @PathVariable("articleNo") int articleNo, @RequestParam("pg") int pg, Model model){
+        String content = "modify";
+        CateDTO cate = categoryService.selectCateNo(cateNO);
+
+
+        ArticleDTO articleDTO = articleService.selectArticle(articleNo);
+
+        model.addAttribute("cate", cate);
+        model.addAttribute("pg",pg);
+        model.addAttribute("article", articleDTO);
+        model.addAttribute("content", content);
+
+        return "boardIndex";
+
+    }
+
+
+    @PostMapping("/modify/{cateNo}/{articleNo}")
+    public String modify(@PathVariable("cateNo") int cateNo,
+                         @PathVariable("articleNo") int articleNo,
+                         @RequestParam("pg") int pg,ArticleDTO articleDTO, Model model){
+
+        CateDTO cate = categoryService.selectCateNo(cateNo);
+        log.info(articleDTO);
+        List<FileDTO> uploadFiles = new ArrayList<>();
+        if (articleDTO.getFiles() != null && !articleDTO.getFiles().isEmpty()) {
+            uploadFiles = fileService.uploadFile(articleDTO); // Process file uploads
+        }
+       int ano =  articleService.updateArticle(articleDTO,cateNo);
+        //글 저장
+        //파일 저장
+        if(!uploadFiles.isEmpty()){
+            for(FileDTO fileDTO : uploadFiles){
+                fileDTO.setAno(ano);
+                int fno = fileService.insertFile(fileDTO);
+            }
+        }
+
+        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view,pg="+pg;
+    }
+
+    @GetMapping("/delete/{cateNo}/{articleNo}")
+    public String delete(@PathVariable("articleNo") int articleNo,
+                         @PathVariable("cateNo") int cateNo,
+                         @RequestParam("pg") int pg, Model model){
+
+        CateDTO cate = categoryService.selectCateNo(cateNo);
+        int result = articleService.deleteArticle(articleNo);
+        if(result==1){
+            return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"?content=list";
+        }
+
+        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view,pg="+pg;
+    }
+
+
+
+
+    //================================================================== CS =====================================================
+    //cs List
     @GetMapping("/{uid}/community/cs")
     public String communityCsList(@PathVariable("uid") String uid, @RequestParam("content") String content,CSPageRequestDTO cspageRequestDTO, Model model){
         CateDTO  cate = categoryService.selectCateNo(504);
@@ -135,6 +260,7 @@ public class ArticleController {
     }
 
 
+    // CS View
     @GetMapping("/504/{csNo}")
     public String csView(@PathVariable("csNo") String csNo,
                          @RequestParam("content") String content,
@@ -154,6 +280,7 @@ public class ArticleController {
     }
 
 
+    //admin 부분 CS list
     @GetMapping("/admin/community/cs")
     public String adminCs( @RequestParam(value="content",defaultValue = "cslist") String content,CSPageRequestDTO pageRequestDTO,Model model){
         CateDTO  cate = categoryService.selectCateNo(504);
@@ -169,82 +296,7 @@ public class ArticleController {
         return  "boardIndex";
     }
 
-    @GetMapping("/{cateGroup}/{cateName}/{articleNo}")
-    public String view(@PathVariable("cateGroup") String group,
-                       @PathVariable("cateName") String cateName,
-                       @PathVariable("articleNo") int articleNo,
-                       @RequestParam(value = "pg",defaultValue = "0") int pg,
-                       @RequestParam(value = "content", required = false) String content,
-                       Model model){
 
-        log.info("pg : "+pg);
-
-        CateDTO cate = categoryService.selectCategory(group,cateName);
-
-
-
-
-       ArticleDTO articleDTO =  articleService.selectArticle(articleNo);
-       log.info("articleDTO : "+articleDTO);
-       model.addAttribute("pg",pg);
-       model.addAttribute("cate", cate);
-       model.addAttribute("content", content);
-       model.addAttribute("article", articleDTO);
-        return "boardIndex";
-    }
-
-
-    @PostMapping("/{cateNo}/writer")
-    public String writer(@PathVariable("cateNo") int cateNo,ArticleDTO articleDTO,  @RequestParam("writer") String writer, HttpServletRequest req){
-        log.info("noticeCate : "+articleDTO.getNoticeCate());
-        CateDTO cate = categoryService.selectCateNo(cateNo);
-
-        articleDTO.setCateNo(cate.getCateNo());
-        articleDTO.setRegIp(req.getRemoteAddr());
-
-        //파일 업로드
-        List<FileDTO> uploadFiles = new ArrayList<>();
-        if (articleDTO.getFiles() != null && !articleDTO.getFiles().isEmpty()) {
-            uploadFiles = fileService.uploadFile(articleDTO); // Process file uploads
-        }
-        int ano;
-        if(cate.getCateNo()==501 || articleDTO.getNoticeCate() != 0){
-            articleDTO.setNotice(true);
-            ano =articleService.insertArticle(articleDTO,cateNo,req);
-        }else {
-            ano = articleService.insertArticle(articleDTO, cateNo, req);
-        }
-        //글 저장
-        //파일 저장
-        if(!uploadFiles.isEmpty()){
-            for(FileDTO fileDTO : uploadFiles){
-                fileDTO.setAno(ano);
-                int fno = fileService.insertFile(fileDTO);
-            }
-        }
-
-
-
-        if(ano>0){
-            return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"?content=list";
-        }
-        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"?content=write&success=300";
-
-    }
-
-    @GetMapping("/delete/{cateNo}/{articleNo}")
-    public String delete(@PathVariable("articleNo") int articleNo,
-                         @PathVariable("cateNo") int cateNo,
-                         @RequestParam("pg") int pg, Model model){
-
-        CateDTO cate = categoryService.selectCateNo(cateNo);
-        int result = articleService.deleteArticle(articleNo);
-        if(result==1){
-                return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"?content=list";
-        }
-
-        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view,pg="+pg;
-    }
 
 
 

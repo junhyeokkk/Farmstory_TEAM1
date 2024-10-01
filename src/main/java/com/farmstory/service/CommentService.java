@@ -24,6 +24,7 @@ public class CommentService {
 
     public CommentDTO selectCommentByuid(int no, String uid){
 
+
         
         return null;
     }
@@ -57,9 +58,9 @@ public class CommentService {
     public CommentDTO updateComment(CommentDTO commentdto) {
         return null;
     }
-    public Boolean deleteComment(int no) {
+    public boolean deleteComment(int no) {
 
-       Boolean exists = commentRepository.existsById(no);
+       boolean exists = commentRepository.existsById(no);
 
        if(exists) {
             commentRepository.deleteById(no);

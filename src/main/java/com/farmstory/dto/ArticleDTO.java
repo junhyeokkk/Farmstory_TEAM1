@@ -6,6 +6,7 @@ import jakarta.persistence.Transient;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -35,6 +36,8 @@ public class ArticleDTO {
     private boolean isNotice=false;
 
     private int noticeCate;
+    private String updateDate;
+
 
     //추가필드
     @Transient
@@ -49,11 +52,11 @@ public class ArticleDTO {
     private int pg;
 
     public String getSubStringRdate() {
-        if(date ==null){
-            return date;
+        if(date == null){
+            return "";
         }else{
-            date =  date.substring(0,10);
-            return date;
+            subStringRdate =  date.substring(0,10);
+            return subStringRdate;
         }
     }
 

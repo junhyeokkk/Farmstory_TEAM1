@@ -39,6 +39,7 @@ public class Article {
     private int com;
     private boolean isNotice;
     private int noticeCate;
+    private LocalDateTime updateDate;
 
     //추가필드
     @Transient
