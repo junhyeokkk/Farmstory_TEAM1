@@ -197,7 +197,7 @@ public class UserService {
     public UserDTO modifyUser(UserDTO userDTO) {
         Boolean result = userRepository.existsById(userDTO.getUid());
 
-        if(result) {
+        if (result) {
             User user = modelMapper.map(userDTO, User.class);
             user.setRegDate(LocalDateTime.parse(userDTO.getRegDate()));
             log.info("이유저인가>?" + user);
@@ -207,12 +207,7 @@ public class UserService {
         }
         return null;
 
-
-
-
-
-
-
+    }
 
     // 비밀번호 찾기 서비스 추가
     public String resetCode(String uid, String email) {
@@ -236,6 +231,7 @@ public class UserService {
 
         return verificationCode;
     }
+
 
 
 
