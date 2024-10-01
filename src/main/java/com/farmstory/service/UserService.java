@@ -203,6 +203,7 @@ public class UserService {
         return null;
     }
 
+
         // 비밀번호 찾기 서비스 추가
         public String resetCode (String uid, String email){
 
@@ -223,6 +224,7 @@ public class UserService {
             session.setAttribute("email", email);  // 세션에 사용자 이메일 저장
 
 
+
             return verificationCode;
         }
 
@@ -233,8 +235,10 @@ public class UserService {
             User user = userRepository.findById(uid)
                     .orElseThrow(() -> new RuntimeException("해당 사용자 정보를 찾을 수 없습니다."));
 
+
             // 3. 비밀번호 암호화
             String encodedPassword = passwordEncoder.encode(newpass);
+
 
             // 4. 유저의 비밀번호를 암호화된 비밀번호로 업데이트
             user.setPass(encodedPassword);
