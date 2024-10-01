@@ -64,6 +64,7 @@ public class UserService {
 
 
 
+
     public String loginUser(String uid, String password) {
        String endcodedpassword = passwordEncoder.encode(password);
 
@@ -115,7 +116,7 @@ public class UserService {
     public void deleteUser(){}
 
 
-    //terms
+//terms
     public TermsDTO selectTemrs(){
 
         List<Terms> termsList = termsRepository.findAll();
@@ -123,6 +124,12 @@ public class UserService {
 
 
     }
+
+
+
+
+
+
 
     // 아이디 찾기 서비스 추가
     public void receiveCode(String name, String email) {
@@ -145,6 +152,9 @@ public class UserService {
 
 
     }
+
+
+
 
     // 인증번호 검증 및 아이디 반환
     public User verifyCodeForUser(String verificationCode, String name, String email) {
@@ -174,5 +184,66 @@ public class UserService {
             return modelMapper.map(user, UserDTO.class);
         }
         return null;
+    }
+
+
+
+
+
+
+
+
+
+    // 비밀번호 찾기 서비스 추가
+    public String resetCode(String uid, String email) {
+
+        // 1. 이름과 이메일로 DB에서 유저 검색
+        Optional<User> user = userRepository.findByUidAndEmail(uid, email);
+
+        if (user.isEmpty()) {
+            throw new RuntimeException("해당 이름과 이메일로 계정을 찾을 수 없습니다.");
+        }
+
+        // 2. 이메일 서비스에서 코드 생성 및 이메일 전송 (세션에 코드 저장)
+        String verificationCode = emailService.sendMail(email, "contents/user/email", session);
+
+
+        // 3. 인증번호를 세션에 저장
+        session.setAttribute("code", verificationCode);  // 세션에 인증번호 저장
+        session.setAttribute("uid", uid);  // 세션에 사용자 아이디 저장
+        session.setAttribute("email", email);  // 세션에 사용자 이메일 저장
+
+
+        return verificationCode;
+    }
+
+
+    // 인증번호 검증 및 비밀번호 변경
+    public User verifyResetCode(String verificationCode, String uid, String email, String newpass) {
+        // 1. 세션에서 저장된 인증번호 및 사용자 정보 가져오기
+        String sessionCode = (String) session.getAttribute("code");  // 세션에 저장된 인증번호 가져오기
+        String sessionUid = (String) session.getAttribute("uid");
+        String sessionEmail = (String) session.getAttribute("email");
+
+
+        // 2. 검증: 세션에 저장된 인증번호와 사용자 정보가 입력된 값과 일치하는지 확인
+        if (sessionCode == null || !sessionCode.equals(verificationCode)
+                || !sessionUid.equals(uid) || !sessionEmail.equals(email)) {
+            throw new RuntimeException("인증번호가 일치하지 않거나 사용자 정보가 일치하지 않습니다.");
+        }
+
+        // 3. 사용자가 존재하는지 확인
+        User user = userRepository.findByUidAndPass(uid, email)
+                .orElseThrow(() -> new RuntimeException("해s당 사용자 정보를 찾을 수 없습니다."));
+
+        // 4. 비밀번호 암호화 (PasswordEncoder 사용)
+        String encodedPassword = passwordEncoder.encode(newpass);
+
+        // 5. 유저의 비밀번호를 암호화된 비밀번호로 업데이트
+        user.setPass(encodedPassword);
+        userRepository.save(user);  // 비밀번호 저장
+
+        // 6. 비밀번호 변경 완료 후, 유저 정보 반환 (필요한 경우)
+        return user;
     }
 }
