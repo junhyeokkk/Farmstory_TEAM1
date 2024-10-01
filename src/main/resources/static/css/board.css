@@ -313,6 +313,11 @@
     text-align: right;
 }
 
+.modify .filedDeleteBtn{
+    color: red;
+    line-height: 15px;
+    height: 15px;
+}
 
 
 /* 버튼 공통 */

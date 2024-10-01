@@ -1,8 +1,11 @@
 package com.farmstory.service;
 
+import com.farmstory.dto.ArticleDTO;
 import com.farmstory.dto.CommentDTO;
+import com.farmstory.entity.Article;
 import com.farmstory.entity.Comment;
 import com.farmstory.entity.User;
+import com.farmstory.repository.ArticleRepository;
 import com.farmstory.repository.CommentRepository;
 import com.farmstory.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +24,8 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
+    private final ArticleService articleService;
+    private final ArticleRepository articleRepository;
 
     public CommentDTO selectCommentByuid(int no, String uid){
 
@@ -38,35 +43,63 @@ public class CommentService {
                 .build();
         comment.setUser(user);
         Comment savedComment = commentRepository.save(comment);
+        if(savedComment != null){
+            articleService.updateCommentCount(comment.getParent(),true);
+        }
 
         CommentDTO commentDTO = modelMapper.map(savedComment, CommentDTO.class);
         log.info("insert commentDTO : "+commentDTO.toString());
         return  commentDTO;
     }
     public CommentDTO selectComment(CommentDTO commentdto) {return null;}
-    public List<CommentDTO> selectComments(int no) {
-        Optional<List<Comment>> optList = commentRepository.findCommentsByParent(no);
-        if (optList.isPresent()) {
-            List<Comment> comments = optList.get();
-            log.info(comments);
-            return comments.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).toList();
+
+   //일반 article
+    public List<CommentDTO> selectComments(int no,String type) {
+        if(type.equals("article")){
+            Optional<List<Comment>> optList = commentRepository.findCommentsByParent(no);
+            if (optList.isPresent()) {
+                List<Comment> comments = optList.get();
+                log.info(comments);
+                return comments.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).toList();
+            }
+        }
+
+        return null;
+
+
+    }
+
+    //cs article
+    public List<CommentDTO> selectComments(String csNo,String type) {
+        if(type.equals("cs")){
+            Optional<List<Comment>> optList = commentRepository.findCommentsByCsParent(csNo);
+            if (optList.isPresent()) {
+                List<Comment> comments = optList.get();
+                log.info(comments);
+                return comments.stream().map(comment -> modelMapper.map(comment, CommentDTO.class)).toList();
+            }
         }
         return null;
 
-
     }
+
     public CommentDTO updateComment(CommentDTO commentdto) {
         return null;
     }
-    public boolean deleteComment(int no) {
+    public int deleteComment(int no) {
 
-       boolean exists = commentRepository.existsById(no);
+       Optional<Comment> Comment = commentRepository.findById(no);
 
-       if(exists) {
-            commentRepository.deleteById(no);
-            return true;
+       if(Comment.isPresent()) {
+           Comment comment = Comment.get();
+           commentRepository.deleteById(comment.getNo());
+           articleService.updateCommentCount(comment.getParent(),false);
+           return comment.getParent();
+
        }
-        return false;
+       return 0;
+
+
     }
 
 }

@@ -40,9 +40,9 @@ public class ArticleDTO {
 
 
     //추가필드
-    @Transient
     private String nick;
-    @Transient
+
+
     private String subStringRdate;
     //    private MultipartFile file1;
     private List<MultipartFile> files;

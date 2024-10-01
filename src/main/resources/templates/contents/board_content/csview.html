@@ -1,5 +1,5 @@
 <link rel="stylesheet" th:href="@{/css/board.css}">
-<script type="text/javascript" th:src="@{/js/commentJs.js}"></script>
+<script type="text/javascript" th:src="@{/js/Cscomment.js}"></script>
 
 
 <section class="view" >
@@ -73,7 +73,10 @@
 				<h3>댓글쓰기</h3>
 				<form name="commentForm" method="post">
 					<textarea name="content">댓글내용 입력</textarea>
-					<input type="hidden" name="parent" th:value="${article.csNo}">
+					<input type="hidden" name="csParent" th:value="${article.csNo}">
+					<input type="hidden" name="commentSize" th:value="${article.commentList.size()}">
+					<input type="hidden" name="cateGroup" th:value="${cate.cateGroup}">
+					<input type="hidden" name="cateName" th:value="${cate.cateName}">
 					<input type="hidden" name="pg" th:value="${pg}">
 					<input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
 					<input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}"/>

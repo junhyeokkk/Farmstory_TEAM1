@@ -6,6 +6,7 @@ import com.farmstory.repository.UserRepository;
 import com.farmstory.security.MyUserDetails;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -90,6 +91,9 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
             User user = opt.get();
             log.info("loadUser..7 user : "+user);
 
+            if(user.getRole().equals("BLACK") || user.getRole().equals("LEAVE")){
+                throw new UsernameNotFoundException("User does not have the required role.");
+            }
             return MyUserDetails.builder()
                     .user(user)
                     .accessToken(accessToken)

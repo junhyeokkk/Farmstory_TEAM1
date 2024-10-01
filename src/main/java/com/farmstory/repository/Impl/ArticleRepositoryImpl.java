@@ -35,17 +35,22 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
 
 
         List<Tuple> content = queryFactory
-                .select(qarticle, quser.nick)
+                .select(qarticle, quser.nick,qcomment.count())
                 .from(qarticle)
                 .join(quser)
                 .on(qarticle.writer.eq(quser.uid))
                 .join(qcate)
                 .on(qcate.cateNo.eq(qarticle.cateNo))
+                .leftJoin(qcomment)
+                .on(qcomment.parent.eq(qarticle.articleNo))
                 .where(qcate.cateNo.eq(cateNo).and(qarticle.isNotice.eq(false)))
+                .groupBy(qarticle.articleNo)
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qarticle.articleNo.desc())
                 .fetch();
+
+        log.info(content);
 
         long total = queryFactory
                 .select(qarticle.count())
@@ -72,16 +77,19 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         String uid = pagerequestDTO.getUid();
 
         List<Tuple> content = queryFactory
-                .select(qarticle, quser.nick)
+                .select(qarticle, quser.nick,qcomment.count())
                 .from(qarticle)
                 .join(quser)
                 .on(qarticle.writer.eq(quser.uid))
                 .join(qcate)
                 .on(qcate.cateNo.eq(qarticle.cateNo))
+                .leftJoin(qcomment)
+                .on(qcomment.parent.eq(qarticle.articleNo))
                 .where(qcate.cateNo.eq(cateNo)
                         .and(qarticle.writer.eq(uid))
                         .and(qarticle.isNotice.eq(false))
                 )
+                .groupBy(qarticle.articleNo, quser.nick)  // Group by articleNo and nick to ensure correct comment count per article
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qarticle.articleNo.desc())
@@ -133,13 +141,16 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         }
 
         List<Tuple> content = queryFactory
-                .select(qarticle, quser.nick)
+                .select(qarticle, quser.nick,qcomment.count())
                 .from(qarticle)
                 .join(quser)
                 .on(qarticle.writer.eq(quser.uid))
                 .join(qcate)
                 .on(qcate.cateNo.eq(qarticle.cateNo))
+                .leftJoin(qcomment)
+                .on(qcomment.parent.eq(qarticle.articleNo))
                 .where(qcate.cateNo.eq(cateNo).and(expression))
+                .groupBy(qarticle.articleNo, quser.nick)  // Group by articleNo and nick to ensure correct comment count per article
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .orderBy(qarticle.updateDate.desc(), qarticle.articleNo.desc())
@@ -185,7 +196,10 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
                                 .from(qarticle)
                                 .join(quser)
                                 .on(qarticle.writer.eq(quser.uid))
+                                .leftJoin(qcomment)
+                                .on(qcomment.parent.eq(qarticle.articleNo))
                                 .where(qarticle.cateNo.eq(cateNo).and(qarticle.isNotice.eq(true)))
+                                .groupBy(qarticle.articleNo, quser.nick)  // Group by articleNo and nick to ensure correct comment count per article
                                 .fetch();
 
         return content;

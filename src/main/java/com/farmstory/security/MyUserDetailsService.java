@@ -3,6 +3,7 @@ package com.farmstory.security;
 import com.farmstory.entity.User;
 import com.farmstory.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+@Log4j2
 @RequiredArgsConstructor
 @Service
 public class MyUserDetailsService implements UserDetailsService {
@@ -24,10 +26,17 @@ public class MyUserDetailsService implements UserDetailsService {
 
         if(optUser.isPresent()) {
             // 시큐리티 사용자 인증객체 생성 후 반환
-            MyUserDetails myUserDetails = MyUserDetails.builder()
-                                                .user(optUser.get())
-                                                .build();
-            return myUserDetails;
+            User user = optUser.get();
+            log.info("log user getRole :"+user.getRole());
+            if(!user.getRole().equals("BLACK") && !user.getRole().equals("LEAVE")){
+                MyUserDetails myUserDetails = MyUserDetails.builder()
+                        .user(user)
+                        .build();
+                return myUserDetails;
+            }else{
+                throw new UsernameNotFoundException("User does not have the required role.");
+            }
+
         }
 
         // 사용자가 입력한 아이디가 없을 경우
