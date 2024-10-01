@@ -31,7 +31,7 @@ public class CartRepositoryImpl implements CartRepositoryCustom {
                 .select(qCart, qProduct)
                 .from(qCart)
                 .join(qProduct)
-                .on(qCart.prodNo.pNo.eq(qProduct.pNo))
+                .on(qCart.prodNo.eq(qProduct.pNo))
                 .join(qUser)
                 .on(qCart.uid.eq(qUser.uid))
                 .where(qUser.uid.eq(cartNo))

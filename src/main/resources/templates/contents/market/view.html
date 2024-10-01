@@ -40,9 +40,18 @@
           delispan.classList.replace('noneFreeDelivery', 'freeDelivery');
         }
         document.querySelector('.sum').textContent = total+`원`;
+        // 준혁 입력 필드 총합 계산 value 값 추가
+        // 숨겨진 입력 필드에 총합 값을 설정
+        var totalPriceInput = document.querySelector('.total-price');
+        totalPriceInput.value = total; // 총합 값 설정
+
       } else {
         // 가격이나 수량이 올바르지 않은 경우
         document.querySelector('.sum').textContent = '0원';
+        // 숨겨진 입력 필드에 총합 값을 설정
+        var totalPriceInput = document.querySelector('.total-price');
+        totalPriceInput.value = 0; // 총합 값 설정
+
       }
     }
 
@@ -59,25 +68,30 @@
         const prono = [[${productDTO.pNo}]];
         const cartProdQty = parseInt(document.querySelector('input[class="stock"]').value, 10);
 
-        const data = {
-          uid: uid,
-          prodNum: prono,
-          cartProdQty: cartProdQty
-        };
+        const cartform = document.querySelector('#cartform');
 
-        fetch('/market/cart', {
+        const jsonData = {
+          "cartProdQty" : cartform.cartProdQty.value,
+          "prodNo" : cartform.prodNo.value,
+          "delprice" : cartform.delprice.value,
+          "totalprice" : 20000,
+          "cart_delivery" : cartform.cart_delivery.value,
+        }
+        console.log(jsonData);
+
+        fetch('/market/cart1', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify(data)
+          body: JSON.stringify(jsonData)
         })
                 .then(resp => resp.json())
                 .then(data => {
                   console.log(data);
                   if (data.result != 0) {
                     if (confirm('장바구니에 상품을 담았습니다.\n 장바구니로 이동하시겠습니까?')) {
-                      location.href = "/market/cart/"+uid;
+                      location.href = "/market/cart1";
                     } else {
                       updateTotal();
                     }
@@ -96,48 +110,76 @@
 </script>
 <div class="market_view">
   <h3>기본정보</h3>
-  <div class="product_info">
-    <img th:src="@{/uploads/product/}+${productDTO.p_sName1}" alt="상품 이미지" />
-    <div class="product_details" th:with="disPrice=${#numbers.formatDecimal(productDTO.price * (1 - productDTO.discount / 100.0),0,0)}">
-        <p th:if="${!#authentication.principal.equals('anonymousUser')}" class="uid" hidden>[[${#authentication.principal.user.uid}]]</p>
-        <p th:if="${#authentication.principal.equals('anonymousUser')}" class="uid" hidden></p>
-      <table>
-        <tr>
-          <th>상품명</th>
-          <td class="product" th:text="${productDTO.pName}">상품 이름</td>
-        </tr>
-        <tr>
-          <th>상품코드</th>
-          <td class="product" th:text="${productDTO.pNo}">01</td>
-        </tr>
-        <tr>
-          <th>배송비</th>
-          <td th:if="${disPrice}>30000" class="deliver"><span class="deli freeDelivery">[[${productDTO.delivery}]]원</span> <span class="deli freeDelivery">3만원 이상 무료배송</span></td>
-          <td th:if="${disPrice}<=30000" class="deliver"><span class="deli noneFreeDelivery">[[${productDTO.delivery}]]원</span> <span class="deli noneFreeDelivery">3만원 이상 무료배송</span></td>
-        </tr>
-        <tr>
-          <th>판매가격</th>
-          <td th:if="${productDTO.discount}>0" class="sell_price"><span>[[${productDTO.price}]]원</span> <span>[[${productDTO.discount}]]%</span> <span>[[${disPrice}]]원</span></td>
-          <td th:if="${productDTO.discount}==0" class="sell_price" th:text="${productDTO.price}">가격</td>
-        </tr>
-        <tr>
-          <th>구매수량 (재고 : [[${productDTO.stock}]])</th>
-          <td class="count">
-            <input type="number" value="1" class="stock"/>
-          </td>
-        </tr>
-        <tr>
-          <th>합계</th>
-          <td th:if="${disPrice}>30000" class="sum" th:text="${disPrice} + '원'">합계 가격</td>
-          <td th:if="${disPrice}<=30000" class="sum" th:text="${disPrice} + ${productDTO.delivery} + '원'">합계 가격</td>
-        </tr>
-      </table>
-      <div class="buttons">
-        <a href="#" type="button" class="add_to_cart">장바구니</a>
-        <a th:href="@{/category/market/order}"  type="button" class="buy_now">바로구매</a>
-      </div> <!-- .buttons -->
-    </div> <!-- .product_info -->
-  </div>
+  <!-- 준혁 폼 추가-->
+  <form id="cartform" action="/market/cart1" method="post">
+    <div class="product_info">
+      <img th:src="@{/uploads/product/}+${productDTO.p_sName1}" alt="상품 이미지" />
+      <div class="product_details" th:with="disPrice=${#numbers.formatDecimal(productDTO.price * (1 - productDTO.discount / 100.0),0,0)}">
+          <p th:if="${!#authentication.principal.equals('anonymousUser')}" class="uid" hidden>[[${#authentication.principal.user.uid}]]</p>
+          <p th:if="${#authentication.principal.equals('anonymousUser')}" class="uid" hidden></p>
+        <table>
+          <tr>
+            <th>상품명</th>
+            <td class="product">
+              <span th:text="${productDTO.pName}"></span>
+              <input type="hidden" name="pName" th:value="${productDTO.pName}" />
+            </td>
+          </tr>
+          <tr>
+            <th>상품코드</th>
+            <td class="product">
+              <span th:text="${productDTO.pNo}"></span>
+              <input type="hidden" name="prodNo" th:value="${productDTO.pNo}" />
+            </td>
+          </tr>
+          <tr>
+            <th>배송비</th>
+            <td th:if="${disPrice}>30000" class="deliver">
+              <span class="deli freeDelivery">[[${productDTO.delivery}]]원</span>
+              <input type="hidden" name="delivery" th:value="${productDTO.delivery}" />
+              <span class="deli freeDelivery">3만원 이상 무료배송</span>
+            </td>
+            <td th:if="${disPrice}<=30000" class="deliver">
+              <span class="deli noneFreeDelivery">[[${productDTO.delivery}]]원</span>
+              <input type="hidden" name="cart_delivery" th:value="${productDTO.delivery}" />
+              <span class="deli noneFreeDelivery">3만원 이상 무료배송</span>
+            </td>
+          </tr>
+          <tr>
+            <th>판매가격</th>
+            <td th:if="${productDTO.discount}>0" class="sell_price">
+              <span>[[${productDTO.price}]]원</span>
+              <span>[[${productDTO.discount}]]%</span>
+              <span>[[${disPrice}]]원</span>
+              <input type="hidden" name="delprice" th:value="${disPrice}" />
+            </td>
+            <td th:if="${productDTO.discount}==0" class="delprice" th:text="${productDTO.price}">
+             </td>
+          </tr>
+          <tr>
+            <th>구매수량 (재고 : [[${productDTO.stock}]])</th>
+            <td class="count">
+              <input type="number" name="cartProdQty" value="1" class="stock"/>
+            </td>
+          </tr>
+          <tr>
+            <th>합계</th>
+            <td th:if="${disPrice}>30000" class="sum" th:text="${disPrice} + '원'">
+            </td>
+            <input type="hidden" name="totalprice" th:value="${disPrice}" class="total-price" />
+            <td th:if="${disPrice}<=30000" class="sum" th:text="${disPrice} + ${productDTO.delivery} + '원'">
+            </td>
+            <input type="hidden" name="totalprice" th:value="${disPrice + productDTO.delivery}" class="total-price" />
+          </tr>
+        </table>
+        <div class="buttons">
+          <input type="submit" value="장바구니" class="add_to_cart">
+          <!--submit 버튼 변경-->
+          <input type="text" value="바로구매" class="buy_now"></input>
+        </div> <!-- .buttons -->
+      </div> <!-- .product_info -->
+    </div>
+  </form>
   <h3>상품설명</h3>
   <div class="sample"><img th:src="@{/uploads/product/}+${productDTO.p_sName2}" alt="상품 이미지2"></div>
   <div class="sample"><img th:src="@{/uploads/product/}+${productDTO.p_sName3}" alt="상품 이미지3"></div>
