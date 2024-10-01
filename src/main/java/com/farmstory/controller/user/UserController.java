@@ -247,8 +247,6 @@ public class UserController {
 
         // 인증번호 및 사용자 정보 검증
         if (sessionUid.equals(uid)) {
-
-            //
             // 인증 성공: 비밀번호 변경 서비스 호출
             userService.verifyResetCode(uid, newpass);
 

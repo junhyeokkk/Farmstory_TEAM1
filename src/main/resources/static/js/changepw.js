@@ -13,7 +13,9 @@ confirmPassword.addEventListener('focusout', () => {
     if (newPassword.value === confirmPassword.value) {
         // 비밀번호 형식 확인
         if (!passwordPattern.test(confirmPassword.value)) {
+
             showResultInvalid(resultPass, '비밀번호 형식에 맞지 않습니다.');
+
             isPassOk = false;
         } else {
             showResultValid(resultPass, '사용 가능한 비밀번호입니다.');
@@ -26,14 +28,15 @@ confirmPassword.addEventListener('focusout', () => {
 });
 
 // 폼 제출 시 검증
+
 document.getElementById('passwordResetForm').onsubmit = function (e) {
     e.preventDefault(); // 기본 폼 제출을 방지
-
 
     if (!isPassOk) {
         alert('비밀번호를 다시 확인해 주세요.');
         return false; // 검증 실패 시 폼 제출을 막음
     }
+
     // 서버로 비밀번호 변경 요청 보내기
     fetch('/api/user/changepass', {
         method: 'POST',
@@ -63,3 +66,4 @@ document.getElementById('passwordResetForm').onsubmit = function (e) {
 
     return false; // 서버로 요청을 보내고 나서 폼 제출을 막음
 };
+

@@ -22,6 +22,7 @@ table {
 }
 
 th, td {
+
     width: 30%; /* th 너비를 더 줄여서 좁은 영역 확보 */
     padding: 12px;
     text-align: left;

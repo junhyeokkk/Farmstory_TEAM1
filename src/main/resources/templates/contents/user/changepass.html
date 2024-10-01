@@ -1,12 +1,15 @@
 <script type="text/javascript" defer th:src="@{/js/changepw.js}"></script>
 <section>
     <form id="passwordResetForm">
+
         <h2>비밀번호 변경</h2>
 
         <table>
             <tr>
                 <th class="id" name="id">아이디</th>
+
                 <td id="uid" th:text="${session.uid}"> </td> <!-- 동적 데이터 -->
+
             </tr>
             <tr>
                 <th>새 비밀번호</th>
