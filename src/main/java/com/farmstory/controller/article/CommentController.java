@@ -1,17 +1,16 @@
 package com.farmstory.controller.article;
 
 
+import com.farmstory.dto.CateDTO;
 import com.farmstory.dto.CommentDTO;
+import com.farmstory.service.CategoryService;
 import com.farmstory.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @Log4j2
@@ -19,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class CommentController {
 
     private final CommentService commentService;
+    private final CategoryService categoryService;
 
 
     @PostMapping("/comment/write")
-    public ResponseEntity<CommentDTO> write(@RequestBody CommentDTO commentDTO, HttpServletRequest req) {
+    public ResponseEntity<CommentDTO> write(@RequestBody CommentDTO commentDTO,
+
+                                            HttpServletRequest req) {
 
         String regip = req.getRemoteAddr();
         commentDTO.setRegip(regip);
@@ -34,14 +36,18 @@ public class CommentController {
 
     }
 
-    @GetMapping("/comment/delete")
-    public String delete(@RequestParam int no, @RequestParam int pg, @RequestParam("writer") String writer) {
-       boolean delete=  commentService.deleteComment(no);
-     if(delete){
-         return "redirect:/article/view?no="+no+"&pg="+pg;
+    @GetMapping("/comment/delete/{cateNo}")
+    public String delete(@PathVariable("cateNo") int cateNo,
+            @RequestParam int no, @RequestParam int pg, @RequestParam("writer") String writer) {
+
+        CateDTO cate = categoryService.selectCateNo(cateNo);
+
+        int parentNo=  commentService.deleteComment(no);
+     if(parentNo > 0 ){
+         return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+parentNo+"?content=view&pg="+pg;
 
      }
-        return "redirect:/article/view?no="+no+"&pg="+pg+"&success=false";
+        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+parentNo+"?content=view&success=false&pg="+pg;
 
     }
 

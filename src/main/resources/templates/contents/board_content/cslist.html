@@ -26,7 +26,7 @@
                                     <th>날짜</th>
                                     <th>조회</th>
                                 </tr>
-                                <th:block th:if="${pageResponseDTO.getDtoList().size() == 0}" >
+                                <th:block th:if="${pageResponseDTO.getDtoList() == null || pageResponseDTO.getDtoList().size() == 0  }" >
                                    <tr>
                                        <td colspan="5" class="td_first">일치하는 내용이 없습니다.</td>
                                    </tr>

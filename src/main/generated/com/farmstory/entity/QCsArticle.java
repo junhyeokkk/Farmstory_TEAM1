@@ -32,6 +32,8 @@ public class QCsArticle extends EntityPathBase<CsArticle> {
 
     public final StringPath csNo = createString("csNo");
 
+    public final StringPath email = createString("email");
+
     public final NumberPath<Integer> file = createNumber("file", Integer.class);
 
     public final ListPath<FileEntity, QFileEntity> fileList = this.<FileEntity, QFileEntity>createList("fileList", FileEntity.class, QFileEntity.class, PathInits.DIRECT2);

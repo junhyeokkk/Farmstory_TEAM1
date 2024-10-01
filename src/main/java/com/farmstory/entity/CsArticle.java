@@ -35,6 +35,7 @@ public class CsArticle {
     private int file;
     private int hit;
     private int comment;
+    private String email;
 
 
     @Builder.Default
@@ -49,7 +50,7 @@ public class CsArticle {
     @OneToMany(mappedBy = "csNo", cascade = CascadeType.REMOVE)
     private List<FileEntity> fileList;
 
-    @OneToMany(mappedBy = "parent",cascade =CascadeType.REMOVE )
+    @OneToMany(mappedBy = "csParent",cascade =CascadeType.REMOVE )
     private List<Comment> commentList;
 
 

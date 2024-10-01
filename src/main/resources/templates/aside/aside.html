@@ -15,11 +15,11 @@
 <!--                            amdin이 아닌경우-->
                             <li th:if="${!#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
 <!--                            admin인 경우 -->
-                            <li th:unless="${!#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/article/admin/community/cs(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
+                            <li th:unless="${!#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/article/admin/community/cs(content= 'cslist')}" th:classappend ="${cate.cateName =='cs' ? 'active' : ''}" class="lnb4">1:1고객문의</a></li>
                         </th:block>
 <!--                        //로그인 안된경우 -->
                         <th:block  sec:authorize="isAnonymous()">
-                            <li><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist')}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4" onclick="alert('로그인이 필요합니다.');">1:1고객문의</a></li>
+                            <li><a th:href="@{/article/cummunity/cs}" th:classappend ="${cateName =='cs' ? 'active' : ''}" class="lnb4" onclick="alert('로그인이 필요합니다.');">1:1고객문의</a></li>
                         </th:block>
                         <li><a th:href="@{/article/community/faq(content= 'list')}" th:classappend ="${cateName =='faq' ? 'active' : ''}" class="lnb5">자주묻는질문</a></li>
                     </ul><!-- .cate_lnb -->
