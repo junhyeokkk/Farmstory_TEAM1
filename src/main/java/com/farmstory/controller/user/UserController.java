@@ -125,14 +125,6 @@ public class UserController {
 
     }
 
-
-
-
-
-
-
-
-
     // 아이디 찾기: 이름과 이메일을 입력받아 인증번호를 *이메일로 전송 ("/findid") 괄호 안 경로
     @ResponseBody
     @PostMapping("/api/user/findid")
