@@ -12,4 +12,6 @@ public interface CommentRepository extends JpaRepository<Comment, Integer> {
 
     public Optional<List<Comment>> findCommentsByParent(int boardId);
     public Optional<List<Comment>> findCommentsByCsParent(String csParentNo);
+
+    public void deleteCommentByCsParent(String csParentNo);
 }

@@ -102,6 +102,32 @@ public class  ArticleService {
         return result;
     }
 
+    public int updateCommentCsCount(String CsparentNo, boolean upanddown){
+
+        int result =0;
+        //up ==ture
+        Optional<CsArticle> optional = csArticleRepository.findById(CsparentNo);
+        if(upanddown){
+            if (optional.isPresent()){
+                CsArticle article = optional.get();
+                article.setComment(article.getComment() + 1);
+                csArticleRepository.save(article);
+                result=1;
+            }
+        }else{
+            if (optional.isPresent()){
+                CsArticle article = optional.get();
+                article.setComment(article.getComment() - 1);
+                csArticleRepository.save(article);
+                result =-1;
+            }
+            //down false
+        }
+
+
+        return result;
+    }
+
 
     public List<ArticleDTO> selectArticles() { return null;}
     public int updateArticle(ArticleDTO articleDTO,int cateNo) {
@@ -290,7 +316,6 @@ public class  ArticleService {
             CsArticle article = opt.get();
             article.setHit(article.getHit() + 1);
             CsArticle hitupdateArticle = csArticleRepository.save(article);
-
             return modelMapper.map(hitupdateArticle, CsArticleDTO.class);
         }
         return null;

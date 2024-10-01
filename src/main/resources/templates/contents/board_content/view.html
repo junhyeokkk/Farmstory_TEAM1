@@ -48,11 +48,13 @@
 					<article>
 						<span class="nick">[[${comment.user.nick}]]</span>
 						<span class="date">[[${comment.getSubStringRdate()}]]</span>
-						<p class="content">[[${comment.content}]]</p>
+						<textarea class="content" name="content" readonly>[[${comment.content}]]</textarea>
 
 						<div th:if="${comment.user.uid == #authentication.principal.user.uid}">
-							<a  th:href="@{'/comment/delete/'+${cate.cateNo}(no=${comment.no},pg=${pg},writer=${comment.user.uid})}" class="remove btn">삭제</a>
-							<a  href="/" class="modify btn">수정</a>
+							<a  href="#" th:data-pg="${pg}" th:data-cateNo="${cate.cateNo}" th:data-no="${comment.no}" th:data-writer="${comment.user.uid}" class="remove commentRemove">삭제</a>
+							<a  href="#" class="modify commentModify" th:data-no="${comment.no}">수정</a>
+							<a  href="/" class="cancle commentCancel" th:data-no="${comment.no}" hidden>취소</a>
+							<a  href="#" class="modify commentCompleted" th:data-no="${comment.no}" hidden>수정완료</a>
 						</div>
 					</article>
 				</th:block>

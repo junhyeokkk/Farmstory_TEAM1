@@ -110,7 +110,7 @@ public class CsArticleRepositoryImpl implements CsArticleRepositoryCustom  {
                 .where(qcsArticle.writer.eq(uid))
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
-                .orderBy(qcsArticle.createdate.asc(), qcsArticle.updateDate.asc())
+                .orderBy(qcsArticle.isCompleted.asc(), qcsArticle.createdate.desc(),qcsArticle.updateDate.desc())
                 .fetch();
 
         Long total = queryFactory

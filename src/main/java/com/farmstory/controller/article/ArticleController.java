@@ -203,7 +203,7 @@ public class ArticleController {
     //================================================================== CS =====================================================
     //cs List
     @GetMapping("/{uid}/community/cs")
-    public String communityCsList(@PathVariable("uid") String uid, @RequestParam("content") String content,CSPageRequestDTO cspageRequestDTO, Model model){
+    public String communityCsList(@PathVariable("uid") String uid, @RequestParam("content") String content,@RequestParam(value="pg",defaultValue = "1") int pg,CSPageRequestDTO cspageRequestDTO, Model model){
         CateDTO  cate = categoryService.selectCateNo(504);
 
         cspageRequestDTO.setUid(uid);
@@ -212,7 +212,11 @@ public class ArticleController {
         CSPageResponseDTO pageResponseDTO = articleService.selectCsArticleForUser(cspageRequestDTO);
 
         log.info(pageResponseDTO.getDtoList().size());
+        log.info(pageResponseDTO);
+        log.info("uidddddddddddddddddd"+pageResponseDTO.getUid());
+
         model.addAttribute("pageResponseDTO",pageResponseDTO);
+        model.addAttribute("pg", pg);
         model.addAttribute("content", content);
         model.addAttribute("cate",cate);
         log.info("content : "+ content);
@@ -258,7 +262,7 @@ public class ArticleController {
         model.addAttribute("cate",cate);
         model.addAttribute("content",content);
 
-        return "boardIndex";
+        return "redirect:/article/"+uid+"/community/cs?content=cslist";
     }
 
 
@@ -272,6 +276,7 @@ public class ArticleController {
         CateDTO cate = categoryService.selectCateNo(504);
 
         CsArticleDTO articleDTO =  articleService.selectCsArticle(csNo);
+        log.info(articleDTO.isCompleted());
 
         model.addAttribute("pg",pg);
         model.addAttribute("cate", cate);
@@ -292,6 +297,7 @@ public class ArticleController {
         CSPageResponseDTO cspageResponseDTO = articleService.selectCSByAdmin(pageRequestDTO);
 
 
+        log.info(cspageResponseDTO.getUid());
         model.addAttribute("pageResponseDTO",cspageResponseDTO);
         model.addAttribute("cate",cate);
         model.addAttribute("content", content);

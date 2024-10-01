@@ -44,14 +44,29 @@ public class CommentService {
         comment.setUser(user);
         Comment savedComment = commentRepository.save(comment);
         if(savedComment != null){
-            articleService.updateCommentCount(comment.getParent(),true);
+            if(comment.getParent()==0){
+                articleService.updateCommentCsCount(savedComment.getCsParent(),true);
+
+            }else {
+                articleService.updateCommentCount(comment.getParent(), true);
+            }
         }
 
         CommentDTO commentDTO = modelMapper.map(savedComment, CommentDTO.class);
         log.info("insert commentDTO : "+commentDTO.toString());
         return  commentDTO;
     }
-    public CommentDTO selectComment(CommentDTO commentdto) {return null;}
+    public CommentDTO selectComment(int No) {
+
+        Optional<Comment> opt = commentRepository.findById(No);
+        if(opt.isPresent()){
+            Comment comment = opt.get();
+            log.info("comment : "+comment.toString());
+            CommentDTO commentDTO = modelMapper.map(comment, CommentDTO.class);
+            return commentDTO;
+        }
+
+        return null;}
 
    //일반 article
     public List<CommentDTO> selectComments(int no,String type) {
@@ -84,20 +99,34 @@ public class CommentService {
     }
 
     public CommentDTO updateComment(CommentDTO commentdto) {
-        return null;
+        commentdto.setWriter(commentdto.getUser().getUid());
+        Comment comment = modelMapper.map(commentdto, Comment.class);
+
+        Comment updatedComment = commentRepository.save(comment);
+        return modelMapper.map(updatedComment, CommentDTO.class);
     }
     public int deleteComment(int no) {
 
-       Optional<Comment> Comment = commentRepository.findById(no);
+       Optional<Comment> opt = commentRepository.findById(no);
+       log.info(opt);
 
-       if(Comment.isPresent()) {
-           Comment comment = Comment.get();
-           commentRepository.deleteById(comment.getNo());
-           articleService.updateCommentCount(comment.getParent(),false);
-           return comment.getParent();
+       int result=0;
+       if(opt.isPresent()) {
+           Comment comment = opt.get();
+           commentRepository.deleteById(no);
+           if(comment.getParent() ==0){
+               //cs일 경우
+               articleService.updateCommentCsCount(comment.getCsParent(),false);
+               result=1;
+           }else{
+               //article경우
+               articleService.updateCommentCount(comment.getParent(),false);
+               result=2;
+
+           }
 
        }
-       return 0;
+       return result;
 
 
     }
