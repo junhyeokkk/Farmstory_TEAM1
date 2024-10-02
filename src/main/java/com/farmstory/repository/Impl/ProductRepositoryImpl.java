@@ -53,36 +53,54 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     }
 
     @Override
-    public Page<Product> selectProductForSearch(PageRequestDTO requestDTO, Pageable pageable) {
+    public Page<Tuple> selectProductForSearch(PageRequestDTO requestDTO, Pageable pageable) {
         String cateNo = requestDTO.getType();
 
         BooleanExpression expression = null;
-/*
         if(cateNo.equals("1")){
-            expression = qproduct.prodCateNo.prodCateNo.eq(1);
+            expression = qproduct.prodCateNo.eq(1);
         }
         else if(cateNo.equals("2")){
-            expression = qproduct.prodCateNo.prodCateNo.eq(2);
+            expression = qproduct.prodCateNo.eq(2);
         }
         else if(cateNo.equals("3")){
-            expression = qproduct.prodCateNo.prodCateNo.eq(3);
+            expression = qproduct.prodCateNo.eq(3);
         }
-*/
-        List<Product> products = null;
+        List<Tuple> products = queryFactory
+                .select(qproduct,qpDescImgFile.p_sName1,qpDescImgFile.p_sName2,qpDescImgFile.p_sName3, qprodCate)
+                .from(qproduct)
+                .leftJoin(qpDescImgFile)
+                .on(qproduct.pNo.eq(qpDescImgFile.pNo))
+                .leftJoin(qprodCate)
+                .on(qprodCate.prodCateNo.eq(qproduct.prodCateNo))
+                .where(expression)
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(qproduct.pNo.desc())
+                .fetch();
+
 
         long total = queryFactory.select(qproduct.count())
                 .from(qproduct)
                 .where(expression)
                 .fetchOne();
 
-        return new PageImpl<Product>(products, pageable, total);
+        return new PageImpl<>(products, pageable, total);
     }
 
     @Override
-    public Product selectProductByPId(Integer id) {
+    public Tuple selectProductByPId(Integer id) {
 
-        Product product = null;
-        ;
+        Tuple product = queryFactory
+                .select(qproduct,qpDescImgFile.p_sName1,qpDescImgFile.p_sName2,qpDescImgFile.p_sName3, qprodCate)
+                .from(qproduct)
+                .leftJoin(qpDescImgFile)
+                .on(qproduct.pNo.eq(qpDescImgFile.pNo))
+                .leftJoin(qprodCate)
+                .on(qprodCate.prodCateNo.eq(qproduct.prodCateNo))
+                .where(qproduct.pNo.eq(id))
+                .fetchOne();
+
         return product;
     }
 }
