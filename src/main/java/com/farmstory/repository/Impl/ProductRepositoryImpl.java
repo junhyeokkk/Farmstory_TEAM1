@@ -5,6 +5,7 @@ import com.farmstory.entity.*;
 import com.farmstory.repository.ProductRepository;
 import com.farmstory.repository.custom.ProductRepositoryCustom;
 import com.querydsl.core.QueryFactory;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +30,26 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 
     @Override
-    public Page<Product> selectProductAllForList(PageRequestDTO requestDTO, Pageable pageable) {
-        List<Product> products = null;
+    public Page<Tuple> selectProductAllForList(PageRequestDTO requestDTO, Pageable pageable) {
+        List<Tuple> products = queryFactory
+                                        .select(qproduct,qpDescImgFile.p_sName1,qpDescImgFile.p_sName2,qpDescImgFile.p_sName3, qprodCate)
+                                        .from(qproduct)
+                                        .leftJoin(qpDescImgFile)
+                                        .on(qproduct.pNo.eq(qpDescImgFile.pNo))
+                                        .leftJoin(qprodCate)
+                                        .on(qprodCate.prodCateNo.eq(qproduct.prodCateNo))
+                                        .offset(pageable.getOffset())
+                                        .limit(pageable.getPageSize())
+                                        .orderBy(qproduct.pNo.desc())
+                                        .fetch();
 
         long total = queryFactory.select(qproduct.count())
                 .from(qproduct)
                 .fetchOne();
+        log.info("total 나오니?> "  + total);
+        log.info("products 나오니?> "  + products.toString());
 
-        return new PageImpl<Product>(products, pageable, total);
+        return new PageImpl<>(products, pageable, total);
     }
 
     @Override
@@ -44,7 +57,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         String cateNo = requestDTO.getType();
 
         BooleanExpression expression = null;
-
+/*
         if(cateNo.equals("1")){
             expression = qproduct.prodCateNo.prodCateNo.eq(1);
         }
@@ -54,7 +67,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         else if(cateNo.equals("3")){
             expression = qproduct.prodCateNo.prodCateNo.eq(3);
         }
-
+*/
         List<Product> products = null;
 
         long total = queryFactory.select(qproduct.count())

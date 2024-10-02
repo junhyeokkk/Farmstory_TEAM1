@@ -32,10 +32,18 @@ public class Product {
     private LocalDate rdate;
     private String pDesc;
 
-    // 외래키 컬럼
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="prodCateNo")
-    private prodCate prodCateNo;
+    private int prodCateNo;
+
+    // 추가 필드
+    @Transient
+    private String p_sName1;
+    @Transient
+    private String p_sName2;
+    @Transient
+    private String p_sName3;
+
+    @Transient
+    private prodCate prodCate;
 
 /*
     @ManyToOne

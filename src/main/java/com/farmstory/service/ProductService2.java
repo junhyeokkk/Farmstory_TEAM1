@@ -5,6 +5,7 @@ import com.farmstory.dto.ProductDTO;
 import com.farmstory.dto.ProductPageResponseDTO;
 import com.farmstory.entity.Product;
 import com.farmstory.repository.ProductRepository;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
@@ -45,18 +46,20 @@ public class ProductService2 {
         Pageable pageable = pageRequestDTO.getPageable("pNo" , 10);
 
 
-        Page<Product> products = null;
+        Page<Tuple> products = null;
 
         if(pageRequestDTO.getType() == null){
             products = productRepository.selectProductAllForList(pageRequestDTO, pageable);
         }
         else{
+            /*
             products = productRepository.selectProductForSearch(pageRequestDTO, pageable);
+        */
         }
 
         List<ProductDTO> productList = products.stream().map(product -> {
             ProductDTO dto = modelMapper.map(product, ProductDTO.class);
-
+/*
             if(dto.getPDescImgFile().getP_sName1() == null){
                 dto.getPDescImgFile().setP_sName1("404이미지없음.png");
             }
@@ -66,7 +69,7 @@ public class ProductService2 {
             if(dto.getPDescImgFile().getP_sName3() == null){
                 dto.getPDescImgFile().setP_sName3("404이미지없음.png");
             }
-
+*/
             return dto;
         })
                 .collect(Collectors.toList());

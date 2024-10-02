@@ -33,4 +33,5 @@ public class Cart {
     private int delprice;
     private int totalprice;
     private int cart_delivery;
+
 }
