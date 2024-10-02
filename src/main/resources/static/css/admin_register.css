@@ -152,7 +152,7 @@
 
   #r_prod_table  td {
     font-weight: 600;
-    border-bottom: 1px solid #999999;
+    border-bottom: 1px dashed  #999999 !important;
     padding: 10px 10px;
   }
 

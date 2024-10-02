@@ -40,3 +40,21 @@ main {
     flex-direction: row;
     justify-content: center;
 }
+
+a {
+    color: inherit !important; /* 기본 색상 상속 */
+    text-decoration: none !important; /* 밑줄 제거 */
+    background-color: transparent !important; /* 배경색 제거 */
+}
+
+a:hover {
+    text-decoration: underline !important; /* 호버 시 밑줄 추가 (선택적) */
+}
+
+.link {
+    text-decoration: none; /* 기본적으로 밑줄 제거 */
+}
+
+.link.underline {
+    text-decoration: underline; /* 밑줄 추가 */
+}

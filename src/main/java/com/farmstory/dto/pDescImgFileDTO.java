@@ -21,6 +21,8 @@ public class pDescImgFileDTO {
     private String p_sName3;
     private String rdate;
 
+    private int pNo;
+
     // 외래키 컬럼
     private ProductDTO product;
 }

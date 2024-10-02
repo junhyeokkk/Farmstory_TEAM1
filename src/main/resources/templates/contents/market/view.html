@@ -34,10 +34,15 @@
           delispan.classList.replace('freeDelivery', 'noneFreeDelivery');
           console.log("배달비 청구!!");
           total = total + delivery;
+          let deliveryValue = document.querySelector('.deliveryValue');
+          deliveryValue.value = delivery;
+
         }
         else{
           deliprice.classList.replace('noneFreeDelivery', 'freeDelivery');
           delispan.classList.replace('noneFreeDelivery', 'freeDelivery');
+          let deliveryValue = document.querySelector('.deliveryValue');
+          deliveryValue.value = 0;
         }
         document.querySelector('.sum').textContent = total+`원`;
         // 준혁 입력 필드 총합 계산 value 값 추가
@@ -101,6 +106,14 @@
                   console.log(err);
                 });
       } // 장바구니 END
+
+      if (e.target.classList.contains('buy_now')) {
+        if (uid == "") {
+          e.preventDefault();
+          alert('로그인이 필요합니다.');
+          return;
+        }
+      }
     });
   }
 
@@ -108,12 +121,12 @@
 <div class="market_view">
   <h3>기본정보</h3>
   <!-- 준혁 폼 추가-->
-  <form id="cartform" action="/market/cart1" method="post">
+  <form id="cartform" action="/market/orderlist" method="post">
     <div class="product_info">
       <img th:src="@{/uploads/product/}+${productDTO.p_sName1}" alt="상품 이미지" />
       <div class="product_details" th:with="disPrice=${#numbers.formatDecimal(productDTO.price * (1 - productDTO.discount / 100.0),0,0)}">
-          <p th:if="${!#authentication.principal.equals('anonymousUser')}" class="uid" hidden>[[${#authentication.principal.user.uid}]]</p>
-          <p th:if="${#authentication.principal.equals('anonymousUser')}" class="uid" hidden></p>
+        <p th:if="${!#authentication.principal.equals('anonymousUser')}" class="uid" hidden>[[${#authentication.principal.user.uid}]]</p>
+        <p th:if="${#authentication.principal.equals('anonymousUser')}" class="uid" hidden></p>
         <table>
           <tr>
             <th>상품명</th>
@@ -133,14 +146,13 @@
             <th>배송비</th>
             <td th:if="${disPrice}>30000" class="deliver">
               <span class="deli freeDelivery">[[${productDTO.delivery}]]원</span>
-              <input type="hidden" name="delivery" th:value="${productDTO.delivery}" />
               <span class="deli freeDelivery">3만원 이상 무료배송</span>
             </td>
             <td th:if="${disPrice}<=30000" class="deliver">
               <span class="deli noneFreeDelivery">[[${productDTO.delivery}]]원</span>
-              <input type="hidden" name="cart_delivery" th:value="${productDTO.delivery}" />
               <span class="deli noneFreeDelivery">3만원 이상 무료배송</span>
             </td>
+            <input type="hidden" name="cart_delivery" th:value="${productDTO.delivery}" class="deliveryValue"/>
           </tr>
           <tr>
             <th>판매가격</th>
@@ -148,10 +160,12 @@
               <span>[[${productDTO.price}]]원</span>
               <span>[[${productDTO.discount}]]%</span>
               <span>[[${disPrice}]]원</span>
+              <!--할인한 금액-->
+              <input type="hidden" name="discount" th:value="${productDTO.price}-${disPrice}" />
               <input type="hidden" name="delprice" th:value="${disPrice}" />
             </td>
             <td th:if="${productDTO.discount}==0" class="delprice" th:text="${productDTO.price}">
-             </td>
+            </td>
           </tr>
           <tr>
             <th>구매수량 (재고 : [[${productDTO.stock}]])</th>
@@ -169,9 +183,9 @@
           </tr>
         </table>
         <div class="buttons">
-          <input type="submit" value="장바구니" class="add_to_cart">
+          <button class="add_to_cart">장바구니</button>
           <!--submit 버튼 변경-->
-          <input type="text" value="바로구매" class="buy_now"></input>
+          <input type="submit"value="바로구매" class="buy_now" />
         </div> <!-- .buttons -->
       </div> <!-- .product_info -->
     </div>

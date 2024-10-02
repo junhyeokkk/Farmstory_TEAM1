@@ -26,7 +26,6 @@ public class ProductController {
     public String register(ProductDTO productDTO, Model model) {
 
         log.info("register product : "  + productDTO.toString());
-        log.info("register product : "  + productDTO.getProdCate().getProdCateName());
 
         // 파일 업로드
         pDescImgFileDTO uploadFile = descImgFileService.uploadpDescImgFile(productDTO);
@@ -37,13 +36,10 @@ public class ProductController {
 
         log.info("nono" + PNo);
 
-        ProductDTO product = ProductDTO.builder()
-                .pNo(PNo)
-                .build();
 
 
         // 이미지 저장 (이미지 파일 1개기 때문에 그냥 바로 저장 처리)
-        uploadFile.setProduct(product);
+        uploadFile.setPNo(PNo);
         descImgFileService.insertpDescImgFile(uploadFile);
 
 

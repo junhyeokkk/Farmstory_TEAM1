@@ -38,6 +38,8 @@ public class ProductDTO {
     // 외래키 컬럼
     private prodCateDTO prodCate;
 
+    private int prodCateNo;
+
 
     public List<MultipartFile> getMultipartFiles(){
         return List.of(files1,files2,files3);

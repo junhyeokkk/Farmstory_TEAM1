@@ -149,9 +149,6 @@ public class UserService {
 
     }
 
-
-
-
     // 인증번호 검증 및 아이디 반환
     public User verifyCodeForUser(String verificationCode, String name, String email) {
         // 1. 세션에서 저장된 인증번호 및 사용자 정보 가져오기
