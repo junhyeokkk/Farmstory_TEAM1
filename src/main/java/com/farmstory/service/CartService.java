@@ -81,5 +81,14 @@ public class CartService {
             return false;
         }
     }
+    public List<CartDTO> findCartWithUid(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String uid = (authentication != null && authentication.getPrincipal() instanceof UserDetails)
+                ? ((UserDetails) authentication.getPrincipal()).getUsername()
+                : null;
+        List<CartDTO> cartDTOList = null;
+
+        return cartDTOList;
+    }
 
 }

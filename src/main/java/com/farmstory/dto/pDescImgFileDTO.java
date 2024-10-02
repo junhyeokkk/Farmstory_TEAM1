@@ -22,7 +22,5 @@ public class pDescImgFileDTO {
     private String rdate;
 
     // 외래키 컬럼
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="pNo")
-    private Product pNo;
+    private ProductDTO product;
 }

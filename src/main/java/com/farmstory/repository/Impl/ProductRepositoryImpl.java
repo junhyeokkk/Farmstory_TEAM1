@@ -30,14 +30,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     @Override
     public Page<Product> selectProductAllForList(PageRequestDTO requestDTO, Pageable pageable) {
-        List<Product> products = queryFactory.select(qproduct)
-                .from(qproduct)
-                .leftJoin(qproduct.prodCateNo ,qprodCate)
-                .leftJoin(qproduct.pDescImgFile, qpDescImgFile)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(qproduct.pNo.desc())
-                .fetch();
+        List<Product> products = null;
 
         long total = queryFactory.select(qproduct.count())
                 .from(qproduct)
@@ -62,15 +55,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
             expression = qproduct.prodCateNo.prodCateNo.eq(3);
         }
 
-        List<Product> products = queryFactory.select(qproduct)
-                .from(qproduct)
-                .leftJoin(qproduct.prodCateNo ,qprodCate)
-                .leftJoin(qproduct.pDescImgFile, qpDescImgFile)
-                .where(expression)
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .orderBy(qproduct.pNo.desc())
-                .fetch();
+        List<Product> products = null;
 
         long total = queryFactory.select(qproduct.count())
                 .from(qproduct)
@@ -83,12 +68,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     @Override
     public Product selectProductByPId(Integer id) {
 
-        Product product = queryFactory.select(qproduct)
-                .from(qproduct)
-                .leftJoin(qproduct.prodCateNo ,qprodCate)
-                .leftJoin(qproduct.pDescImgFile, qpDescImgFile)
-                .where(qproduct.pNo.eq(id))
-                .fetchOne();
+        Product product = null;
         ;
         return product;
     }

@@ -30,7 +30,7 @@ public class ProductService {
 
         Product product = modelMapper.map(productDTO, Product.class);
         prodCate prodcate = prodCate.builder()
-                .prodCateNo((productDTO.getProdCateNo()))
+                .prodCateNo((productDTO.getProdCate().getProdCateNo()))
                 .build();
         product.setProdCateNo(prodcate);
         log.info(product);
@@ -56,25 +56,9 @@ public class ProductService {
             products = productRepository.selectProductForSearch(pageRequestDTO, pageable);
         }
 
-        List<ProductDTO> productList = products.stream().map(product -> {
-            ProductDTO productDTO = ProductDTO.builder()
-                    .pNo(product.getPNo())
-                    .pName(product.getPName())
-                    .price(product.getPrice())
-                    .stock(product.getStock())
-                    .point(product.getPoint())
-                    .discount(product.getDiscount())
-                    .delivery(product.getDelivery())
-                    .rdate(product.getRdate().toString()) // 날짜 포맷 조정 필요시 변환
-                    .pDesc(product.getPDesc())
-                    .prodCateName(product.getProdCateNo() != null ? product.getProdCateNo().getProdCateName() : null) // 카테고리 이름 가져오기
-                    // 이미지 파일 정보 추가
-                    .p_sName1(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName1() : "404이미지없음.png")
-                    .p_sName2(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName2() : null)
-                    .p_sName3(product.getPDescImgFile() != null ? product.getPDescImgFile().getP_sName3() : null)
-                    .build();
-            return productDTO;
-        }).collect(Collectors.toList());
+        List<ProductDTO> productList = products.stream().map(product ->
+                modelMapper.map(product, ProductDTO.class))
+                .collect(Collectors.toList());
 
         int total = (int) products.getTotalElements();
 
