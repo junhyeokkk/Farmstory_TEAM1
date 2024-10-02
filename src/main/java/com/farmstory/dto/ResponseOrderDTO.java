@@ -13,7 +13,6 @@ import java.util.List;
 public class ResponseOrderDTO {
 
     private UserDTO userDTO;
-    private ProductDTO productDTO;
     private List<CartDTO> cartDTOList;
 
 }

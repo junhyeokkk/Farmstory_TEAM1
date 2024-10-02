@@ -27,7 +27,7 @@ public class QOrder extends EntityPathBase<Order> {
 
     public final StringPath orderDesc = createString("orderDesc");
 
-    public final NumberPath<Integer> payment = createNumber("payment", Integer.class);
+    public final StringPath payment = createString("payment");
 
     public final StringPath recAddr1 = createString("recAddr1");
 

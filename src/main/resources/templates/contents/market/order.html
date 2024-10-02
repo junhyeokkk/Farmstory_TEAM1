@@ -1,133 +1,155 @@
-<link rel="stylesheet" th:href="@{/css/market_order.css}">
+<link  rel="stylesheet" th:href="@{/css/market_order.css}">
+<script type="text/javascript" th:src="@{/js/Order.js}"></script>
 
-<div class="market_order">
-  <h3 class="tb_tit">주문상품 전체(10)</h3><!-- .tb_tit -->
-  <table class="tb1">
-    <colgroup>
-      <col style="width: 10%">
-      <col style="width: 12%">
-      <col style="width: 28%">
-      <col style="width: 10%">
-      <col style="width: 10%">
-      <col style="width: 10%">
-      <col style="width: 10%">
-      <col style="width: 10%">
-    </colgroup>
-    <tr>
-      <th>이미지</th>
-      <th>종류</th>
-      <th>상품명</th>
-      <th>수량</th>
-      <th>할인</th>
-      <th>포인트</th>
-      <th>가격</th>
-      <th>소계</th>
-    </tr>
-    <tr>
-      <td><img src="../images/market_item1.jpg" alt="사과 샘플"/></td>
-      <td>과일</td>
-      <td>사과 500g</td>
-      <td>1</td>
-      <td>10%</td>
-      <td>40p</td>
-      <td>4,000</td>
-      <td><strong>3,600</strong>원</td>
-    </tr>
-  </table><!-- .tb1 -->
+<script th:inline="javascript">
+  const user = {
+    uid: [[${responseOrderDTO.userDTO.uid}]],
+    name: [[${responseOrderDTO.userDTO.name}]],
+    hp: [[${responseOrderDTO.userDTO.hp}]],
+    zip: [[${responseOrderDTO.userDTO.zip}]],
+    addr1: [[${responseOrderDTO.userDTO.addr1}]],
+    addr2: [[${responseOrderDTO.userDTO.addr2}]]
+  };
 
-
-  <div class="order_info cf">
-    <h4 class="order_tit">주문정보 입력</h4>
-    <table class="order_tb cf">
+</script>
+<form action="/market/addOrder" method="post">
+  <div class="market_order">
+    <h3 class="tb_tit">주문상품 전체(10)</h3><!-- .tb_tit -->
+    <table class="tb1">
       <colgroup>
-        <col style="width: 23.52%">
-        <col style="width: 76.48%">
+        <col style="width: 10%">
+        <col style="width: 12%">
+        <col style="width: 28%">
+        <col style="width: 10%">
+        <col style="width: 10%">
+        <col style="width: 10%">
+        <col style="width: 10%">
+        <col style="width: 10%">
       </colgroup>
       <tr>
-        <th>주문자</th>
-        <td>
-          <input type="text" class="uid" placeholder="홍길동">
-        </td>
+        <th>이미지</th>
+        <th>종류</th>
+        <th>상품명</th>
+        <th>수량</th>
+        <th>할인</th>
+        <th>포인트</th>
+        <th>가격</th>
+        <th>소계</th>
       </tr>
-      <tr>
-        <th>휴대폰</th>
-        <td>
-          <input type="text" class="hp" placeholder="010-1234-1001">
-        </td>
+      <tr th:each="cartDTO , i:${responseOrderDTO.cartDTOList}">
+        <td><img th:src="@{/uploads/product/}+${cartDTO.productDTO.p_sName1}" alt="사과 샘플"/></td>
+        <td>[[${cartDTO.productDTO.prodCate.prodCateName}]]</td>
+        <td>[[${cartDTO.productDTO.pName}]]</td>
+        <td>[[${cartDTO.cartProdQty}]]</td>
+        <td>[[${cartDTO.productDTO.discount}]]%</td>
+        <td>[[${cartDTO.productDTO.point}]]p</td>
+        <td>[[${cartDTO.productDTO.price}*${cartDTO.cartProdQty}]]</td>
+        <td><strong>[[${cartDTO.totalprice}]]</strong>원</td>
       </tr>
-      <tr class="use cf">
-        <th>포인트사용</th>
-        <td class="use_point cf">
-          <input type="text" class="point" placeholder="">
-          <a href="#" class="point_btn">사용하기</a><br>
-          <div>사용가능 <span>[[${#authentication.principal.user.point}]]</span></div>
-        </td>
-      </tr>
-      <tr>
-        <th>받는분</th>
-        <td><input type="text" class="" placeholder=""></td>
-      </tr>
-      <tr>
-        <th>연락처</th>
-        <td><input type="text" class="" placeholder=""></td>
-      </tr>
-      <tr>
-        <th class="delivery_addr">배송주소</th>
-        <td class="cf">
-          <input type="text" class="post_sch" placeholder="" title="우편번호 검색칸">
-          <a href="#"><img th:src="@{/images/user/btn_post_search.gif}" alt="우편번호 검색" class="post_sch_btn"></a>
-          <input type="text" class="addr1" placeholder="기본주소 검색">
-          <input type="text" class="addr2" placeholder="상세주소 입력">
-        </td>
-      </tr>
-      <tr>
-        <th>결제방법</th>
-        <td>
-          <input type="checkbox" id="check"><label for="check"></label>
-          계좌이체
-          <!-- <input type="checkbox" class="" placeholder="" value="">계좌이체 -->
-          <input type="checkbox" class="" placeholder="" value="">신용카드
-          <input type="checkbox" class="" placeholder="" value="">체크카드
-          <input type="checkbox" class="" placeholder="" value="">휴대폰
-        </td>
-      </tr>
-      <tr>
-        <th class="etc">기타</th>
-        <td><input type="textarea" class="" placeholder=""></td>
-      </tr>
-    </table>
-  </div> <!-- .order_info -->
+    </table><!-- .tb1 -->
 
-  <div class="order_final cf">
-    <table class="tb2">
-      <tr>
-        <th colspan="2">전체합계</th>
-      </tr>
-      <tr>
-        <td>상품수</td>
-        <td>1</td>
-      </tr>
-      <tr>
-        <td>상품금액</td>
-        <td>27,000</td>
-      </tr>
-      <tr>
-        <td>할인금액</td>
-        <td>5,0000원</td>
-      </tr>
-      <tr>
-        <td>배송비</td>
-        <td>5,0000원</td>
-      </tr>
-      <tr>
-        <td>포인트</td>
-        <td>4,000원</td>
-      </tr>
-      <tr>
-        <td>전체주문금액</td>
-        <td>22,000</td>
-      </tr>
-    </table><!-- .tb2 -->
-    <button class="btn_order"><a href="#">주문하기</a></button>
-  </div><!-- .order_final -->
-</div>
+    <div class="order_info cf">
+      <h4 class="order_tit">주문정보 입력</h4>
+      <button id="set_user">주문자 정보와 동일</button>
+      <table class="order_tb cf">
+        <colgroup>
+          <col style="width: 23.52%">
+          <col style="width: 76.48%">
+        </colgroup>
+        <tr>
+          <th>주문자</th>
+          <td>
+            <input type="text" id="username" class="username" placeholder="홍길동">
+          </td>
+        </tr>
+        <tr>
+          <th>휴대폰</th>
+          <td>
+            <input type="text" id="hp" class="hp" placeholder="010-1234-1001">
+          </td>
+        </tr>
+        <tr class="use cf">
+          <th>포인트사용</th>
+          <td class="use_point cf">
+            <input type="number" name="usedPoint" class="point" placeholder="">
+            <a href="#" class="point_btn">사용하기</a><br>
+            <div>사용가능 <span id="available-points">[[${#authentication.principal.user.point}]]</span> 포인트</div>
+            <div id="point-error" style="color: red; display: none;">사용 가능한 포인트보다 높게 입력할 수 없습니다.</div>
+          </td>
+        </tr>
+        <tr>
+          <th>받는분</th>
+          <input type="hidden" name="uid" th:value="${responseOrderDTO.userDTO.uid}" />
+          <td><input type="text" id="sendername" class="sendername" placeholder=""></td>
+        </tr>
+        <tr>
+          <th>연락처</th>
+          <td><input type="text" name="recHp" id="senderhp" class="senderhp" placeholder=""></td>
+        </tr>
+        <tr>
+          <th class="delivery_addr">배송주소</th>
+          <td class="cf">
+            <input type="text" name="recZip" id="recZip" class="recZip" placeholder="" title="우편번호 검색칸">
+            <a href="#"><img th:src="@{/images/user/btn_post_search.gif}" alt="우편번호 검색" class="post_sch_btn"></a>
+            <input type="text" name="recAddr1" id="recAddr1" class="recAddr1" placeholder="기본주소 검색">
+            <input type="text" name="recAddr2" id="recAddr2" class="recAddr2" placeholder="상세주소 입력">
+          </td>
+        </tr>
+        <tr>
+          <th>결제방법</th>
+          <td>
+            <input type="checkbox" name="payment" value="계좌이체" id="account-transfer">
+            <label for="account-transfer">계좌이체</label>
+            <input type="checkbox" name="payment" value="신용카드" id="credit-card">
+            <label for="credit-card">신용카드</label>
+            <input type="checkbox" name="payment" value="체크카드" id="debit-card">
+            <label for="debit-card">체크카드</label>
+            <input type="checkbox" name="payment" value="휴대폰" id="mobile">
+            <label for="mobile">휴대폰</label>
+          </td>
+        </tr>
+        <tr>
+          <th class="etc">기타</th>
+          <td><input name="orderDesc" type="textarea" class="orderDesc" placeholder=""></td>
+        </tr>
+      </table>
+    </div> <!-- .order_info -->
+
+    <div class="order_final cf">
+      <table class="tb2">
+        <tr>
+          <th colspan="2">전체합계</th>
+        </tr>
+        <tr>
+          <td>상품수</td>
+          <td>[[${cartDTO.cartProdQty}]]</td>
+          <input type="hidden" name="totalQty" th:value="${cartDTO.cartProdQty}" />
+        </tr>
+        <tr>
+          <td>상품금액</td>
+          <td>[[${cartDTO.productDTO.price}]]</td>
+        </tr>
+        <tr>
+          <td>할인금액</td>
+          <td>[[${cartDTO.productDTO.price}*${cartDTO.cartProdQty}-${cartDTO.totalprice}]]</td>
+          <input type="hidden" name="delivery" th:value="${cartDTO.productDTO.price}*${cartDTO.cartProdQty}-${cartDTO.totalprice}" />
+        </tr>
+        <tr>
+          <td>배송비</td>
+          <td>[[${cartDTO.cart_delivery}]]</td>
+          <input type="hidden" name="delivery" th:value="${cartDTO.cart_delivery}" />
+        </tr>
+        <tr>
+          <td>포인트</td>
+          <td>[[${cartDTO.productDTO.point}*${cartDTO.cartProdQty}]]</td>
+        </tr>
+        <tr>
+          <td>전체주문금액</td>
+          <td>[[${cartDTO.totalprice}]]</td>
+          <input type="hidden" name="totalPrice" th:value="${cartDTO.totalprice}" />
+        </tr>
+      </table><!-- .tb2 -->
+      <button type="submit" class="btn_order"><a href="#">주문하기</a></button>
+    </div><!-- .order_final -->
+  </div>
+</form>

@@ -27,7 +27,16 @@ public class OrderController {
     private final ProductService productService;
     private final UserService userService;
     private final CartService cartService;
+    private final OrderService orderService;
 
+    @PostMapping("/addOrder")
+    public String addOrder(OrderDTO orderDTO, Model model) {
+
+        orderService.insertOrder(orderDTO);
+
+        log.info(orderDTO.toString());
+        return null;
+    }
 
     @PostMapping("/orderlist")
     public String orderlist(CartDTO cartDTO, Model model){
@@ -47,7 +56,8 @@ public class OrderController {
         cartDTO.setUid(uid);
 
         // 해당 product 들고오기
-        ProductDTO productDTO = productService.selectProduct(cartDTO.getProdNo());
+        ProductDTO productDTO = productService.selectProductById(cartDTO.getProdNo());
+        cartDTO.setProductDTO(productDTO);
 
         // 해당 user 들고오기
         UserDTO userDTO = userService.selectUser(cartDTO.getUid());
@@ -58,7 +68,6 @@ public class OrderController {
         cartDTOList.add(cartDTO);
 
         ResponseOrderDTO responseOrderDTO = new ResponseOrderDTO();
-        responseOrderDTO.setProductDTO(productDTO);
         responseOrderDTO.setUserDTO(userDTO);
         responseOrderDTO.setCartDTOList(cartDTOList);
 
