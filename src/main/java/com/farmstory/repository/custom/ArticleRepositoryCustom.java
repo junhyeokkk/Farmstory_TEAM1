@@ -17,4 +17,8 @@ public interface ArticleRepositoryCustom {
     public List<Tuple> selectArticleById(int no);
 
     public List<Tuple> selectNotice(int cateNo);
+
+    public List<Tuple> MainViewArticle(int cateNo);
+    public List<Tuple> MainNoticeArticle(int cateNo);
+
 }

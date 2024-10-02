@@ -30,6 +30,8 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
     private final QComment qcomment = QComment.comment;
 
 
+
+
     @Override
     public Page<Tuple> selectArticleAllForList(PageRequestDTO pagerequestDTO, Pageable pageable,int cateNo) {
 
@@ -201,6 +203,34 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
                                 .where(qarticle.cateNo.eq(cateNo).and(qarticle.isNotice.eq(true)))
                                 .groupBy(qarticle.articleNo, quser.nick)  // Group by articleNo and nick to ensure correct comment count per article
                                 .fetch();
+
+        return content;
+    }
+
+    @Override
+    public List<Tuple> MainViewArticle(int cateNo) {
+        List<Tuple> content = queryFactory
+                .select(qarticle.articleNo,qarticle.title,qarticle.date)
+                .from(qarticle)
+                .where(qarticle.cateNo.eq(cateNo).and(qarticle.isNotice.eq(false)))
+                .limit(5)
+                .orderBy(qarticle.articleNo.desc())
+                .fetch();
+
+        return content;
+    }
+
+    @Override
+    public List<Tuple> MainNoticeArticle(int cateNo) {
+
+        List<Tuple> content = queryFactory
+                .select(qarticle.articleNo,qarticle.title,qarticle.date)
+                .from(qarticle)
+                .where(qarticle.cateNo.eq(cateNo))
+                .limit(5)
+                .orderBy(qarticle.articleNo.desc())
+                .fetch();
+
 
         return content;
     }

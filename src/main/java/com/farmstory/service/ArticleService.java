@@ -6,6 +6,7 @@ import com.farmstory.entity.CsArticle;
 import com.farmstory.repository.ArticleRepository;
 import com.farmstory.repository.CateRepository;
 import com.farmstory.repository.CsArticleRepository;
+import com.farmstory.repository.FileRepository;
 import com.querydsl.core.Tuple;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,7 +34,66 @@ public class  ArticleService {
     private final CateRepository cateRepository;
     private final ModelMapper modelMapper;
     private final CsArticleRepository csArticleRepository;
+    private final FileRepository fileRepository;
 
+    public int updateFileCount(int ano){
+        int count = 0;
+        count= fileRepository.selectFileCount(ano);
+
+        Optional<Article> article = articleRepository.findById(ano);
+        if (article.isPresent()) {
+            Article article1 = article.get();
+            article1.setFile(count);
+            Article updateArticle= articleRepository.save(article1);
+            return updateArticle.getArticleNo();
+        }else{
+            return 0;
+        }
+
+    }
+
+    public List<ArticleDTO> mainArticle(int cateNo){
+        List<Tuple> tuples= articleRepository.MainViewArticle(cateNo);
+        log.info(tuples);
+        if(!tuples.isEmpty()){
+            List<ArticleDTO> articleDTOS = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            for(Tuple tuple : tuples){
+                Integer articleNoInteger = tuple.get(0, Integer.class);                 ArticleDTO articleDTO = ArticleDTO.builder()
+                        .articleNo( articleNoInteger != null ? articleNoInteger : 0 )
+                        .cateNo(cateNo)
+                        .title(tuple.get(1,String.class))
+                        .date(tuple.get(2, LocalDateTime.class).format(formatter))
+                        .build();
+                articleDTOS.add(articleDTO);
+            }
+            return articleDTOS;
+        }
+        return null;
+
+    }
+    public List<ArticleDTO> mainNoticeArticle(int cateNo){
+        List<Tuple> tuples= articleRepository.MainNoticeArticle(cateNo);
+        log.info(tuples);
+        if(!tuples.isEmpty()){
+            List<ArticleDTO> articleDTOS = new ArrayList<>();
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
+            for(Tuple tuple : tuples){
+                Integer articleNoInteger = tuple.get(0, Integer.class);                 ArticleDTO articleDTO = ArticleDTO.builder()
+                        .articleNo( articleNoInteger != null ? articleNoInteger : 0 )
+                        .cateNo(cateNo)
+                        .title(tuple.get(1,String.class))
+                        .date(tuple.get(2, LocalDateTime.class).format(formatter))
+                        .build();
+                articleDTOS.add(articleDTO);
+            }
+            return articleDTOS;
+        }
+        return null;
+
+    }
 
     public int insertArticle(ArticleDTO articleDTO, int cateNo, HttpServletRequest req) {
         log.info("article controller :"+articleDTO.toString());

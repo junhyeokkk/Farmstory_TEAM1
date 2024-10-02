@@ -194,7 +194,6 @@ main td {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    margin-right: 12px;
 }
 /* 정보 */
 .info>div {
@@ -262,13 +261,14 @@ main td {
 .notice tr>td:nth-child(2) {
     display: block;
     width: 240px;
+    font-size: 12px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-left: 6px;
-    margin-right: 12px;
 }
 
 .notice tr>td:nth-child(3) {
-    width: 46px;
+    width: 55px;
+    font-size: 10px;
 }

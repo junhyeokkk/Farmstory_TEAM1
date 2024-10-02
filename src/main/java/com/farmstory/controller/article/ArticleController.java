@@ -7,8 +7,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -78,7 +80,7 @@ public class ArticleController {
     public String view(@PathVariable("cateGroup") String group,
                        @PathVariable("cateName") String cateName,
                        @PathVariable("articleNo") int articleNo,
-                       @RequestParam(value = "pg",defaultValue = "0") int pg,
+                       @RequestParam(value = "pg",defaultValue = "1") int pg,
                        @RequestParam(value = "content", required = false) String content,
                        Model model){
 
@@ -159,17 +161,32 @@ public class ArticleController {
     }
 
 
+    @Transactional
     @PostMapping("/modify/{cateNo}/{articleNo}")
     public String modify(@PathVariable("cateNo") int cateNo,
                          @PathVariable("articleNo") int articleNo,
-                         @RequestParam("pg") int pg,ArticleDTO articleDTO, Model model){
+                         @RequestParam("pg") int pg,
+                         @RequestParam(value="deleteFiles",defaultValue = "") List<Long> deleteFiles,
+                         @RequestParam("files") List<MultipartFile> newfiles,
+                         ArticleDTO articleDTO, Model model){
 
         CateDTO cate = categoryService.selectCateNo(cateNo);
         log.info(articleDTO);
-        List<FileDTO> uploadFiles = new ArrayList<>();
-        if (articleDTO.getFiles() != null && !articleDTO.getFiles().isEmpty()) {
-            uploadFiles = fileService.uploadFile(articleDTO); // Process file uploads
+
+        int result=0;
+        if(deleteFiles != null && !deleteFiles.isEmpty()){
+            for(Long fno : deleteFiles){
+                int fNo = Math.toIntExact(fno);
+                result = fileService.deleteFile(fNo);
+                articleDTO.setFile(articleDTO.getFile()-1);
+            }
         }
+        List<FileDTO> uploadFiles = new ArrayList<>();
+        if (newfiles != null && !newfiles.isEmpty()) {
+            articleDTO.setFiles(newfiles);
+            uploadFiles = fileService.uploadFile(articleDTO);
+        }
+        log.info("file 갯수 : " +articleDTO.getFile());
        int ano =  articleService.updateArticle(articleDTO,cateNo);
         //글 저장
         //파일 저장
@@ -179,6 +196,9 @@ public class ArticleController {
                 int fno = fileService.insertFile(fileDTO);
             }
         }
+
+        //파일 갯수 조정
+        articleService.updateFileCount(ano);
 
         return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+articleNo+"?content=view&pg="+pg;
     }

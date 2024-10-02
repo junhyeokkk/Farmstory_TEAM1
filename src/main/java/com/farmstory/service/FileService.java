@@ -4,6 +4,7 @@ import com.farmstory.dto.ArticleDTO;
 import com.farmstory.dto.CsArticleDTO;
 import com.farmstory.dto.FileDTO;
 import com.farmstory.entity.FileEntity;
+import com.farmstory.repository.ArticleRepository;
 import com.farmstory.repository.FileRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -33,6 +34,7 @@ import java.util.UUID;
 @Service
 public class FileService {
     private final FileRepository fileRepository;
+    private final ArticleRepository articleRepository;
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
 
@@ -200,7 +202,35 @@ public class FileService {
     }
 
     public List<FileDTO> selectFileAllByAno(int ano){return null;}
-    public void updateFile(FileDTO fileDTO) {}
-    public void deleteFile(int fno){}
+    public void updateFile(MultipartFile file,ArticleDTO articleDTO) {
+
+
+    }
+    public int deleteFile(int fno){
+
+        Optional<FileEntity> optFile = fileRepository.findById(fno);
+        int result=0;
+        if (optFile.isPresent()) {
+            FileEntity fileEntity = optFile.get();
+            Path path = Paths.get(uploadPath+"article/"+ fileEntity.getSName());
+            File file = new File(path.toString());
+            if(file.exists()){
+                boolean deleted = file.delete();
+                if(deleted){
+                    fileRepository.deleteById(fno);
+                   result=1;
+                }else {
+                    throw new RuntimeException("파일 삭제 실패: " + path.toString());
+                }
+            } else {
+                throw new RuntimeException("파일을 찾을 수 없음: " + path.toString());
+            }
+        } else {
+            throw new RuntimeException("파일 정보를 찾을 수 없음: fno = " + fno);
+        }
+
+        return result;
+
+    }
 
 }
