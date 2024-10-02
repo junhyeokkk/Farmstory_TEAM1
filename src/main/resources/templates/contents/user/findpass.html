@@ -67,9 +67,9 @@
         }
     });
 
-    // 인증번호 입력 필드에 대한 포커스아웃 이벤트 리스너 추가
-    const verificationCodeField = document.getElementById('verificationCode'); // 인증번호 입력 필드
-    verificationCodeField.addEventListener('focusout', () => {
+    // 인증번호 입력 필드  이벤트 리스너 추가
+    const verifyCodeBtn = document.getElementById('verifyCodeBtn'); // 인증번호 입력 필드
+    verifyCodeBtn.addEventListener('click', () => {
         const code = document.getElementById('verificationCode').value;
         const uid = document.getElementById('uid').value;
         const email = document.getElementById('email').value;
@@ -88,25 +88,16 @@
                     if (!response.ok) {
                         throw new Error("인증코드 검증 실패");
                     }
-                    return response.json(); // 응답을 JSON으로 변환
-                })
-                .then(data => {
-                    if (!data.result) {
-                        // 인증 실패 메시지 표시
-                        showResultInvalid(resultEmail, '인증코드가 일치하지 않습니다.');
-                    } else {
-                        // 인증 성공 메시지 표시
-                        showResultValid(resultEmail, '이메일이 인증되었습니다.');
-                        isPassOk = true;
+                    // 인증 성공 메시지 표시
+                    showResultValid(resultEmail, '이메일이 인증되었습니다.');
+                    isPassOk = true;
+                    // "다음" 버튼 활성화
+                    document.getElementById('nextBtn').disabled = false;
 
-                        // "다음" 버튼 활성화
-                        document.getElementById('nextBtn').disabled = false;
-
-                        // "다음" 버튼 클릭 시 이벤트 등록
-                        document.getElementById('nextBtn').addEventListener('click', function () {
-                            window.location.href = '/category/user/changepass';  // 비밀번호 변경 페이지로 이동
-                        });
-                    }
+                    // "다음" 버튼 클릭 시 이벤트 등록
+                    document.getElementById('nextBtn').addEventListener('click', function () {
+                        window.location.href = '/category/user/changepass';  // 비밀번호 변경 페이지로 이동
+                    });
                 })
                 .catch(error => {
                     console.error('Error:', error);
@@ -116,6 +107,13 @@
             showResultInvalid(resultEmail, '인증번호를 입력하세요.');
         }
     });
+
+
+    // "다음" 버튼 클릭 시 처리
+    function handleNextBtnClick() {
+        window.location.href = '/category/user/changepass';  // 비밀번호 변경 페이지로 이동
+    }
+
 
     // 유효성 검사 메시지 출력 함수
     function showResultInvalid(element, message) {

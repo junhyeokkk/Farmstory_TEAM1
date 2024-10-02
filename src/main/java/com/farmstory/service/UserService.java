@@ -245,5 +245,28 @@ public class UserService {
             return user;
         }
 
+
+
+        // 나의 정보
+
+
+    // 별명, 주소 업데이트 메서드
+    public void updateUserInfo(String uid, String nick, String zip, String addr1, String addr2) {
+        User user = userRepository.findById(uid)
+                .orElseThrow(() -> new RuntimeException("사용자를 찾을 수 없습니다."));
+
+        user.setNick(nick);
+        user.setZip(zip);
+        user.setAddr1(addr1);
+        user.setAddr2(addr2);
+        userRepository.save(user);
+    }
+
+
+
+
+
+
+
     }
 
