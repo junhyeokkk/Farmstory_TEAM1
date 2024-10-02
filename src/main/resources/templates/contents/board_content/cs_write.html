@@ -6,7 +6,6 @@
                         <form th:action="@{'/article/' + ${#authentication.principal.user.uid} + '/cs/writer'}" method="post" enctype="multipart/form-data"  onsubmit="return validateForm()">
                             <input type="hidden" name="writer" th:value="${#authentication.principal.user.uid}">
                             <input type="hidden" name="nick" th:value="${#authentication.principal.user.nick}">
-                            <input type="hidden" name="b_writer" value="">
                             <select name="inquiry" id="inquiry">
                                 <option value="0" selected>상품문의</option>
                                 <option value="1">배송문의</option>
@@ -17,8 +16,6 @@
                             <table>
                                 <tr>
                                     <td>제목</td>
-                                    <input type="hidden" name="b_cateNo" value=""/>
-                                    <input type="hidden" name="group" value=""/>
                                     <td><input type="text" name="title" placeholder="제목을 입력하세요."/></td>
                                 </tr>
                                 <tr>

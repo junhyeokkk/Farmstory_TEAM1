@@ -25,6 +25,7 @@ public class CSPageResponseDTO {
 
     private String type;
     private String keyword;
+    private String uid;
 
 
 
@@ -44,6 +45,7 @@ public class CSPageResponseDTO {
          this.next = total > this.end *this.size;
          this.type = cspageRequestDTO.getType();
          this.keyword = cspageRequestDTO.getKeyword();
+         this.uid= cspageRequestDTO.getUid();
         // Ensure `end` is at least 1 if `start` is 1
         if (this.start == 1 && this.end == 0) {
             this.end = 0;

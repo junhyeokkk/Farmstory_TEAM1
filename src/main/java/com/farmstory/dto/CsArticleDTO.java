@@ -29,6 +29,8 @@ public class CsArticleDTO {
     private int hit =0;
     @Builder.Default
     private int comment=0;
+    private String email;
+
 
     @Builder.Default
     private boolean isCompleted=false;

@@ -42,9 +42,7 @@
 
 
 						 <a th:if="${article.isCompleted == 0}" th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.csNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
-					 <th:block th:if="${#authentication.principal.user.role =='ADMIN'}">
-						 <a th:if="${cate.cateNo ==504}" th:href="@{'/article/cs/completed/'+${article.csNo}}" class="btn btnComplete">완료</a>
-					 </th:block>
+						 <a th:if="${cate.cateNo ==504}" th:href="@{'/article/cs/completed/'+${article.csNo}(pg=${pg})}" class="btn btnComplete">완료</a>
 	                    <a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist',pg=${pg})}" class="btn btnList">목록</a>
 	                 
                 </div>  
@@ -58,10 +56,12 @@
 					<article>
 						<span class="nick">[[${comment.user.nick}]]</span>
 						<span class="date">[[${comment.getSubStringRdate()}]]</span>
-						<p class="content">[[${comment.content}]]</p>
+						<textarea class="content" name="content" readonly>[[${comment.content}]]</textarea>
 						<div>
-							<a th:href="@{/comment/delete(no=${comment.no},pg=${pg},writer=${comment.writer})}" class="remove btn">삭제</a>
-							<a href="/" class="modify btn">수정</a>
+							<a  href="#" th:data-pg="${pg}" th:data-cateNo="${cate.cateNo}" th:data-no="${comment.no}" th:data-writer="${comment.user.uid}" class="remove commentRemove">삭제</a>
+							<a  href="#" class="modify commentModify" th:data-no="${comment.no}">수정</a>
+							<a  href="/" class="cancel commentCancel" th:data-no="${comment.no}" hidden>취소</a>
+							<a  href="#" class="modify commentCompleted" th:data-no="${comment.no}" hidden>수정완료</a>
 						</div>
 					</article>
 				</th:block>
@@ -69,7 +69,7 @@
 			</section>
 
 			<!-- 댓글쓰기 -->
-			<section class="commentForm">
+			<section th:if="${!article.isCompleted()}" class="commentForm" >
 				<h3>댓글쓰기</h3>
 				<form name="commentForm" method="post">
 					<textarea name="content">댓글내용 입력</textarea>

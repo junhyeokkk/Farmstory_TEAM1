@@ -3,6 +3,7 @@ package com.farmstory.controller.article;
 
 import com.farmstory.dto.CateDTO;
 import com.farmstory.dto.CommentDTO;
+import com.farmstory.service.ArticleService;
 import com.farmstory.service.CategoryService;
 import com.farmstory.service.CommentService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +20,7 @@ public class CommentController {
 
     private final CommentService commentService;
     private final CategoryService categoryService;
+    private final ArticleService articleService;
 
 
     @PostMapping("/comment/write")
@@ -36,20 +38,35 @@ public class CommentController {
 
     }
 
-    @GetMapping("/comment/delete/{cateNo}")
-    public String delete(@PathVariable("cateNo") int cateNo,
-            @RequestParam int no, @RequestParam int pg, @RequestParam("writer") String writer) {
+    @ResponseBody
+    @GetMapping("/comment/delete")
+    public ResponseEntity<?> delete(@RequestParam int no, @RequestParam int pg, @RequestParam("writer") String writer) {
 
-        CateDTO cate = categoryService.selectCateNo(cateNo);
 
-        int parentNo=  commentService.deleteComment(no);
-     if(parentNo > 0 ){
-         return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+parentNo+"?content=view&pg="+pg;
-
-     }
-        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+parentNo+"?content=view&success=false&pg="+pg;
+        int result=  commentService.deleteComment(no);
+        return ResponseEntity.ok().body(result);
+//     if(parentNo > 0 ){
+//         return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+parentNo+"?content=view&pg="+pg;
+//
+//     }
+//        return "redirect:/article/"+cate.getCateGroup()+"/"+cate.getCateName()+"/"+parentNo+"?content=view&success=false&pg="+pg;
 
     }
 
+    @ResponseBody
+    @PostMapping("/comment/modify")
+    public ResponseEntity<CommentDTO> modify(@RequestParam("no") int no,
+                          @RequestParam("comment") String comment, HttpServletRequest req) {
+
+        CommentDTO commentDTO = commentService.selectComment(no);
+        log.info(commentDTO);
+
+        commentDTO.setContent(comment);
+
+       CommentDTO updatedComment =  commentService.updateComment(commentDTO);
+
+        return ResponseEntity.ok().body(updatedComment);
+
+    }
 
 }
