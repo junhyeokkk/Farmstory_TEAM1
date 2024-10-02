@@ -132,7 +132,7 @@ th {
   }
 
 #o_prod_table > td {
-    border-bottom: 1px solid #999999;
+    border-bottom: 1px dashed  #999999 !important;
   }
 #o_prod_table  *{
   font-weight: 800;

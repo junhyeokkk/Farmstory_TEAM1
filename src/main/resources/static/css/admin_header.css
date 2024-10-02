@@ -28,7 +28,7 @@ header {
 }
 
 .home > a {
-  color: white;
+  color: white  !important;
   font-style: inherit;
   font-size: 12px;
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -27,15 +28,27 @@ public class ProductService {
     private final ProductRepository productRepository;
     private final ModelMapper modelMapper;
 
+    // 중원씨꺼 select 가져옴
+    public ProductDTO selectProduct(int pNo) {
+        Optional<Product> product = productRepository.findById(pNo);
+
+        if(product.isPresent()){
+            ProductDTO productDTO = null;
+            productDTO = modelMapper.map(product, ProductDTO.class);
+            return productDTO;
+        }
+        return null;
+    }
+
     // 상품 insert
     public int insertProduct(ProductDTO productDTO) {
 
-        /*
+
         Product product = modelMapper.map(productDTO, Product.class);
         prodCate prodcate = prodCate.builder()
-                .prodCateNo((productDTO.getProdCate().getProdCateNo()))
+                .prodCateNo((productDTO.getProdCateNo()))
                 .build();
-        product.setProdCateNo(prodcate);
+        product.setProdCate(prodcate);
         log.info(product);
 
         // 상품 저장 후 저장한 product PNo 반환
@@ -44,8 +57,6 @@ public class ProductService {
 
         return savedproduct.getPNo();
 
-         */
-        return 0;
     }
 
     public ProductPageResponseDTO getAllProductsWithAllInfo(PageRequestDTO pageRequestDTO) {
