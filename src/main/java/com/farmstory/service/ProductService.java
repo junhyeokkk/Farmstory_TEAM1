@@ -1,11 +1,11 @@
 package com.farmstory.service;
 
-import com.farmstory.dto.PageRequestDTO;
-import com.farmstory.dto.ProductDTO;
-import com.farmstory.dto.ProductPageResponseDTO;
+import com.farmstory.dto.*;
 import com.farmstory.entity.Product;
+import com.farmstory.entity.pDescImgFile;
 import com.farmstory.entity.prodCate;
 import com.farmstory.repository.ProductRepository;
+import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.catalina.mapper.Mapper;
@@ -14,6 +14,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +30,7 @@ public class ProductService {
     // 상품 insert
     public int insertProduct(ProductDTO productDTO) {
 
+        /*
         Product product = modelMapper.map(productDTO, Product.class);
         prodCate prodcate = prodCate.builder()
                 .prodCateNo((productDTO.getProdCate().getProdCateNo()))
@@ -40,25 +43,46 @@ public class ProductService {
         log.info("saved pno " + savedproduct);
 
         return savedproduct.getPNo();
+
+         */
+        return 0;
     }
 
     public ProductPageResponseDTO getAllProductsWithAllInfo(PageRequestDTO pageRequestDTO) {
 
         Pageable pageable = pageRequestDTO.getPageable("pNo" , 10);
 
-
-        Page<Product> products = null;
+        Page<Tuple> products = null;
+        log.info("너는 되니? " + products);
 
         if(pageRequestDTO.getType() == null){
+            log.info("너니?1 ");
             products = productRepository.selectProductAllForList(pageRequestDTO, pageable);
+            log.info("너까지 되니? " + products);
         }
         else{
+            /*
+            log.info("너니?2 ");
             products = productRepository.selectProductForSearch(pageRequestDTO, pageable);
+            log.info("너는 되니2? " + products);
+        */
         }
 
-        List<ProductDTO> productList = products.stream().map(product ->
-                modelMapper.map(product, ProductDTO.class))
-                .collect(Collectors.toList());
+        List<ProductDTO> productList = products.getContent().stream().map(tuple -> {
+                    Product product = tuple.get(0, Product.class);
+                    String p_sName1 = (tuple.get(1, String.class));
+                    String p_sName2 = (tuple.get(2, String.class));
+                    String p_sName3 = (tuple.get(3, String.class));
+                    prodCate prodCate = tuple.get(4, prodCate.class);
+                    product.setP_sName1(p_sName1);
+                    product.setP_sName2(p_sName2);
+                    product.setP_sName3(p_sName3);
+                    product.setProdCate(prodCate);
+
+                    return modelMapper.map(product, ProductDTO.class);
+                }).toList();
+
+        log.info("매핑 되니? " + productList);
 
         int total = (int) products.getTotalElements();
 

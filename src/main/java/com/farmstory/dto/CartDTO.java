@@ -1,6 +1,7 @@
 package com.farmstory.dto;
 
 import com.farmstory.entity.Product;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -27,5 +28,6 @@ public class CartDTO {
     private int delprice;
     private int totalprice;
     private int cart_delivery;
+
 
 }
