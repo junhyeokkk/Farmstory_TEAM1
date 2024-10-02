@@ -36,10 +36,11 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
         log.info("loadUser..3 provider : "+provider);
 
 
-        String uid;
-        String name = "";
-        String email="";
-        String nick;
+        String uid=null;
+        String name =null;
+        String email=null;
+        String nick=null;
+        String hp=null;
         Map<String, Object> attributes;
 
         if ("google".equals(provider)) {
@@ -63,7 +64,8 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
 
             attributes  = oAuth2User.getAttributes();
             log.info("loadUser..5 attributes : "+attributes);
-            Long id = (Long) attributes.get("id");
+            String id = attributes.get("id").toString();
+
             // 카카오 사용자 정보에서 properties 가져오기
             Map<String, Object> properties = (Map<String, Object>) attributes.get("properties");
             log.info("loadUser..6 properties : "+properties);
@@ -78,8 +80,25 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
             log.info("loadUser..9 email : "+email);
             uid= email.split("@")[0];
             name = (String) properties.get("nickname");
-            nick = name+id;
-        } else {
+            nick = name+id.substring(0,4);
+        }else if("naver".equals(provider)){
+            OAuth2User oAuth2User = super.loadUser(userRequest);
+            log.info("loadUser..4 oAuth2User : "+oAuth2User);
+
+
+           attributes = oAuth2User.getAttributes();
+            Map<String, Object> response = (Map<String, Object>) attributes.get("response");
+            log.info("loadUser..5 attributes : "+attributes);
+
+
+            email = (String) response.get("email");
+            uid ="N"+ email.split("@")[0];
+            name = (String) response.get("name");
+            nick = (String) response.get("nickname");
+            hp = (String) response.get("hp");
+            log.info("naver : hp "+hp);
+
+        }else {
             throw new OAuth2AuthenticationException("Unsupported provider: " + provider);
         }
 
@@ -109,6 +128,7 @@ public class MyOauth2UserService extends DefaultOAuth2UserService {
                     .role("USER")
                     .email(email)
                     .nick(nick)
+                    .hp(hp)
                     .build();
 
             userRepository.save(user);

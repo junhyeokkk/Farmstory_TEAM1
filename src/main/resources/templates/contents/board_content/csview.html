@@ -21,6 +21,12 @@
 							<input type="text" name="title" th:value="${article.title}" readonly />
 						</td>
 					</tr>
+					<tr>
+						<td>연락받을 이메일</td>
+						<td>
+							<input type="text" name="email" th:value="${article.email}" readonly>
+						</td>
+					</tr>
 					<!-- 첨부파일이 있으면 나타나게끔  -->
 						<tr th:if="${!article.fileList.isEmpty()}">
 							<td>첨부파일</td>
@@ -42,7 +48,7 @@
 
 
 						 <a th:if="${article.isCompleted == 0}" th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.csNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
-						 <a th:if="${cate.cateNo ==504}" th:href="@{'/article/cs/completed/'+${article.csNo}(pg=${pg})}" class="btn btnComplete">완료</a>
+						 <a th:if="${cate.cateNo ==504 && !article.isCompleted }" th:href="@{'/article/cs/completed/'+${article.csNo}(pg=${pg})}" class="btn btnComplete">완료</a>
 	                    <a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist',pg=${pg})}" class="btn btnList">목록</a>
 	                 
                 </div>  

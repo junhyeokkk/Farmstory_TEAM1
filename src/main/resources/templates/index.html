@@ -137,52 +137,16 @@
         <table border="0" class="commuList">
           <tbody>
           <!-- @@@텃밭가꾸기 임시 리스트@@@ -->
-          <tr>
+          <tr th:each="garden:${gardens}">
             <td>
               <img th:src="@{/images/main_latest_icon.gif}" alt=">">
             </td>
             <td>
-              <a th:href="@{/category/croptalk/grow(content='view')}">텃밭 가꾸기</a>
+              <a th:href="@{'/article/croptalk/grow/'+${garden.articleNo}(content='view')}">[[${garden.title}]]</a>
             </td>
-            <td>24-09-04</td>
+            <td>[[${#strings.substring(garden.date,0,10)}]]</td>
           </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/grow(content='view')}">텃밭 가꾸기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/grow(content='view')}">텃밭 가꾸기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/grow(content='view')}">텃밭 가꾸기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/grow(content='view')}">텃밭 가꾸기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <!-- @@@텃밭가꾸기 임시 리스트 끝@@@ -->
+
           </tbody>
         </table>
       </div>
@@ -196,52 +160,16 @@
         <table border="0" class="commuList">
           <tbody>
           <!-- @@@귀농학교 임시 리스트@@@ -->
-          <tr>
+          <tr th:each="school:${schools}">
             <td>
               <img th:src="@{/images/main_latest_icon.gif}" alt=">">
             </td>
             <td>
-              <a th:href="@{/category/croptalk/school(content='view')}">귀농학교</a>
+              <a th:href="@{'/article/croptalk/school/'+${school.articleNo}(content='view')}">[[${school.title}]]</a>
             </td>
-            <td>24-09-04</td>
+            <td>[[${#strings.substring(school.date,0,10)}]]</td>
           </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/school(content='view')}">귀농학교</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/school(content='view')}">귀농학교</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/school(content='view')}">귀농학교</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/school(content='view')}">귀농학교</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <!-- @@@귀농학교 임시 리스트 끝@@@ -->
+
           </tbody>
         </table>
       </div>
@@ -255,52 +183,16 @@
         <table border="0" class="commuList">
           <tbody>
           <!-- @@@농작물이야기 임시 리스트@@@ -->
-          <tr>
+          <tr th:each="story:${storys}">
             <td>
               <img th:src="@{/images/main_latest_icon.gif}" alt=">">
             </td>
             <td>
-              <a th:href="@{/category/croptalk/story(content='view')}">농작물 이야기</a>
+              <a th:href="@{'/article/croptalk/story/'+${story.articleNo}(content='view')}">[[${story.title}]]</a>
             </td>
-            <td>24-09-04</td>
+            <td>[[${#strings.substring(story.date,0,10)}]]</td>
           </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/story(content='view')}">농작물 이야기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/story(content='view')}">농작물 이야기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/story(content='view')}">농작물 이야기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <tr>
-            <td>
-              <img th:src="@{/images/main_latest_icon.gif}" alt=">">
-            </td>
-            <td>
-              <a th:href="@{/category/croptalk/story(content='view')}">농작물 이야기농작물 이야기</a>
-            </td>
-            <td>24-09-04</td>
-          </tr>
-          <!-- @@@농작물이야기 임시 리스트 끝@@@ -->
+
           </tbody>
         </table>
       </div>
@@ -348,65 +240,17 @@
         <img th:src="@{/images/main_sub2_notice_tit.png}" alt="공지사항">
         <table border="0">
           <tbody>
-          <!-- @@@공지사항 임시 리스트@@@ -->
-          <tr>
+          <tr th:each="notice:${notices}">
             <td>
               ·
             </td>
             <td>
-              <a th:href="@{/category/community/notice(content='list')}">안녕하세요. 홈페이지 오픈 기념 이벤트를 하고있습니다.</a>
+              <a th:href="@{'/article/community/notice/'+${notice.articleNo}(content='view')}">[[${notice.title}]]</a>
             </td>
             <td>
-              24-09-04
+              [[${#strings.substring(notice.date,0,10)}]]
             </td>
           </tr>
-          <tr>
-            <td>
-              ·
-            </td>
-            <td>
-              <a th:href="@{/category/community/notice(content='list')}">안녕하세요. 홈페이지 오픈 기념 이벤트를 하고있습니다.</a>
-            </td>
-            <td>
-              24-09-04
-            </td>
-          </tr>
-          <tr>
-
-          </tr>
-          <td>
-            ·
-          </td>
-          <td>
-            <a th:href="@{/category/community/notice(content='list')}">안녕하세요. 홈페이지 오픈 기념 이벤트를 하고있습니다.</a>
-          </td>
-          <td>
-            24-09-04
-          </td>
-          </tr>
-          <tr></tr>
-          <td>
-            ·
-          </td>
-          <td>
-            <a th:href="@{/category/community/notice(content='list')}">안녕하세요. 홈페이지 오픈 기념 이벤트를 하고있습니다.</a>
-          </td>
-          <td>
-            24-09-04
-          </td>
-          </tr>
-          <tr></tr>
-          <td>
-            ·
-          </td>
-          <td>
-            <a th:href="@{/category/community/notice(content='list')}">안녕하세요. 홈페이지 오픈 기념 이벤트를 하고있습니다.</a>
-          </td>
-          <td>
-            24-09-04
-          </td>
-          </tr>
-          <!-- @@@공지사항 임시 리스트@@@ -->
           </tbody>
         </table>
       </div>
