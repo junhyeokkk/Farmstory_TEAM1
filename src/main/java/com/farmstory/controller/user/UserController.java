@@ -192,6 +192,11 @@ public class UserController {
         session.setAttribute("uid", uid);
         session.setAttribute("email", email);
 
+// 로그 추가 - 세션 값 확인
+        log.info("세션에 저장된 인증 코드: {}", session.getAttribute("code"));
+        log.info("세션에 저장된 UID: {}", session.getAttribute("uid"));
+        log.info("세션에 저장된 이메일: {}", session.getAttribute("email"));
+
         // 응답으로 인증번호 발송 완료 메시지 전송
         return ResponseEntity.status(HttpStatus.OK).body("비밀번호 재설정 인증 코드가 이메일로 전송되었습니다.");
     }
@@ -207,6 +212,14 @@ public class UserController {
         String sessionCode = (String) session.getAttribute("code");
         String sessionUid = (String) session.getAttribute("uid");
         String sessionEmail = (String) session.getAttribute("email");
+
+        // 로그 추가 - 세션 값과 클라이언트에서 받은 값 확인
+        log.info("세션에서 가져온 인증 코드: {}", sessionCode);
+        log.info("세션에서 가져온 UID: {}", sessionUid);
+        log.info("세션에서 가져온 이메일: {}", sessionEmail);
+        log.info("클라이언트로부터 받은 인증 코드: {}", verificationCode);
+        log.info("클라이언트로부터 받은 UID: {}", uid);
+        log.info("클라이언트로부터 받은 이메일: {}", email);
 
         // 인증번호 및 사용자 정보 검증
         if (sessionCode != null && sessionCode.equals(verificationCode)
@@ -228,22 +241,18 @@ public class UserController {
     @ResponseBody
     @PostMapping("/api/user/changepass")
     public ResponseEntity<?> resetPassword(HttpSession session, @RequestBody Map<String, String> jsonData) {
-//        String verificationCode = jsonData.get("code");
         String uid = jsonData.get("uid");
-//        String email = jsonData.get("email");
         String newpass = jsonData.get("newpass");
 
         // 세션에서 인증번호 및 사용자 정보 가져오기
         String sessionCode = (String) session.getAttribute("code");
         String sessionUid = (String) session.getAttribute("uid");
-//        String sessionEmail = (String) session.getAttribute("email");
 
-//        System.out.println("sessionCode = " + sessionCode);
-//        System.out.println("verificationCode = " + verificationCode);
+
         System.out.println("sessionUid = " + sessionUid);
         System.out.println("uid = " + uid);
-//        System.out.println("sessionEmail = " + sessionEmail);
-//        System.out.println("email = " + email);
+
+
 
         // 인증번호 및 사용자 정보 검증
         if (sessionUid.equals(uid)) {
@@ -263,10 +272,28 @@ public class UserController {
 
 
 
+    // 회원 정보 수정 API (비밀번호, 별명, 주소 등 수정)
+    @ResponseBody
+    @PostMapping("/api/user/update")
+    public ResponseEntity<?> updateUserInfo(HttpSession session, @RequestBody UserDTO userDTO) {
+        // 세션에서 인증된 사용자 확인
+        String sessionUid = (String) session.getAttribute("uid");
+        if (sessionUid == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 없습니다.");
+        }
 
+        // 비밀번호 변경 처리 (비밀번호가 입력된 경우에만 변경)
+        if (userDTO.getPass() != null && !userDTO.getPass().isEmpty()) {
+            userService.verifyResetCode(sessionUid, userDTO.getPass());  // 비밀번호 변경
+        }
 
+        // 별명과 주소 업데이트 처리
+        userService.updateUserInfo(sessionUid, userDTO.getNick(), userDTO.getZip(), userDTO.getAddr1(), userDTO.getAddr2());
 
+        return ResponseEntity.status(HttpStatus.OK).body("회원 정보가 성공적으로 수정되었습니다.");
+    }
 }
+
 
 
 
