@@ -21,7 +21,7 @@ public class OrderDTO {
     private String recZip;      // 주문 받는 우편번호
     private String recAddr1;    // 주문 받는 주소1
     private String recAddr2;    // 주문 받는주소2
-    private int payment;    // 결제금액?
+    private String payment;    // 결제금액?
     private String orderDesc; // 주문 부가 설명
 
     // 외래키 컬럼

@@ -29,15 +29,21 @@ public class ProductService {
     private final ModelMapper modelMapper;
 
     // 중원씨꺼 select 가져옴
-    public ProductDTO selectProduct(int pNo) {
-        Optional<Product> product = productRepository.findById(pNo);
+    public ProductDTO selectProductById(int pNo) {
+        Tuple tuple = productRepository.selectProductByPId(pNo);
 
-        if(product.isPresent()){
-            ProductDTO productDTO = null;
-            productDTO = modelMapper.map(product, ProductDTO.class);
-            return productDTO;
-        }
-        return null;
+        Product product = tuple.get(0, Product.class);
+        String p_sName1 = (tuple.get(1, String.class));
+        String p_sName2 = (tuple.get(2, String.class));
+        String p_sName3 = (tuple.get(3, String.class));
+        prodCate prodCate = tuple.get(4, prodCate.class);
+        product.setP_sName1(p_sName1);
+        product.setP_sName2(p_sName2);
+        product.setP_sName3(p_sName3);
+        product.setProdCate(prodCate);
+
+        ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+        return productDTO;
     }
 
     // 상품 insert
