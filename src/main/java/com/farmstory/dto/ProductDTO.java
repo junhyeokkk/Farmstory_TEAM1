@@ -1,5 +1,6 @@
 package com.farmstory.dto;
 
+import com.farmstory.entity.prodCate;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -27,21 +28,14 @@ public class ProductDTO {
     private MultipartFile files2;
     private MultipartFile files3;
 
-    private pDescImgFileDTO pDescImgFileDTO;
+    private pDescImgFileDTO pDescImgFile;
 
-    // 이거 지우고 위에스면댐
-    private String p_sName1;
-    private String p_sName2;
-    private String p_sName3;
 
     // 외래키 컬럼
-    private int prodCateNo;
-    private String prodCateName;
+    private prodCateDTO prodCate;
 
     public List<MultipartFile> getMultipartFiles(){
         return List.of(files1,files2,files3);
     }
-
-
 
 }

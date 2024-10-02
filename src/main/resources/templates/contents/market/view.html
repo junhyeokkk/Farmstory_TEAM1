@@ -20,7 +20,7 @@
     });
 
     function updateTotal() {
-      var quantity = parseInt(document.querySelector('input[class="stock"]').value, 10);
+      let quantity = parseInt(document.querySelector('input[class="stock"]').value, 10);
 
       if(quantity > stock) {
         stockInput.value = stock;
@@ -28,7 +28,7 @@
       }
 
       if (!isNaN(price) && !isNaN(quantity)) {
-        var total = value * quantity;
+        let total = value * quantity;
         if(total < 30000){
           deliprice.classList.replace('freeDelivery', 'noneFreeDelivery');
           delispan.classList.replace('freeDelivery', 'noneFreeDelivery');
@@ -42,14 +42,13 @@
         document.querySelector('.sum').textContent = total+`원`;
         // 준혁 입력 필드 총합 계산 value 값 추가
         // 숨겨진 입력 필드에 총합 값을 설정
-        var totalPriceInput = document.querySelector('.total-price');
+        let totalPriceInput = document.querySelector('.total-price');
         totalPriceInput.value = total; // 총합 값 설정
-
       } else {
         // 가격이나 수량이 올바르지 않은 경우
         document.querySelector('.sum').textContent = '0원';
         // 숨겨진 입력 필드에 총합 값을 설정
-        var totalPriceInput = document.querySelector('.total-price');
+        let totalPriceInput = document.querySelector('.total-price');
         totalPriceInput.value = 0; // 총합 값 설정
 
       }
@@ -65,8 +64,6 @@
         }
 
 
-        const prono = [[${productDTO.pNo}]];
-        const cartProdQty = parseInt(document.querySelector('input[class="stock"]').value, 10);
 
         const cartform = document.querySelector('#cartform');
 
@@ -74,12 +71,12 @@
           "cartProdQty" : cartform.cartProdQty.value,
           "prodNo" : cartform.prodNo.value,
           "delprice" : cartform.delprice.value,
-          "totalprice" : 20000,
+          "totalprice" : cartform.totalprice.value,
           "cart_delivery" : cartform.cart_delivery.value,
         }
         console.log(jsonData);
 
-        fetch('/market/cart1', {
+        fetch('/market/cart', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
@@ -91,7 +88,7 @@
                   console.log(data);
                   if (data.result != 0) {
                     if (confirm('장바구니에 상품을 담았습니다.\n 장바구니로 이동하시겠습니까?')) {
-                      location.href = "/market/cart1";
+                      location.href = "/market/cart";
                     } else {
                       updateTotal();
                     }
@@ -167,9 +164,8 @@
             <td th:if="${disPrice}>30000" class="sum" th:text="${disPrice} + '원'">
             </td>
             <input type="hidden" name="totalprice" th:value="${disPrice}" class="total-price" />
-            <td th:if="${disPrice}<=30000" class="sum" th:text="${disPrice} + ${productDTO.delivery} + '원'">
+            <td th:unless="${disPrice}>30000" class="sum" th:text="${disPrice} + ${productDTO.delivery} + '원'">
             </td>
-            <input type="hidden" name="totalprice" th:value="${disPrice + productDTO.delivery}" class="total-price" />
           </tr>
         </table>
         <div class="buttons">

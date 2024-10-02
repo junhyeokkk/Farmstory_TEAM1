@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -17,8 +16,6 @@ import com.querydsl.core.types.dsl.PathInits;
 public class QpDescImgFile extends EntityPathBase<pDescImgFile> {
 
     private static final long serialVersionUID = -466206707L;
-
-    private static final PathInits INITS = PathInits.DIRECT2;
 
     public static final QpDescImgFile pDescImgFile = new QpDescImgFile("pDescImgFile");
 
@@ -30,29 +27,20 @@ public class QpDescImgFile extends EntityPathBase<pDescImgFile> {
 
     public final NumberPath<Integer> pfNo = createNumber("pfNo", Integer.class);
 
-    public final QProduct pNo;
+    public final NumberPath<Integer> pNo = createNumber("pNo", Integer.class);
 
     public final StringPath rdate = createString("rdate");
 
     public QpDescImgFile(String variable) {
-        this(pDescImgFile.class, forVariable(variable), INITS);
+        super(pDescImgFile.class, forVariable(variable));
     }
 
     public QpDescImgFile(Path<? extends pDescImgFile> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QpDescImgFile(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QpDescImgFile(PathMetadata metadata, PathInits inits) {
-        this(pDescImgFile.class, metadata, inits);
-    }
-
-    public QpDescImgFile(Class<? extends pDescImgFile> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.pNo = inits.isInitialized("pNo") ? new QProduct(forProperty("pNo"), inits.get("pNo")) : null;
+        super(pDescImgFile.class, metadata);
     }
 
 }

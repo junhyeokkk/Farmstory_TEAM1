@@ -29,8 +29,5 @@ public class pDescImgFile {
     private String rdate;
 
     // 외래키 컬럼
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="pNo")
-    @ToString.Exclude
-    private Product pNo;
+    private int pNo;
 }

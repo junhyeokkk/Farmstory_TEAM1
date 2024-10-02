@@ -66,22 +66,8 @@ public class MarketController {
         model.addAttribute("productDTO", productDTO);
         return "boardIndex";
     }
+
 /*
-    @GetMapping("/cart/{uid}")
-    public String cart(@RequestParam(value = "content", required = false) String content
-            ,@PathVariable String uid
-            ,Model model){
-        CateDTO cate = categoryService.selectCategory("market","cart");
-        log.info("cate : "+cate);
-
-        List<CartResponceDTO> cartList = cartService.selectALLWithUid(uid);
-
-        model.addAttribute("cate", cate);
-        model.addAttribute("content", content);
-        model.addAttribute("cartList", cartList);
-        return "boardIndex";
-    }
-
     @PostMapping("/cart")
     @ResponseBody
     public ResponseEntity<Map<String, Object>> cartInsert(@RequestParam(value = "content", required = false) String content
@@ -107,14 +93,37 @@ public class MarketController {
     }
 
 */
-    @PostMapping("/cart1")
-    public String cart1(@RequestBody CartDTO cartDTO, Model model){
+    @PostMapping("/cart")
+    @ResponseBody
+    public ResponseEntity<Map<String, Object>> cart1(@RequestBody CartDTO cartDTO, Model model){
         log.info("cart 들어왔나? : "+cartDTO.toString());
+        Map<String, Object> response = new HashMap<>();
+        try {
+            boolean success = cartService.insertCart1(cartDTO);
+            if (success) {
+                response.put("result", 1);
+            } else {
+                response.put("result", 0);
+            }
+            return ResponseEntity.ok(response);
+        }catch(Exception e){
+            response.put("result", 0);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+    @GetMapping("/cart")
+    public String cart(@RequestParam(value = "content", required = false) String content
+            ,Model model){
 
-        cartService.insertCart1(cartDTO);
+        CateDTO cate = categoryService.selectCategory("market","cart");
+        log.info("cate : "+cate);
 
-        CateDTO cate= categoryService.selectCategory("market","cart");
+        List<CartDTO> cartList = cartService.findCartWithUid();
+
         model.addAttribute("cate", cate);
+        model.addAttribute("content", content);
+
+        model.addAttribute("cartList", cartList);
 
         return "boardIndex";
     }
