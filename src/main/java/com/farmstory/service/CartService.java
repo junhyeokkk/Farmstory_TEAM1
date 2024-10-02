@@ -2,9 +2,12 @@ package com.farmstory.service;
 
 import com.farmstory.dto.CartDTO;
 import com.farmstory.dto.CartResponceDTO;
+import com.farmstory.dto.ProductDTO;
 import com.farmstory.entity.Cart;
 import com.farmstory.entity.Product;
+import com.farmstory.entity.prodCate;
 import com.farmstory.repository.CartRepository;
+import com.farmstory.repository.ProductRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -21,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class CartService {
+    private final ProductRepository productRepository;
     private final CartRepository cartRepository;
     private final ModelMapper modelMapper;
 
@@ -86,7 +90,27 @@ public class CartService {
         String uid = (authentication != null && authentication.getPrincipal() instanceof UserDetails)
                 ? ((UserDetails) authentication.getPrincipal()).getUsername()
                 : null;
-        List<CartDTO> cartDTOList = null;
+
+        List<Cart> cartList = cartRepository.findAllByUid(uid);
+        List<CartDTO> cartDTOList = cartList.stream().map(cart -> {
+            CartDTO cartDTO = modelMapper.map(cart, CartDTO.class);
+
+            Tuple tuple = productRepository.selectProductByPId(cartDTO.getProdNo());
+
+            Product product = tuple.get(0, Product.class);
+            String p_sName1 = (tuple.get(1, String.class));
+            String p_sName2 = (tuple.get(2, String.class));
+            String p_sName3 = (tuple.get(3, String.class));
+            prodCate prodCate = tuple.get(4, prodCate.class);
+            product.setP_sName1(p_sName1);
+            product.setP_sName2(p_sName2);
+            product.setP_sName3(p_sName3);
+            product.setProdCate(prodCate);
+            ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
+
+            cartDTO.setProductDTO(productDTO);
+            return cartDTO;
+        }).toList();
 
         return cartDTOList;
     }

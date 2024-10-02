@@ -23,6 +23,8 @@ public class CartDTO {
     // 컬럼이름맞게 수정!!!
     private int prodNo; // 상품 번호
 
+    private ProductDTO productDTO;
+
     // 준혁 추가필드
     // 할인율 적용된 price
     private int delprice;
