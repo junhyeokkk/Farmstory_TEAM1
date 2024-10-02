@@ -4,6 +4,7 @@ import com.farmstory.dto.PageRequestDTO;
 import com.farmstory.dto.ProductDTO;
 import com.farmstory.dto.ProductPageResponseDTO;
 import com.farmstory.entity.Product;
+import com.farmstory.entity.prodCate;
 import com.farmstory.repository.ProductRepository;
 import com.querydsl.core.Tuple;
 import lombok.RequiredArgsConstructor;
@@ -52,27 +53,24 @@ public class ProductService2 {
             products = productRepository.selectProductAllForList(pageRequestDTO, pageable);
         }
         else{
-            /*
+
             products = productRepository.selectProductForSearch(pageRequestDTO, pageable);
-        */
+
         }
 
-        List<ProductDTO> productList = products.stream().map(product -> {
-            ProductDTO dto = modelMapper.map(product, ProductDTO.class);
-/*
-            if(dto.getPDescImgFile().getP_sName1() == null){
-                dto.getPDescImgFile().setP_sName1("404이미지없음.png");
-            }
-            if(dto.getPDescImgFile().getP_sName2() == null){
-                dto.getPDescImgFile().setP_sName2("404이미지없음.png");
-            }
-            if(dto.getPDescImgFile().getP_sName3() == null){
-                dto.getPDescImgFile().setP_sName3("404이미지없음.png");
-            }
-*/
-            return dto;
-        })
-                .collect(Collectors.toList());
+        List<ProductDTO> productList = products.getContent().stream().map(tuple -> {
+            Product product = tuple.get(0, Product.class);
+            String p_sName1 = (tuple.get(1, String.class));
+            String p_sName2 = (tuple.get(2, String.class));
+            String p_sName3 = (tuple.get(3, String.class));
+            prodCate prodCate = tuple.get(4, prodCate.class);
+            product.setP_sName1(p_sName1);
+            product.setP_sName2(p_sName2);
+            product.setP_sName3(p_sName3);
+            product.setProdCate(prodCate);
+
+            return modelMapper.map(product, ProductDTO.class);
+        }).toList();
 
         int total = (int) products.getTotalElements();
 
@@ -84,7 +82,17 @@ public class ProductService2 {
     }
 
     public ProductDTO selectProductById(int pNo) {
-            Product product = productRepository.selectProductByPId(pNo);
+            Tuple tuple = productRepository.selectProductByPId(pNo);
+
+            Product product = tuple.get(0, Product.class);
+            String p_sName1 = (tuple.get(1, String.class));
+            String p_sName2 = (tuple.get(2, String.class));
+            String p_sName3 = (tuple.get(3, String.class));
+            prodCate prodCate = tuple.get(4, prodCate.class);
+            product.setP_sName1(p_sName1);
+            product.setP_sName2(p_sName2);
+            product.setP_sName3(p_sName3);
+            product.setProdCate(prodCate);
 
             ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
             return productDTO;
