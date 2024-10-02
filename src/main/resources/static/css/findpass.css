@@ -1,21 +1,29 @@
 section {
     width: 600px;
-    height: 286px;
+    height: 306px;
     margin: 0 auto;
     margin-top: 60px;
     margin-bottom: 60px;
     box-sizing: border-box;
 }
+
+.findpass{
+}
 h2 {
     height: 12px;
     font-size: 12px;
-    margin: 5px;
     padding-top: 16px;
     padding-bottom: 8px;
     font-weight: bold;
 }
 hr {
     border: solid 1px black;
+}
+#findPassForm{
+    height:306px ;
+    bottom: 200px;
+    margin-bottom: 200px;
+
 }
 .table {
     width: 600px;
@@ -41,14 +49,17 @@ hr {
     height: 87px;
     border : 1px solid #E9E9E9;
     box-sizing: border-box;
-    position: relative; bottom: 49.5px;
+    position: relative;
+    bottom: 49.5px;
 }
 .table > div:nth-child(4) {
     width: 479px;
     height: 87px;
     border : 1px solid #E9E9E9;
     box-sizing: border-box;
-    position: relative; left:120px; bottom: 136.5px;
+    position: relative;
+    left:120px;
+    bottom: 136.5px;
 }
 .id {
     width: 40px;
@@ -120,13 +131,13 @@ hr {
 }
 .note{
     font-weight: bold;
+    margin-bottom: 25px;
 }
 .bottom {
     position: relative;
     top: 20px;
     width: 100%;
-    height: 20px;
-    margin-top: 58px ;
+    height: -5px;
 }
 .cancelBtn {
     width: 42px;

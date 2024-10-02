@@ -1,9 +1,8 @@
-<section>
+<section class="findpass cf">
     <h2>비밀번호 찾기</h2>
     <hr>
     <form method="post" th:action="@{/user/findpass}" id="findPassForm">
         <div class="table">
-            <table>
             <div>
                 <label class="id" name="id">아이디</label>
             </div>
@@ -21,7 +20,6 @@
                 <span id="resultEmail" class="validationMessage"></span>
             </div>
 
-            </table>
         </div>
         <div class="note">
             비밀번호를 찾고자 하는 아이디와 이메일을 입력해 주세요. </br>
@@ -32,6 +30,7 @@
           <button type="button" class="cancelBtn">취소</button>
           <button type="button" class="nextBtn" id="nextBtn" disabled>다음</button>  <!-- 기본적으로 비활성화 -->
         </div>
+    </form>
 </section>
 <script>
     console.log('bbbbbbbb');
