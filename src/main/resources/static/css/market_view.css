@@ -1,8 +1,14 @@
 
 
 /* main */
+.market_view{
+    width: 762px;
+    height: auto;
+    box-sizing: border-box;
 
-.article h3:nth-of-type(1) {
+}
+
+.market_view > h3:nth-of-type(1) {
     width: 64.2px;
     height: 17px;
     margin-top: 41px;
@@ -16,12 +22,19 @@
 .product_info {
     width: 762px;
     height: 270px;
+    box-sizing: border-box;
 }
 
-.product_info > img {
+.product_info > imgContainer {
     width: 240px;
     height: 240px;
     margin-top: 11px;
+}
+.imgContainer img{
+    width: 240px;
+    height: 240px;
+}
+.product_details{
 }
 
 .product_details > table{
