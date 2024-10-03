@@ -3,9 +3,14 @@ package com.farmstory.controller.market;
 import com.farmstory.dto.*;
 import com.farmstory.entity.OrderItem;
 import com.farmstory.entity.Product;
+import com.farmstory.repository.CartRepository;
 import com.farmstory.service.CartService;
 import com.farmstory.service.CategoryService;
 import com.farmstory.service.ProductService2;
+import com.farmstory.service.UserService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,6 +39,7 @@ public class MarketController {
     private final CategoryService categoryService;
     private final ProductService2 productService;
     private final CartService cartService;
+    private final UserService userService;
     @Value("${spring.servlet.multipart.location}")
     private String uploadedPath;
 
@@ -127,4 +134,5 @@ public class MarketController {
 
         return "boardIndex";
     }
+
 }

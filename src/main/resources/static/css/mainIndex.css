@@ -92,6 +92,8 @@ main td {
 /* 상품 이미지 */
 .product>img {
     margin-bottom: 10px;
+    width: 140px;
+    height: 140px;
 }
 /* 상품 종류 */
 .product>p:nth-child(2) {

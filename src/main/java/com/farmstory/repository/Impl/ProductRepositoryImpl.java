@@ -103,4 +103,21 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
         return product;
     }
+
+    @Override
+    public List<Tuple> MainViewProduct() {
+
+        List<Tuple> content = queryFactory
+                .select(qproduct,qpDescImgFile.p_sName1,qpDescImgFile.p_sName2,qpDescImgFile.p_sName3, qprodCate)
+                .from(qproduct)
+                .leftJoin(qpDescImgFile)
+                .on(qproduct.pNo.eq(qpDescImgFile.pNo))
+                .leftJoin(qprodCate)
+                .on(qprodCate.prodCateNo.eq(qproduct.prodCateNo))
+                .limit(6)
+                .orderBy(qproduct.pNo.desc())
+                .fetch();
+        return content;
+    }
+
 }

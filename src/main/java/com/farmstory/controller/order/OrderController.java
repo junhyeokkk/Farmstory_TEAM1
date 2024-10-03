@@ -2,6 +2,9 @@ package com.farmstory.controller.order;
 
 import com.farmstory.dto.*;
 import com.farmstory.service.*;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -78,4 +81,37 @@ public class OrderController {
         log.info("responseOrderDTO"+ responseOrderDTO.toString());
         return "boardIndex";
     }
+
+    @PostMapping("/CartToOrder")
+    public String processSelectedCartItems(@RequestParam("selectedItems") String selectedItems, Model model) throws JsonProcessingException {
+        // JSON 문자열을 List<Integer>로 변환
+        ObjectMapper objectMapper = new ObjectMapper();
+        List<Integer> cartNos = objectMapper.readValue(selectedItems, new TypeReference<List<Integer>>() {});
+        log.info("cartNos : "+cartNos);
+        // cartNo별로 처리 로직 수행
+        List<CartDTO> cartDTOList = new ArrayList<>();
+        for (Integer cartNo : cartNos) {
+            log.info("cartNo : "+cartNo);
+            CartDTO cartDTO = cartService.selectCartByCartNo(cartNo);
+            ProductDTO productDTO = productService.selectProductById(cartDTO.getProdNo());
+            cartDTO.setProductDTO(productDTO);
+            cartDTOList.add(cartDTO);
+        }
+        // 해당 user 들고오기
+        UserDTO userDTO = userService.selectUser(cartDTOList.get(0).getUid());
+
+        ResponseOrderDTO responseOrderDTO = new ResponseOrderDTO();
+        responseOrderDTO.setUserDTO(userDTO);
+        responseOrderDTO.setCartDTOList(cartDTOList);
+
+        log.info("!!!!!!!!!!!!!!!cartDTOList : "+cartDTOList);
+        CateDTO cate= categoryService.selectCategory("market","order");
+
+        model.addAttribute("cate", cate);
+        model.addAttribute("responseOrderDTO", responseOrderDTO);
+        log.info("responseOrderDTO"+ responseOrderDTO.toString());
+        // 처리 후 페이지 리다이렉트
+        return "boardIndex";
+    }
+
 }
