@@ -41,9 +41,9 @@
                                         <td>[[${notice.hit}]]</td>
                                     </tr>
                                 </th:block>
-                                <th:block th:if="${pageResponseDTO.getDtoList().size() == 0}" >
+                                <th:block th:if="${pageResponseDTO.getDtoList().size() == 0 or pageResponseDTO.getDtoList ==null }" >
                                     <tr>
-                                        <td colspan="5" class="td_first"><a  th:href="@{/article/list(pg=1)}">일치하는 내용이 없습니다.</a></td>
+                                        <td colspan="5" class="td_first">일치하는 내용이 없습니다</td>
                                     </tr>
                                 </th:block>
                                 <tr th:each="article,i:${pageResponseDTO.getDtoList()}">
@@ -83,8 +83,7 @@
                             </th:block>
                         </div>
                         <!-- 글쓰기 버튼 -->
-                        [[${cate.cateGroup}]]
-                        [[${cate.cateName}]]
+
                         <th:block th:if="${(cate.cateNo == 501 || cate.cateNo == 505) && #authentication.principal != 'anonymousUser'}">
                             <a th:if="${#authentication.principal.user.role == 'ADMIN'}"
                                th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName}(content='write')}"
