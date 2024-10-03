@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,22 +34,44 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping("/addOrder")
-    public String addOrder(OrderDTO orderDTO, Model model) {
-/*
+    public String addOrder(OrderDTO orderDTO,
+                           @RequestParam("cartDTOList") String cartDTOListJson,Model model) throws IOException {
+        log.info("컨트롤러에 ㄴ들어오냐?");
+        log.info("Received cartDTOListJson: " + cartDTOListJson);
+        ObjectMapper objectMapper = new ObjectMapper();
+;
+        List<CartDTO> cartDTOList = objectMapper.readValue(cartDTOListJson, new TypeReference<List<CartDTO>>() {});
+
+
+        log.info("cartDTOLIST 오냐?? " + cartDTOList);
+
         OrderDTO savedOrder = orderService.insertOrder(orderDTO);
 
         if(savedOrder != null) {
-            OrderItemDTO orderItemDTO = new OrderItemDTO();
-            orderItemDTO.setOrderNo(savedOrder.getOrderNo());
+            // cart 개수만큼 orderitem 추가
+            for(int i=0; i<cartDTOList.size(); i++) {
+                OrderItemDTO orderItemDTO = new OrderItemDTO();
+                orderItemDTO.setOrderNo(savedOrder.getOrderNo());
+                CartDTO cartDTO = cartDTOList.get(i);
+                orderItemDTO.setDiscount(cartDTO.getTotalprice()-cartDTO.getDelprice());
+                orderItemDTO.setItemQty(cartDTO.getCartProdQty());
+                orderItemDTO.setPNo(cartDTO.getProdNo());
+                orderItemDTO.setItemPrice(cartDTO.getTotalprice());
+
+                orderService.insertOrderItem(orderItemDTO);
+                productService.updateProductStock(orderItemDTO.getPNo(),orderItemDTO.getItemQty());
+                userService.UpdateUserPoint(orderDTO.getUid(),orderDTO.getUsedPoint(),orderDTO.getEarnPoint());
+            }
+
         }
-  */
+
       log.info("afdssssssssssssssssssss" + orderDTO.toString());
 
-        return null;
+        return "index";
     }
 
     @PostMapping("/orderlist")
-    public String orderlist(CartDTO cartDTO ,Model model){
+    public String orderlist(CartDTO cartDTO ,Model model) throws JsonProcessingException {
 
         log.info("컨트롤러 들어옹ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ니/.?");
 
@@ -106,6 +129,13 @@ public class OrderController {
         ResponseOrderDTO responseOrderDTO = new ResponseOrderDTO();
         responseOrderDTO.setUserDTO(userDTO);
         responseOrderDTO.setCartDTOList(cartDTOList);
+
+        // ObjectMapper를 사용해 cartDTOList를 JSON으로 직렬화
+        ObjectMapper objectMapper = new ObjectMapper();
+        String cartJson = objectMapper.writeValueAsString(cartDTOList);
+
+        // Model에 cartJson 추가
+        model.addAttribute("cartJson", cartJson);
 
         // 조회한 카테고리 정보를 모델에 추가
         model.addAttribute("cate", cate);

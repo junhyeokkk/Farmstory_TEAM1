@@ -123,4 +123,13 @@ public class ProductService {
                 .total(total)
                 .build();
     }
+
+    // order 후 재고 빼기
+    public void updateProductStock(int pNo, int stock){
+        productRepository.findById(pNo).ifPresent(product -> {
+            int resultstock = product.getStock()-stock;
+            product.setStock(resultstock);
+            productRepository.save(product);
+        });
+    }
 }
