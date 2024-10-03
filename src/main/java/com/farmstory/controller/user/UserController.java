@@ -1,12 +1,10 @@
 package com.farmstory.controller.user;
 
-import com.farmstory.dto.CateDTO;
-import com.farmstory.dto.PageRequestDTO;
-import com.farmstory.dto.UserDTO;
-import com.farmstory.dto.UserPageResponseDTO;
+import com.farmstory.dto.*;
 import com.farmstory.entity.User;
 import com.farmstory.service.CategoryService;
 import com.farmstory.service.EmailService;
+import com.farmstory.service.TermsService;
 import com.farmstory.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
@@ -30,6 +28,7 @@ public class UserController {
     private final UserService userService;
     private final EmailService emailService;
     private final CategoryService categoryService;
+    private final TermsService termsService;
     private String email;
 
     @GetMapping("/admin/a_user")
@@ -55,6 +54,15 @@ public class UserController {
         userDTO.setRegip(regip);
         UserDTO savedUser = userService.insertUser(userDTO);
         return "redirect:/category/user/login?success=200";
+    }
+
+    @GetMapping("/user/terms")
+    public String terms(Model model) {
+        TermsDTO termsDTO = termsService.selectTerms();
+        model.addAttribute("termsDto", termsService.selectTerms());
+        CateDTO cateDTO = categoryService.selectCateNo(702);
+        model.addAttribute("cate", cateDTO);
+        return "boardIndex";
     }
 
 
