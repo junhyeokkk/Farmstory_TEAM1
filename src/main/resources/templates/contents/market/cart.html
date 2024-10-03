@@ -66,17 +66,19 @@
 
 
       // 삭제 버튼 클릭 시
-      if (e.target.classList.contains('del')) {
+      if (e.target.classList.contains('btnSD')) {
         e.preventDefault();
 
-        const selectedCheckboxes = document.querySelectorAll('.select:checked');
+        const selectedCheckboxes = document.querySelectorAll('.checkbox:checked');
         console.log(selectedCheckboxes);
         let selectedIds = [];
 
         for (let checkbox of selectedCheckboxes) {
           const row = checkbox.closest('tr');
-          const productNo = row.querySelector('.no').value.trim();
-          selectedIds.push(productNo);
+          const productNo = row.querySelector('.cartNo').value.trim();
+          selectedIds.push({
+            cartNo: productNo
+          });
         }
 
         if (selectedIds.length === 0) {
@@ -88,8 +90,26 @@
           return;
         }
 
-        //삭제 구현
-
+        fetch('/market/CartDelete', {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(selectedIds)
+        })
+                .then(resp => resp.json())
+                .then(data => {
+                  if (data.success) {
+                    alert('삭제되었습니다.');
+                    location.reload();
+                  } else {
+                    alert('삭제에 실패했습니다.');
+                  }
+                })
+                .catch(err => {
+                  console.error('Error:', err);
+                  alert('삭제 중 오류가 발생했습니다.');
+                });
       }//del
     }); // EventListener END
   };
@@ -172,7 +192,7 @@
         <input type="hidden" name="cartNoInput" th:value="${cart.cartNo}" class="cartNo"/>
       </tr>
     </table><!-- .tb1 -->
-    <button class="btnSD"><a href="#">선택삭제</a></button>
+    <button class="btnSD">선택삭제</button>
     <div class="order_final">
       <table class="tb2">
         <tr>

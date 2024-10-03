@@ -135,4 +135,44 @@ public class MarketController {
         return "boardIndex";
     }
 
+
+
+    @DeleteMapping("/CartDelete")
+    public ResponseEntity<Map<String, Object>> cartDelete(@RequestBody List<CartDTO> selectedItems) {
+        Map<String, Object> response = new HashMap<>();
+
+        try {
+            // JSON으로 받은 선택 항목 처리 로직
+            for (CartDTO cart : selectedItems) {
+                cartService.deleteCartByCartNo(cart.getCartNo());
+            }
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 오류 발생 시 실패 응답
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
+    @DeleteMapping("/productDelete")
+    public ResponseEntity<Map<String, Object>> productDelete(@RequestBody List<Integer> selectedItems) {
+        Map<String, Object> response = new HashMap<>();
+
+        log.info("productDelete : "+selectedItems);
+
+        try {
+            // JSON으로 받은 선택 항목 처리 로직
+            for (Integer pNo : selectedItems) {
+                productService.deleteProductById(pNo);
+            }
+            response.put("success", true);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            // 오류 발생 시 실패 응답
+            response.put("success", false);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        }
+    }
+
 }
