@@ -14,11 +14,16 @@ import org.springframework.stereotype.Service;
 public class OrderService {
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
-
+/*
     public OrderDTO insertOrder(OrderDTO orderDTO) {
 
+        Order order = modelMapper.map(orderDTO, Order.class);
+        Order savedOrder = orderRepository.save(order);
 
+        OrderDTO savedorderDTO = modelMapper.map(savedOrder, OrderDTO.class);
 
-        return orderDTO;
+        return savedorderDTO;
     }
+
+ */
 }

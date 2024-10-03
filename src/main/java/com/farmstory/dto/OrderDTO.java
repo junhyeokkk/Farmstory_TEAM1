@@ -3,6 +3,7 @@ package com.farmstory.dto;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -11,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OrderDTO {
-    private int oderNo; // 주문 번호
+    private int orderNo; // 주문 번호
     private LocalDateTime orderDate;    //주문날짜
     private int totalPrice; // 주문 전체 금액
     private int totalQty;   //
@@ -26,4 +27,6 @@ public class OrderDTO {
 
     // 외래키 컬럼
     private String uid;
+
+    private List<CartDTO> cartDTOList;
 }

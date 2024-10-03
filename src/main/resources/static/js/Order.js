@@ -43,4 +43,12 @@ window.onload = function () {
         }
     });
 
+    const cartDTOListInput = document.querySelector('input[name="cartDTOList"]');
+    const cartDTOListString = cartDTOListInput.value;
+
+    // 문자열을 JSON으로 변환
+    const cartDTOList = JSON.parse(cartDTOListString);
+
+    console.log(cartDTOList); // 콘솔에 확인
+
 }

@@ -1,5 +1,6 @@
 package com.farmstory.entity;
 
+import com.farmstory.dto.CartDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -15,7 +16,7 @@ import java.time.LocalDateTime;
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int oderNo; // 주문 번호
+    private int orderNo; // 주문 번호
 
     private LocalDateTime orderDate;    //주문날짜
     private int totalPrice; // 주문 전체 금액
@@ -31,4 +32,5 @@ public class Order {
 
     // 외래키 컬럼
     private String uid;
+
 }
