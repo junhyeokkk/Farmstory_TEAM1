@@ -124,7 +124,7 @@
   <form id="cartform" action="/market/orderlist" method="post">
     <div class="product_info">
       <div class="imgContainer">
-        <img th:src="@{/'uploads/product/'+${productDTO.p_sName1}}" alt="상품 이미지" />
+        <img th:src="@{'/uploads/product/'+${productDTO.p_sName1}}" alt="상품 이미지" />
       </div>
       <div class="product_details" th:with="disPrice=${#numbers.formatDecimal(productDTO.price * (1 - productDTO.discount / 100.0),0,0)}">
         <p th:if="${!#authentication.principal.equals('anonymousUser')}" class="uid" hidden>[[${#authentication.principal.user.uid}]]</p>
