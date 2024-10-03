@@ -29,26 +29,36 @@ window.onload = function () {
         }
     });
 
-    pointButton.addEventListener('click', function(event) {
-        event.preventDefault(); // 기본 동작 방지
 
-        const enteredPoints = parseInt(pointInput.value);
+        // 버튼 클릭 이벤트 처리
+        pointButton.addEventListener('click', function(event) {
+            event.preventDefault(); // 기본 동작 방지
+            const pointButton = document.querySelector('.point_btn');
+            const pointInput = document.querySelector('.point');
+            const pointDisplay = document.querySelector('.pointdisplay'); // 여기에서 정확한 요소가 선택되는지 확인
+            const hiddenInput = document.getElementById('usedpoint');
+            const enteredPoints = parseInt(pointInput.value);
 
-        // 입력값이 유효한 경우
-        if (enteredPoints <= availablePoints) {
-            pointInput.setAttribute('readonly', true); // readonly로 설정
-            pointButton.textContent = '사용됨'; // 버튼 텍스트 변경
-        } else {
-            alert('사용 가능한 포인트를 입력해 주세요.');
-        }
-    });
+            // 입력값이 유효한 경우
+            if (enteredPoints <= availablePoints && enteredPoints > 0) {
+                pointInput.setAttribute('readonly', true); // readonly로 설정
+                pointButton.textContent = '사용됨'; // 버튼 텍스트 변경
 
-    const cartDTOListInput = document.querySelector('input[name="cartDTOList"]');
-    const cartDTOListString = cartDTOListInput.value;
+                // 입력한 포인트를 td에 표시 (textContent 사용)
+                if (pointDisplay) {
+                    pointDisplay.textContent = enteredPoints; // td의 텍스트 업데이트
+                } else {
+                    console.error("포인트를 표시할 수 없습니다. point-display 요소를 찾을 수 없습니다.");
+                }
 
-    // 문자열을 JSON으로 변환
-    const cartDTOList = JSON.parse(cartDTOListString);
-
-    console.log(cartDTOList); // 콘솔에 확인
-
+                // hidden input에 값 세팅 (value 속성 직접 변경)
+                if (hiddenInput) {
+                    hiddenInput.value = enteredPoints; // hidden input의 value 값 설정
+                }
+            } else {
+                alert('사용 가능한 포인트를 입력해 주세요.');
+            }
+        });
 }
+
+

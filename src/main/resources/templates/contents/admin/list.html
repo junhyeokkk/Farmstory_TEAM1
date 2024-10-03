@@ -5,7 +5,7 @@
                     <div id="article1">
                       <div class="table_heading" id="prod_heading">
                         <a id="prod_now">상품현황</a>
-                        <a href="#" id="prod_more">+ 더보기</a>
+                        <a th:href="@{/admin/product}" id="prod_more">+ 더보기</a>
                       </div>
                       <table id="m_prod_table">
                         <tr>
@@ -16,21 +16,20 @@
                           <th>재고</th>
                           <th>등록일</th>
                         </tr>
-                        <tr>
-                            <td>1011</td>
-                            <td>사과 500g</td>
-                            <td>과일</td>
-                            <td>4,000원</td>
-                            <td>100</td>
-                            <td>2023-01-01</td>
-
-                        </tr>
+                          <tr th:each="product, i : ${productPageResponseDTO.getProductList().subList(0, 3)}">
+                              <td>[[${product.pNo}]]</td>
+                              <td>[[${product.pName}]]</td>
+                              <td>[[${product.prodCate.prodCateName}]]</td>
+                              <td>[[${product.price}]]</td>
+                              <td>[[${product.stock}]]</td>
+                              <td>[[${product.rdate}]]</td>
+                          </tr>
                       </table>
                     </div>
                     <div id="article2">
                       <div class="table_heading" id="order_heading">
                         <a id="order_now">주문현황</a>
-                        <a href="#" id="order_more">+ 더보기</a>
+                        <a th:href="@{/admin/a_order}" id="order_more">+ 더보기</a>
                       </div>
                       <table id="m_order_table">
                         <tr>
@@ -43,22 +42,22 @@
                           <th>주문자</th>
                           <th>주문일</th>
                         </tr>
-                        <tr>
-                            <td>1011</td>
-                            <td>사과 500g</td>
-                            <td>4,000원</td>
-                            <td>2개</td>
-                            <td>3,000원</td>
-                            <td>8,000원</td>
-                            <td>홍길동</td>
-                            <td>2023-01-01</td>
-                        </tr>
+                          <tr th:each="order , i:${orderPageResponseDTO.orderDTOList.subList(0, 3)}">
+                              <td>[[${order.orderNo}]]</td>
+                              <td>[[${order.pName}]]</td>
+                              <td>[[${order.price}]]</td>
+                              <td>[[${order.totalQty}]]</td>
+                              <td>[[${order.price}]]</td>
+                              <td>[[${order.totalPrice}]]</td>
+                              <td>[[${order.name}]]</td>
+                              <td>[[${order.orderDate}]]</td>
+                          </tr>
                       </table>
                     </div>
                     <div id="article3">
                       <div class="table_heading" id="user_heading">
                         <a id="user_now">회원현황</a>
-                        <a href="#" id="user_more">+ 더보기</a>
+                        <a th:href="@{/admin/a_user}" id="user_more">+ 더보기</a>
                       </div>
                       <table id="m_user_table">
                         <tr>
@@ -70,15 +69,15 @@
                           <th>등급</th>
                           <th>회원가입일</th>
                         </tr>
-                        <tr>
-                            <td>a101</td>
-                            <td>김유신</td>
-                            <td>유신123</td>
-                            <td>010-1234-1001</td>
-                            <td>yusin123@naver.com</td>
-                            <td>2</td>
-                            <td>2023-01-01</td>
-                        </tr>
+                          <tr th:each="user , i:${userPageResponseDTO.getUserList().subList(0, 3)}">
+                              <td class="user-uid">[[${user.uid}]]</td>
+                              <td>[[${user.name}]]</td>
+                              <td>[[${user.nick}]]</td>
+                              <td>[[${user.email}]]</td>
+                              <td>[[${user.hp}]]</td>
+                              <td>2</td>
+                              <td>[[${user.regDate}]]</td>
+                          </tr>
                       </table>
                     </div>
                   </div>

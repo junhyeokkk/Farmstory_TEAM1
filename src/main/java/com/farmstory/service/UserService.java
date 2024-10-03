@@ -38,6 +38,16 @@ public class UserService {
     private final JavaMailSender javaMailSender;
     private final HttpSession session;
 
+
+    // order 후 point 업데이트
+    public void UpdateUserPoint(String uid , int usedpoint, int earnpoint){
+        userRepository.findById(uid).ifPresent(user -> {
+            user.setPoint(user.getPoint()+earnpoint-usedpoint);
+            userRepository.save(user);
+        });
+
+    }
+
     // 페이지네이션 User selectAll
     public UserPageResponseDTO selectUserAll(PageRequestDTO pageRequestDTO) {
 
