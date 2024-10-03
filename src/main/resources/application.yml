@@ -13,9 +13,14 @@ server:
     port: 8080
     servlet:
         context-path: /
+    error:
+        whitelabel:
+          enabled: false
+        path: error
+
 spring:
-#    profiles:
-#        active: prod
+    profiles:
+        active: prod
     application:
         name: FarmStory
         version: ${version}

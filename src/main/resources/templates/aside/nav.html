@@ -1,6 +1,6 @@
 
-            <div th:if="${cate.cateGroup=='community'}">
-                <h2>
+            <div th:if="${cate.cateGroup=='community'}" class="top_nav">
+                <h2 class="h2nav">
                     <!-- community={notice,today,cook,cs,faq}-->
                     <img th:if="${cate.cateName=='notice'}" th:src="@{/images/sub_nav_tit_cate5_tit1.png}" alt="공지사항">
                      <img th:if="${cate.cateName=='menu'}" th:src="@{/images/sub_nav_tit_cate5_tit2.png}" alt="오늘의식단">
@@ -20,10 +20,10 @@
                 </p>
             </div>
 
-            <div th:if="${cate.cateGroup=='croptalk'}">
+            <div th:if="${cate.cateGroup=='croptalk'}" class="top_nav">
 
                 <nav>
-                    <h2>
+                    <h2 class="h2nav">
                         <img th:if="${cate.cateName=='story'}" th:src="@{/images/sub_nav_tit_cate3_tit1.png}" alt="농작물이야기">
                         <img th:if="${cate.cateName=='grow'}" th:src="@{/images/sub_nav_tit_cate3_tit2.png}" alt="텃밭가꾸기">
                         <img th:if="${cate.cateName=='school'}" th:src="@{/images/sub_nav_tit_cate3_tit3.png}" alt="귀농학교">
@@ -38,9 +38,9 @@
                     </p><!-- location end -->
                 </nav>
             </div>
-            <div th:if="${cate.cateGroup=='event'}">
+            <div th:if="${cate.cateGroup=='event'}" class="top_nav">
                 <nav>
-                    <h2>
+                    <h2 class="h2nav">
                         <img th:src="@{/images/sub_nav_tit_cate4_tit1.png}" alt="이벤트">
                     </h2>
                     <p class="location">
@@ -51,9 +51,9 @@
                     </p>
                 </nav>
             </div>
-            <div th:if="${cate.cateGroup=='introduction'}">
+            <div th:if="${cate.cateGroup=='introduction'}" class="top_nav">
                 <nav>
-                    <h2>
+                    <h2 class="h2nav">
                         <img th:if="${cate.cateName=='intro'}" th:src="@{/images/sub_nav_tit_cate1_tit1.png}" alt="인사말">
                         <img th:if="${cate.cateName=='direct'}" th:src="@{/images/sub_nav_tit_cate1_tit2.png}" alt="찾아오시는길">
                     </h2>
@@ -67,9 +67,9 @@
                 </nav>
             </div>
 
-            <div th:if="${cate.cateGroup=='market'}" >
+            <div th:if="${cate.cateGroup=='market'}" class="top_nav">
                 <nav>
-                    <h2>
+                    <h2 class="h2nav">
                         <img th:src="@{/images/sub_nav_tit_cate2_tit1.png}" alt="장보기">
                     </h2>
                     <p class="location">
@@ -81,10 +81,10 @@
                 </nav>
             </div>
 
-            <div th:if="${cate.cateGroup=='myinfo'}">
+            <div th:if="${cate.cateGroup=='myinfo'}" class="top_nav">
 
                 <nav>
-                    <h2>
+                    <h2 class="h2nav">
                         <img th:if="${cate.cateName=='cart'}" th:src="@{/images/myinfo/myinfo_nav_tit1.png}" alt="장바구니">
                         <img th:if="${cate.cateName=='orderitem'}" th:src="@{/images/myinfo/myinfo_nav_tit2.png}" alt="주문내역">
                         <img th:if="${cate.cateName=='myinfo'}" th:src="@{/images/myinfo/myinfo_nav_tit3.png}" alt="정보수정">

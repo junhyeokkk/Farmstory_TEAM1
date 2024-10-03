@@ -213,3 +213,13 @@ function initializeMap() {
     // Set the marker on the map
     marker.setMap(map);
 }
+
+
+function alertAndRedirect(error, redirectUrl) {
+    // 링크 기본 동작 막기
+    error.preventDefault();
+    // 알림창 띄우기
+    alert('로그인이 필요합니다.');
+    // alert 확인 후 리다이렉트
+    window.location.href = redirectUrl;
+}
