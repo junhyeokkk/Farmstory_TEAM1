@@ -27,5 +27,4 @@ public class ProductCateController {
         List<prodCateDTO> prodcates = productService.selectprodcate();
         return ResponseEntity.ok().body(prodcates);
     }
-
 }

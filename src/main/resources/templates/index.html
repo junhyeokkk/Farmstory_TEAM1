@@ -34,84 +34,18 @@
         <!-- 장보기 -->
         <div class="main_shopping">
           <img th:src="@{/images/main_market_tit.png}" alt="장보기 베스트 상품을 소개합니다.">
-          <article class="shopping_list">
+          <article class="shopping_list" th:each="product:${products}">
             <!-- @@@상품 임시데이터@@@ -->
-            <a th:href="@{/category/market/pview}">
+            <a th:href="@{/market/pview/{pNo}(pNo=${product.pNo})}">
               <div class="product">
-                <img th:src="@{/images/market_item1.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
+                <img th:src="@{/uploads/product/}+${product.p_sName1}" alt="상품이미지">
+                <p class="protype" th:text="${product.prodCate.prodCateName}">과일</p>
+                <p th:text="${product.pName}">사과</p>
                 <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
+                  <span class="price" th:text="${product.price} + '원'">900원</span>
+                  <span class="discount" th:text="${product.discount} + '%↓'">80%↓</span>
                 </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item2.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item3.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item4.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item5.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item6.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
+                <p class="priceResult" th:text="${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0),0,0)} + '원'">3000원</p>
               </div>
             </a>
             <!-- @@@상품 임시데이터 끝@@@ -->
