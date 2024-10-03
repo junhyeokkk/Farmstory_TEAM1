@@ -1,3 +1,8 @@
+.blurred {
+    filter: blur(5px);  /* 블러 정도 */
+    pointer-events: none;  /* 블러된 상태에서는 클릭 불가 */
+}
+
 /* 글목록 */
 .list {
     position: relative;

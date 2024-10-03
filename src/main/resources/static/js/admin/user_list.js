@@ -23,7 +23,7 @@ document.querySelectorAll('.openModalBtn').forEach(button => {
             .then(data => {
                 console.log(data);
                 if (data) { // data가 유효하면 성공으로 간주
-                    alert('성공');
+                   // alert('성공');
 
                     if (data.role === 'LEAVE') {
                         // 해당 td 요소 선택

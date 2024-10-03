@@ -5,7 +5,8 @@ let isPassOk = false; // 비밀번호 검증 결과를 저장하는 플래그
 console.log(confirmPassword)
 
 // 비밀번호 형식 확인 정규식 (8자 이상, 영문, 숫자, 특수문자 포함)
-const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+const passwordPattern = /^(?=.*[a-zA-z])(?=.*[0-9])(?=.*[$`~!@$!%*#^?&\\(\\)\-_=+]).{5,16}$/;
 
 // 비밀번호 확인 필드에 대한 이벤트 리스너 추가
 confirmPassword.addEventListener('focusout', () => {
