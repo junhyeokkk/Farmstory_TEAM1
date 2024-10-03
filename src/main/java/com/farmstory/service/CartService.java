@@ -37,6 +37,9 @@ public class CartService {
         }
         return null;
     }
+    public void deleteCartByCartNo(int cartNo) {
+        cartRepository.deleteById(cartNo);
+    }
     /*
     public boolean insertCart(CartDTO cartDTO){
         Cart cart = modelMapper.map(cartDTO, Cart.class);

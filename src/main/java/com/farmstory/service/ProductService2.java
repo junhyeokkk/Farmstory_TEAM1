@@ -139,4 +139,7 @@ public class ProductService2 {
         }
         return null;
     }
+    public void deleteProductById(int pNo) {
+        productRepository.deleteById(pNo);
+    }
 }

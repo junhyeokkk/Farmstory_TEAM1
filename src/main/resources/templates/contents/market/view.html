@@ -26,6 +26,10 @@
         stockInput.value = stock;
         quantity = stock;
       }
+      if(quantity < 1) {
+        stockInput.value = 1;
+        quantity = 1;
+      }
 
       if (!isNaN(price) && !isNaN(quantity)) {
         let total = value * quantity;
