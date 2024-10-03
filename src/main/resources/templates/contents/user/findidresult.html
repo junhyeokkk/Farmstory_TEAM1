@@ -5,7 +5,7 @@
 
 <section class="find-section cf">
     <div>
-        <form  action="" method="post">
+        <form>
             <h4>아이디 찾기 결과</h4>
             <table class="idresult">
                 <tr>
@@ -28,7 +28,7 @@
             <h5>고객님의 정보와 일치하는 아이디입니다.</h5>
 
             <div class="btn-group">
-                <button type="submit" class="btn" id="blogin">로그인</button> <!-- 로그인 버튼 -->
+                <button type="button" class="btn" id="blogin">로그인</button> <!-- 로그인 버튼 -->
                 <button type="button" class="btn" id="find-pass">비밀번호 찾기</button> <!-- 비밀번호 찾기 버튼 -->
             </div>
         </form>
@@ -36,8 +36,14 @@
 </section>
 
 <script>
-    // URL에서 전달된 파라미터로 아이디 표시
-    const params = new URLSearchParams(window.location.search);
-    document.getElementById('uid').textContent = params.get('uid');
     // 서버에서 나머지 정보도 같이 받아온 경우, 위와 같이 처리 가능
+
+
+    document.getElementById("blogin").addEventListener("click", function () {
+        window.location.href = "/category/user/login";  // 로그인 페이지로 리다이렉트
+    });
+
+    document.getElementById("find-pass").addEventListener("click", function () {
+        window.location.href = "/category/user/findpass";  // 비번찾기 페이지로 리다이렉트
+    });
 </script>

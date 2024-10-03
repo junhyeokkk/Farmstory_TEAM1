@@ -20,7 +20,7 @@ window.onload = function (){
     const inputUids = document.getElementsByClassName('inputUid');
     const resultUid = document.getElementById('resultUid');
     const btnCheckUid = document.getElementById('btnCheckUid');
-
+   
     btnCheckUid.onclick = function() {
         const type    = this.dataset.type;
         const value   = inputUids[0].value;
