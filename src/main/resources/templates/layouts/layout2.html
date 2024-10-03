@@ -51,7 +51,7 @@
       <article class="article">
         <div class="articleIn">
           <!-- Dynamic content rendering -->
-          <div th:replace="~{contents/dynamicContent :: content(${cate.cateGroup},${cate.cateName},${content})}"></div>
+          <th:block th:replace="~{contents/dynamicContent :: content(${cate.cateGroup},${cate.cateName},${content})}"></th:block>
         </div>
       </article>
     </section>

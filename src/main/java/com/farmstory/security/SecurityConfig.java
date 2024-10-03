@@ -43,6 +43,7 @@ public class SecurityConfig {
                 .requestMatchers("/").permitAll()
                 .requestMatchers("/article/**").permitAll()
                 .requestMatchers("/category/**").permitAll()
+                .requestMatchers("/category/user/findresult").permitAll()
                 .requestMatchers("/article/write").authenticated()
                 .requestMatchers("/article/delete/**").authenticated()
                 .requestMatchers("/user/**").permitAll()
