@@ -19,6 +19,8 @@ public class OrderItem {
     private LocalDateTime orderDate;    // 주문날짜
     private int itemPrice;
     private int itemQty;
+
+    // 할인 되는 금액
     private int discount;
 
     // 외래키 목록

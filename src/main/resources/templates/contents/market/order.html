@@ -45,6 +45,7 @@
         <td>[[${cartDTO.productDTO.point}]]p</td>
         <td>[[${cartDTO.productDTO.price}*${cartDTO.cartProdQty}]]</td>
         <td><strong>[[${cartDTO.totalprice}]]</strong>원</td>
+        <input type="hidden" name="cartDTOList" th:value="${responseOrderDTO.cartDTOList}" />
       </tr>
     </table><!-- .tb1 -->
 
@@ -122,31 +123,31 @@
         </tr>
         <tr>
           <td>상품수</td>
-          <td>[[${cartDTO.cartProdQty}]]</td>
-          <input type="hidden" name="totalQty" th:value="${cartDTO.cartProdQty}" />
+          <td>[[${orderSummary.totalQty}]]</td>
+          <input type="hidden" name="totalQty" th:value="${orderSummary.totalQty}" />
         </tr>
         <tr>
           <td>상품금액</td>
-          <td>[[${cartDTO.productDTO.price}]]</td>
+          <td>[[${orderSummary.totalDiscount}+${orderSummary.totalPrice}}]]</td>
         </tr>
         <tr>
           <td>할인금액</td>
-          <td>[[${cartDTO.productDTO.price}*${cartDTO.cartProdQty}-${cartDTO.totalprice}]]</td>
-          <input type="hidden" name="delivery" th:value="${cartDTO.productDTO.price}*${cartDTO.cartProdQty}-${cartDTO.totalprice}" />
+          <td>[[${orderSummary.totalDiscount}]]</td>
+          <input type="hidden" name="totalDiscount" th:value="${orderSummary.totalDiscount}" />
         </tr>
         <tr>
           <td>배송비</td>
-          <td>[[${cartDTO.cart_delivery}]]</td>
-          <input type="hidden" name="delivery" th:value="${cartDTO.cart_delivery}" />
+          <td>[[${orderSummary.totalDelivery}]]</td>
+          <input type="hidden" name="delivery" th:value="${orderSummary.totalDelivery}" />
         </tr>
         <tr>
           <td>포인트</td>
-          <td>[[${cartDTO.productDTO.point}*${cartDTO.cartProdQty}]]</td>
+          <td>[[${orderSummary.totalPoint}]]</td>
         </tr>
         <tr>
           <td>전체주문금액</td>
           <td>[[${cartDTO.totalprice}]]</td>
-          <input type="hidden" name="totalPrice" th:value="${cartDTO.totalprice}" />
+          <input type="hidden" name="totalPrice" th:value="${orderSummary.totalPrice}" />
         </tr>
       </table><!-- .tb2 -->
       <button type="submit" class="btn_order"><a href="#">주문하기</a></button>
