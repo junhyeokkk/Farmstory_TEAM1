@@ -31,16 +31,16 @@
 				</table>
 				 <div>
 
-					 <th:block th:if="${#authentication.principal != null and (#authentication.principal.user.uid.equals(article.writer) or #authentication.principal.user.role =='ADMIN')}">
+					 <th:block th:if="${!#authentication.principal.equals('anonymousUser') and #authentication.principal.user != null and (#authentication.principal.user.uid.equals(article.writer) or #authentication.principal.user.role == 'ADMIN')}">
 						 <a th:href="@{'/article/delete/'+${cate.cateNo}+'/'+${article.articleNo}(pg=${pg})}" class="btn btnDelete">삭제</a>
 						 <a th:href="@{'/article/modify/' + ${cate.cateNo} + '/' + ${article.articleNo}(pg=${pg})}" class="btn btnModify">수정</a>
 					 </th:block>
 	                    <a th:href="@{'/article/' + ${cate.cateGroup} + '/' + ${cate.cateName}(content='list',pg=${pg})}" class="btn btnList">목록</a>
 	                 
-                </div>  
+                </div>
 
 			<!-- 댓글목록 -->
-			<section class="commentList">
+			<section class="commentList" th:if="${!#authentication.principal.equals('anonymousUser')}">
 				<h3>댓글목록</h3>
 				<p th:if="${article.commentList.size() == 0}" class="empty">등록된 댓글이 없습니다.</p>
 
@@ -50,7 +50,7 @@
 						<span class="date">[[${comment.getSubStringRdate()}]]</span>
 						<textarea class="content" name="content" readonly>[[${comment.content}]]</textarea>
 
-						<div th:if="${comment.user.uid == #authentication.principal.user.uid}">
+						<div th:if="${!#authentication.principal.equals('anonymousUser') and (comment.user.uid == #authentication.principal.user.uid)}">
 							<a  href="#" th:data-pg="${pg}" th:data-cateNo="${cate.cateNo}" th:data-no="${comment.no}" th:data-writer="${comment.user.uid}" class="remove commentRemove">삭제</a>
 							<a  href="#" class="modify commentModify" th:data-no="${comment.no}">수정</a>
 							<a  href="/" class="cancle commentCancel" th:data-no="${comment.no}" hidden>취소</a>
@@ -58,11 +58,28 @@
 						</div>
 					</article>
 				</th:block>
+			</section>
+			<section class="commentList" th:unless="${!#authentication.principal.equals('anonymousUser')}">
+				<h3>댓글목록</h3>
+				<p class="empty"><a th:href="@{/category/user/login}" >로그인이 필요합니다.</a></p>
+				<th:block th:each="comment:${article.commentList}">
+					<article>
+						<span class="nick blurred ">[[${comment.user.nick}]]</span>
+						<span class="date blurred ">[[${comment.getSubStringRdate()}]]</span>
+						<textarea class="content blurred " name="content" readonly>[[${comment.content}]]</textarea>
 
+						<div th:if="${!#authentication.principal.equals('anonymousUser') and (comment.user.uid == #authentication.principal.user.uid)}">
+							<a  href="#" th:data-pg="${pg}" th:data-cateNo="${cate.cateNo}" th:data-no="${comment.no}" th:data-writer="${comment.user.uid}" class="remove commentRemove">삭제</a>
+							<a  href="#" class="modify commentModify" th:data-no="${comment.no}">수정</a>
+							<a  href="/" class="cancle commentCancel" th:data-no="${comment.no}" hidden>취소</a>
+							<a  href="#" class="modify commentCompleted" th:data-no="${comment.no}" hidden>수정완료</a>
+						</div>
+					</article>
+				</th:block>
 			</section>
 
 			<!-- 댓글쓰기 -->
-			<section class="commentForm">
+			<section class="commentForm" th:if="${!#authentication.principal.equals('anonymousUser')}">
 				<h3>댓글쓰기</h3>
 				<form name="commentForm" method="post">
 					<textarea name="content">댓글내용 입력</textarea>

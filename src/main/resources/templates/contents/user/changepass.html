@@ -1,10 +1,10 @@
 <script type="text/javascript" defer th:src="@{/js/changepw.js}"></script>
-<section>
+<section id="changePass">
     <form id="passwordResetForm">
 
         <h2>비밀번호 변경</h2>
 
-        <table>
+        <table class="pwChange">
             <tr>
                 <th class="id" name="id">아이디</th>
 
@@ -24,14 +24,14 @@
                 </td>
             </tr>
         </table>
-    <h5>비밀번호를 변경해 주세요.<br>
-        영문,숫자,특수문자를 사용하여 8자 이상 입력해 주세요.
-    </h5>
+        <h5>비밀번호를 변경해 주세요.<br>
+            영문,숫자,특수문자를 사용하여 8자 이상 입력해 주세요.
+        </h5>
 
-    <div class="btn-group">
-        <button type="button" class="btnCancel" onclick="history.back();">취소</button>
-        <button type="submit" class="btnNext">다음</button>
-    </div>
+        <div class="btn-group">
+            <button type="button" class="btnCancel" onclick="history.back();">취소</button>
+            <button type="submit" class="btnNext">다음</button>
+        </div>
     </form>
 </section>
 

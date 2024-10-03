@@ -23,10 +23,11 @@ public class MainController {
     @GetMapping(value = {"/","/index","/category"})
     public String index(Model model) {
 
+        //메인화면 게시글
         List<ArticleDTO> gardens  = articleService.mainArticle(302);
         List<ArticleDTO> schools  = articleService.mainArticle(303);
         List<ArticleDTO> storys  = articleService.mainArticle(301);
-        List<ArticleDTO> notices  = articleService.mainNoticeArticle(504);
+        List<ArticleDTO> notices  = articleService.mainNoticeArticle(501);
 
         log.info("garden: " + gardens);
 

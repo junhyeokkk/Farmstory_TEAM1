@@ -98,9 +98,9 @@ spring:
                         scope: profile_nickname,account_email
                         client-name: kakao
                     naver:
-                        client-id: oDypaU0qe3eHzMz3ZfQX
-                        client-secret: _0yQKxoY0s
-                        redirect-uri: http://127.0.0.1:8080/login/oauth2/naver
+                        client-id: Y9IyZZGlVkBEySe5Athp
+                        client-secret: RPOF5x94hE
+                        redirect-uri: http://ec2-52-79-87-164.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/naver
                         authorization-grant-type: authorization_code
                         scope: profile
                         client-name: Naver
