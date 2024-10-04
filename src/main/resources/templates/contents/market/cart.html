@@ -10,13 +10,16 @@
       let totalDiscount = 0;
       let totalPoints = 0;
       let maxDeliveryFee = 0;
+      let selectTotal = 0;
       for (let checkbox of selectedCheckboxes1) {
+
         const row = checkbox.closest('tr');
         const quantity_column = parseInt(row.querySelector('.quantity-column').innerText.trim(), 10);
         const discount_column = parseInt(row.querySelector('.discount-column').innerText.replace('%', '').trim(), 10);
         const points_column = parseInt(row.querySelector('.points-column').innerText.replace('p', '').trim(), 10);
         const price_column = parseInt(row.querySelector('.price-column').innerText.replace('원', '').trim(), 10);
         const delivery = parseInt(row.getElementsByClassName('delivery')[0].value.trim(), 10);
+
 
         // 합계 계산
         const itemTotalPrice = quantity_column * price_column;
@@ -27,9 +30,11 @@
         totalDiscount += itemDiscount;
         totalPoints += points_column;
         maxDeliveryFee += delivery;
+        selectTotal += 1;
       }
       const totalOrderAmount = totalProductPrice - totalDiscount + maxDeliveryFee;
       // UI 업데이트
+      document.getElementById('selectedTotal').innerText = "장바구니 목록(" +selectTotal + ")";
       document.getElementById('total-item-count').innerText = totalItemCount;
       document.getElementById('total-product-price').innerText = totalProductPrice + "원";
       document.getElementById('total-discount').innerText = totalDiscount+ "원";
@@ -151,7 +156,7 @@
 </script>
 <link rel="stylesheet" th:href="@{/css/market_cart.css}">
   <div class="market_cart">
-    <h3 class="tb_tit">장바구니 전체(0)</h3><!-- .tb_tit -->
+    <h3 class="tb_tit" id="selectedTotal">장바구니 목록(0)</h3><!-- .tb_tit -->
     <table class="tb1">
       <colgroup>
         <col style="width: 11%">
@@ -180,7 +185,7 @@
       </tr>
       <tr th:unless="${#lists.size('cartList') eq 0}" th:each="cart : ${cartList}">
         <td><input type="checkbox" class="checkbox"/></td>
-        <td><img th:src="@{/uploads/product/}+${cart.productDTO.p_sName1}" alt="상품 이미지" /></td>
+        <td><img th:src="@{'/uploads/product/'+cart.productDTO.p_sName1}" alt="상품 이미지" /></td>
         <td th:text="${cart.productDTO.prodCate.prodCateName}">과일</td>
         <td th:text="${cart.productDTO.pName}">사과 500g</td>
         <td class="quantity-column">[[${cart.cartProdQty}]]</td>
