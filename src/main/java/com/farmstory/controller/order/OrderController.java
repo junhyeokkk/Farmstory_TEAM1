@@ -61,6 +61,7 @@ public class OrderController {
                 orderService.insertOrderItem(orderItemDTO);
                 productService.updateProductStock(orderItemDTO.getPNo(),orderItemDTO.getItemQty());
                 userService.UpdateUserPoint(orderDTO.getUid(),orderDTO.getUsedPoint(),orderDTO.getEarnPoint());
+                cartService.deleteCartByCartNo(cartDTO.getCartNo());
             }
 
         }
@@ -168,9 +169,44 @@ public class OrderController {
         responseOrderDTO.setUserDTO(userDTO);
         responseOrderDTO.setCartDTOList(cartDTOList);
 
+        // 계산 먼저 처리하고 order에서 그대로 쓰기
+        OrderSummaryDTO orderSummary = new OrderSummaryDTO();
+
+        int totalQty = 0;
+        int totalPrice = 0;
+        int totalDiscount = 0;
+        int totalDelivery = 0;
+        int totalPoint = 0;
+
+        for (CartDTO cart : cartDTOList) {
+            totalQty += cart.getCartProdQty();
+            totalPrice += cart.getTotalprice();
+            totalDelivery += cart.getCart_delivery();
+            totalPoint += cart.getProductDTO().getPoint() * cart.getCartProdQty();
+
+            // 할인 금액 계산
+            int discount = (cart.getProductDTO().getPrice() * cart.getCartProdQty()) - cart.getTotalprice();
+            totalDiscount += discount;
+        }
+
+        // 결과 DTO에 값 설정
+        orderSummary.setTotalQty(totalQty);
+        orderSummary.setTotalPrice(totalPrice);
+        orderSummary.setTotalDiscount(totalDiscount);
+        orderSummary.setTotalDelivery(totalDelivery);
+        orderSummary.setTotalPoint(totalPoint);
+
         log.info("!!!!!!!!!!!!!!!cartDTOList : "+cartDTOList);
         CateDTO cate= categoryService.selectCategory("market","order");
 
+        // ObjectMapper를 사용해 cartDTOList를 JSON으로 직렬화
+        String cartJson = objectMapper.writeValueAsString(cartDTOList);
+
+        // Model에 cartJson 추가
+        model.addAttribute("cartJson", cartJson);
+
+
+        model.addAttribute("orderSummary", orderSummary);
         model.addAttribute("cate", cate);
         model.addAttribute("responseOrderDTO", responseOrderDTO);
         log.info("responseOrderDTO"+ responseOrderDTO.toString());

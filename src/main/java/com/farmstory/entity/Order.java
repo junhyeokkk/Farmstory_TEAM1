@@ -45,8 +45,13 @@ public class Order {
     private String pName;
     @Transient
     private int price;
+    /*
     @Transient
     private int itemQty;
+    */
     @Transient
     private String name;
+    @Transient
+    private String p_sName1;
+
 }

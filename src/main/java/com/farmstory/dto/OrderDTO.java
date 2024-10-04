@@ -37,4 +37,5 @@ public class OrderDTO {
     private int price;
     private int itemQty;
     private String name;
+    private String p_sName1;
 }
