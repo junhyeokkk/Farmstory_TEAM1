@@ -67,8 +67,7 @@
                             </th:block>
                         </div>
                         <!-- 글쓰기 버튼 -->
-                        [[${cate.cateGroup}]]
-                        [[${cate.cateName}]]
+
                             <a th:href="@{'/article/' + ${#authentication.principal.user.uid} + '/community/cs?content=cs_write'}"
                                class="btnWrite">
                                 글쓰기
