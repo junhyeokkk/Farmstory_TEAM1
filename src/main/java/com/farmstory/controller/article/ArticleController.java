@@ -164,7 +164,6 @@ public class ArticleController {
     }
 
 
-    @Transactional
     @PostMapping("/modify/{cateNo}/{articleNo}")
     public String modify(@PathVariable("cateNo") int cateNo,
                          @PathVariable("articleNo") int articleNo,
