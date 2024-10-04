@@ -50,7 +50,7 @@ public class ProductController {
         // 조회한 카테고리 정보를 모델에 추가
         model.addAttribute("cate", cate);
 
-        return "admin_index";
+        return "redirect:/admin/main";
     }
 
     @GetMapping("/admin/product")
