@@ -22,6 +22,8 @@ public class admin_ListController {
     @GetMapping("/admin/main")
     public String list (Model model, PageRequestDTO pageRequestDTO){
 
+        log.info("list admin");
+
         OrderPageResponseDTO orderPageResponseDTO = orderService.getAllOrder(pageRequestDTO);
         ProductPageResponseDTO productPageResponseDTO = productService.getAllProductsWithAllInfo(pageRequestDTO);
         UserPageResponseDTO userPageResponseDTO = userService.selectUserAll(pageRequestDTO);

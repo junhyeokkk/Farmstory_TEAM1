@@ -16,7 +16,7 @@
                           <th>재고</th>
                           <th>등록일</th>
                         </tr>
-                          <tr th:each="product, i : ${productPageResponseDTO.getProductList().subList(0, 3)}">
+                          <tr th:each="product, i : ${productPageResponseDTO.productList.subList(0, 3)}">
                               <td>[[${product.pNo}]]</td>
                               <td>[[${product.pName}]]</td>
                               <td>[[${product.prodCate.prodCateName}]]</td>

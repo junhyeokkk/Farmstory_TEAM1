@@ -109,8 +109,14 @@ public class OrderService {
             String name = (tuple.get(1, String.class));
             Product product = tuple.get(2, Product.class);
 
-            order.setPName(product.getPName());
-            order.setPrice(product.getPrice());
+            if (product != null) {
+                order.setPName(product.getPName());
+                order.setPrice(product.getPrice());
+            } else {
+                order.setPName("asdfassfd");
+                order.setPrice(0);
+            }
+
             order.setName(name);
 
             return modelMapper.map(order, OrderDTO.class);
