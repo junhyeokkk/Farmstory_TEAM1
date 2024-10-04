@@ -83,7 +83,7 @@ public class UserController {
         // 이메일 인증이 필요한 경우 (회원가입 시 이메일이 중복되지 않거나, 아이디 찾기에서 유효한 이메일일 때),
         if(type.equals("email") && count == 0){
             LocalDateTime requestedAt = LocalDateTime.now();
-            String code = emailService.sendMail(value, "/contents/user/email",session);
+            String code = emailService.sendMail(value, "contents/user/email",session);
             log.info("value code : "+code);
         }
 
