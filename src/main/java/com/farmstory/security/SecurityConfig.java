@@ -6,6 +6,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -28,6 +30,16 @@ public class SecurityConfig {
                 .failureUrl("/category/user/login?success=100")
                 .usernameParameter("uid")
                 .passwordParameter("pass"));
+
+
+
+        http.sessionManagement(session -> session
+                .sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::migrateSession)  // 세션 고정 공격 방지
+                .maximumSessions(1)  // 동시 로그인 세션 하나로 제한 (옵션)
+                .maxSessionsPreventsLogin(true)  // 새로운 로그인이 기존 세션을 만료시키지 않도록 설정
+        );
+
+
 
         // 로그아웃 설정
         http.logout(logout -> logout

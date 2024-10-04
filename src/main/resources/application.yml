@@ -43,6 +43,8 @@ spring:
                 format_sql: true
                 show_sql: true
     servlet:
+        session:
+            timeout: 10m
         multipart:
             location: uploads/
     web:
