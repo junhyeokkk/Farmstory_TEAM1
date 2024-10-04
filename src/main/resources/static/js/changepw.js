@@ -67,4 +67,7 @@ document.getElementById('passwordResetForm').onsubmit = function (e) {
 
     return false; // 서버로 요청을 보내고 나서 폼 제출을 막음
 };
+    document.querySelector(".btnCancel").addEventListener("click", function () {
+    window.history.back()      });
+// 로그인 페이지로 리다이렉트
 

@@ -2,6 +2,7 @@ package com.farmstory.controller.user;
 
 import com.farmstory.dto.*;
 import com.farmstory.entity.User;
+import com.farmstory.security.MyUserDetails;
 import com.farmstory.service.CategoryService;
 import com.farmstory.service.EmailService;
 import com.farmstory.service.TermsService;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -280,26 +282,8 @@ public class UserController {
 
 
 
-    // 회원 정보 수정 API (비밀번호, 별명, 주소 등 수정)
-    @ResponseBody
-    @PostMapping("/api/user/update")
-    public ResponseEntity<?> updateUserInfo(HttpSession session, @RequestBody UserDTO userDTO) {
-        // 세션에서 인증된 사용자 확인
-        String sessionUid = (String) session.getAttribute("uid");
-        if (sessionUid == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("로그인 정보가 없습니다.");
-        }
 
-        // 비밀번호 변경 처리 (비밀번호가 입력된 경우에만 변경)
-        if (userDTO.getPass() != null && !userDTO.getPass().isEmpty()) {
-            userService.verifyResetCode(sessionUid, userDTO.getPass());  // 비밀번호 변경
-        }
 
-        // 별명과 주소 업데이트 처리
-        userService.updateUserInfo(sessionUid, userDTO.getNick(), userDTO.getZip(), userDTO.getAddr1(), userDTO.getAddr2());
-
-        return ResponseEntity.status(HttpStatus.OK).body("회원 정보가 성공적으로 수정되었습니다.");
-    }
 }
 
 

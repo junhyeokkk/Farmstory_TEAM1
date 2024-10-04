@@ -90,10 +90,8 @@
                     // 인증 성공 메시지 표시
                     showResultValid(resultEmail, '이메일이 인증되었습니다.');
                     isPassOk = true;
-                    // "다음" 버튼 활성화
-                    document.getElementById('nextBtn').disabled = false;
 
-                    // "다음" 버튼 클릭 시 이벤트 등록
+                    document.getElementById('nextBtn').disabled = false;
                     document.getElementById('nextBtn').addEventListener('click', function () {
                         window.location.href = '/category/user/changepass';  // 비밀번호 변경 페이지로 이동
                     });
@@ -124,6 +122,10 @@
         element.textContent = message;
         element.style.color = 'green';
     }
+
+    document.querySelector(".cancelBtn").addEventListener("click", function () {
+        window.location.href = "/category/user/login";  // 로그인 페이지로 리다이렉트
+    });
 
 
 </script>
