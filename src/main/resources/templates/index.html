@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko"
+       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       xmlns:th="http://www.thymeleaf.org">
 <!--      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" -->
 <!--      layout:decorate="~{/layouts/layout.html}">-->
@@ -37,6 +38,14 @@
         slides[nextCurrent].style.zIndex = 1;
         slides[nextCurrent].style.left = '100%';
       }, 4000);
+    }
+    function alertAndRedirect(error, redirectUrl) {
+      // 링크 기본 동작 막기
+      error.preventDefault();
+      // 알림창 띄우기
+      alert('로그인이 필요합니다.');
+      // alert 확인 후 리다이렉트
+      window.location.href = redirectUrl;
     }
   </script>
   <main id="main cf">
@@ -84,11 +93,11 @@
         </div>
     <!-- 오늘의식단, 나도요리사 -->
     <div class="main_comm_banner">
-      <a th:href="@{/category/community/menu}">
+      <a th:href="@{/article/community/menu(content= 'list')}">
         <img th:src="@{/images/main_banner_sub1_tit.png}" alt="팜스토리 오늘의 식단">
       </a>
 
-      <a th:href="@{/category/communit/chef}">
+      <a th:href="@{/article/community/chef(content='list')}">
         <img th:src="@{/images/main_banner_sub2_tit.png}" alt="팜스토리 나도 요리사">
       </a>
     </div>
@@ -176,10 +185,26 @@
           </p>
         </div>
         <div class="commBtns">
-          <a th:href="@{/category/community/cs}">
-            <img th:src="@{/images/main_sub2_cs_bt1.png}" alt="1:1고객문의">
-          </a>
-          <a th:href="@{/category/community/faq}">
+
+          <th:block sec:authorize="isAuthenticated()">
+            <!--                            amdin이 아닌경우-->
+            <th:block  th:if="${!#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{'/article/'+${#authentication.principal.user.uid}+'/community/cs'(content= 'cslist')}" ><img th:src="@{/images/main_sub2_cs_bt1.png}" alt="1:1고객문의"></a></th:block>
+            <!--                            admin인 경우 -->
+            <th:block th:unless="${!#authorization.expression('hasRole(''ADMIN'')')}"><a th:href="@{/article/admin/community/cs(content= 'cslist')}" ><img th:src="@{/images/main_sub2_cs_bt1.png}" alt="1:1고객문의"></a></th:block>
+          </th:block>
+          <!--                        //로그인 안된경우 -->
+          <th:block  sec:authorize="isAnonymous()">
+            <a th:href="@{/article/cummunity/cs}"  onclick="alertAndRedirect(event, '/category/user/login');"><img th:src="@{/images/main_sub2_cs_bt1.png}" alt="1:1고객문의"></a>
+          </th:block>
+
+
+
+
+
+<!--          <a th:href="@{/category/community/cs}">-->
+<!--            <img th:src="@{/images/main_sub2_cs_bt1.png}" alt="1:1고객문의">-->
+<!--          </a>-->
+          <a th:href="@{/article/community/faq(content='list')}">
             <img th:src="@{/images/main_sub2_cs_bt2.png}" alt="자주묻는 질문">
           </a>
           <a th:href="@{/category/myinfo/orderitem}">

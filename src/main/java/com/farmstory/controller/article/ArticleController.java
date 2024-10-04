@@ -2,10 +2,12 @@ package com.farmstory.controller.article;
 
 import com.farmstory.dto.*;
 import com.farmstory.repository.CsArticleRepository;
+import com.farmstory.security.MyUserDetails;
 import com.farmstory.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -331,12 +333,22 @@ public class ArticleController {
 
 
     @GetMapping("/cs/completed/{csNo}")
-    public String completed(@PathVariable("csNo") String csNo){
+    public String completed(@PathVariable("csNo") String csNo, @AuthenticationPrincipal MyUserDetails userDetails){
 
+        boolean isAdmin = false;
+        String uid = userDetails.getUser().getUid() ;
+        if(userDetails != null){
+            isAdmin = userDetails.getAuthorities().stream()
+                    .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+        }
         String updateCsCompleted = articleService.updateCsCompleted(csNo);
 
         if(updateCsCompleted != null){
-            return "redirect:/article/admin/community/cs";
+            if(isAdmin){
+                return "redirect:/article/admin/community/cs";
+            }else{
+                return "redirect:/article/"+uid+"/community/cs?content=cslist";
+            }
 
         }
         return "redirect:/article/504/"+csNo+"?content=csview";

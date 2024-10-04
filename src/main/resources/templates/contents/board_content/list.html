@@ -41,8 +41,8 @@
                                         <td>[[${notice.hit}]]</td>
                                     </tr>
                                 </th:block>
-                                <th:block th:if="${pageResponseDTO.getDtoList().size() == 0 or pageResponseDTO.getDtoList ==null }" >
-                                    <tr>
+                                <th:block th:if="${pageResponseDTO.getDtoList().size() == 0 or pageResponseDTO.getDtoList ==null}" >
+                                    <tr th:if="${cate.cateName != 'notice'}">
                                         <td colspan="5" class="td_first">일치하는 내용이 없습니다</td>
                                     </tr>
                                 </th:block>

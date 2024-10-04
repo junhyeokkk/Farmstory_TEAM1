@@ -28,7 +28,6 @@ window.onload = function () {
         }
 
         if(e.target.classList.contains('commentCompleted')){
-            alert('targeting');
             e.preventDefault();
             const no= commentCompleted.dataset.no;
             const comment = textarea.value;
