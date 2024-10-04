@@ -1,7 +1,6 @@
 <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 <html xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <script th:src="@{/js/utils.js}"></script>
-<script type="text/javascript" th:src="@{/js/modifyinfo.js}" defer></script>
 <section class="myinfo">
     <form th:action="@{/user/update}" method="post">
         <table border="1">
@@ -57,12 +56,12 @@
                 <td>E-Mail</td>
                 <td>
                     <!-- 로그인한 사용자의 이메일 출력 -->
-                    <input type="email"  class="inputEmail" name="email" placeholder="이메일 입력" th:value="${#authentication.principal.user.email}" />
-                    <button type="button" id="btnCheckEmail" data-type="email"><img th:src="@{/images/user/chk_auth.gif}" alt="인증번호 받기"/></button>
-                    <span class="resultEmail"></span>
+                    <input type="email"  class="emailtext" name="email" placeholder="이메일 입력" th:value="${#authentication.principal.user.email}" />
+                    <button type="button"  id="sendCodeBtn" data-type="email"><img th:src="@{/images/user/chk_auth.gif}" alt="인증번호 받기"/></button>
+                    <span id="resultEmail"  class="validationMessage"></span>
                     <div class="auth">
-                        <input type="text" name="auth" class="inputEmailCode" placeholder="인증번호 입력"/>
-                        <button type="button" id="btnCheckEmailCode"  ><img th:src="@{/images/user/chk_confirm.gif}" alt="확인"/></button>
+                        <input type="text" name="auth" class="verificationCodetext" id="verificationCode" placeholder="인증번호 입력"/>
+                        <button type="button" id="verifyCodeBtn" class="verificationCode" ><img th:src="@{/images/user/chk_confirm.gif}" alt="확인"/></button>
                     </div>
                 </td>
 
@@ -111,7 +110,8 @@
 
 </section>
 <script>
-    document.getElementById("modifyPassBtn").addEventListener("click", function () {
+    document.getElementById("modifyPassBtn").addEventListener("click", function (e) {
+        e.preventDefault();
         const passInput = document.querySelector("input[name='pass']");
         const passConfirmInput = document.querySelector("input[name='pass2']");
         const resultPass = document.getElementById("resultPass");
@@ -141,30 +141,35 @@
         } else {
             resultPass2.textContent = "사용 가능한 비밀번호 입니다.";
             resultPass2.style.color = "green";
+
+            if(confirm('비밀번호를 변경하시겠습니까?')){
+                // 비밀번호 변경 API 호출
+                fetch('/api/myinfo/modifypass', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ newpass: newPassword })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.result) {
+                            passwordMessage.textContent = "비밀번호가 성공적으로 변경되었습니다.";
+                            passwordMessage.style.color = "green";
+                        } else {
+                            passwordMessage.textContent = "비밀번호 변경에 실패했습니다.";
+                            passwordMessage.style.color = "red";
+                        }
+                    })
+                    .catch(error => {
+                        console.error("비밀번호 변경 중 오류 발생:", error);
+                        passwordMessage.textContent = "오류가 발생했습니다. 다시 시도해 주세요.";
+                        passwordMessage.style.color = "red";
+                    });
+            }
         }
 
-        // 비밀번호 변경 API 호출
-        fetch('/api/myinfo/modifypass', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ newpass: newPassword })
-        })
-            .then(response => response.json())
-            .then(data => {
-                if (data.result) {
-                    passwordMessage.textContent = "비밀번호가 성공적으로 변경되었습니다.";
-                    passwordMessage.style.color = "green";
-                } else {
-                    passwordMessage.textContent = "비밀번호 변경에 실패했습니다.";
-                    passwordMessage.style.color = "red";
-                }
-            })
-            .catch(error => {
-                console.error("비밀번호 변경 중 오류 발생:", error);
-                passwordMessage.textContent = "오류가 발생했습니다. 다시 시도해 주세요.";
-                passwordMessage.style.color = "red";
-            });
+
     });
+
 
 
 
@@ -179,7 +184,7 @@
             .then(data => {
                 const resultNick = document.getElementById("resultNick");
                 if (data.result) {
-                    resultNick.textContent = "이미 사용 중인 별명입니다."; //메시지로떠라 ㅡㅡ
+                    resultNick.textContent = "현재 사용 중인 별명입니다."; //메시지로떠라 ㅡㅡ
                     resultNick.style.color = "red";
                 } else {
                     resultNick.textContent = "사용 가능한 별명입니다.";
@@ -192,6 +197,77 @@
                 resultNick.style.color = "red";
                 console.error(error);
             });
+    });
+    document.getElementById('sendCodeBtn').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        const uid = document.getElementById('uid').value;
+        const email = document.getElementById('email').value;
+
+        if (uid && email) {
+            fetch('/api/user/findpass', {  // 비밀번호 찾기 경로로 수정
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({uid: uid, email: email})
+            }).then(response => {
+                if (!response.ok) {
+                    throw new Error("인증코드 보내기 실패");
+                }
+
+                // 인증번호 입력란 및 인증 버튼 표시
+                document.getElementById('verificationCode').style.display = 'block';
+                document.getElementById('verifyCodeBtn').style.display = 'block';
+
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('인증번호 발송 중 오류가 발생했습니다.');
+            });
+        } else {
+            alert('아이디와 이메일을 입력하세요.');
+        }
+    });
+
+
+
+    // 인증번호 입력 필드  이벤트 리스너 추가
+    const verifyCodeBtn = document.getElementById('verifyCodeBtn'); // 인증번호 입력 필드
+    verifyCodeBtn.addEventListener('click', () => {
+        const code = document.getElementById('verificationCode').value;
+        const uid = document.getElementById('uid').value;
+        const email = document.getElementById('email').value;
+        const resultEmail = document.getElementById('resultEmail'); // 결과 메시지를 표시할 span
+
+        if (code && uid && email) {
+            // 서버로 인증코드 검증 요청 전송
+            fetch('/api/user/verifypass', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({code: code, uid: uid, email: email})
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("해당 이름과 이메일로 계정을 찾을 수 없습니다.");
+                    }
+                    // 인증 성공 메시지 표시
+                    showResultValid(resultEmail, '이메일이 인증되었습니다.');
+                    isPassOk = true;
+
+                    document.getElementById('nextBtn').disabled = false;
+                    document.getElementById('nextBtn').addEventListener('click', function () {
+                        window.location.href = '/category/user/changepass';  // 비밀번호 변경 페이지로 이동
+                    });
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    showResultInvalid(resultEmail, '인증번호 검증 중 오류가 발생했습니다.');
+                });
+        } else {
+            showResultInvalid(resultEmail, '인증번호를 입력하세요.');
+        }
     });
 
     // 회원 정보 수정
@@ -237,3 +313,5 @@
             });
     });
 </script>
+<!--//<script type="text/javascript" th:src="@{/js/modifyinfo.js}" defer></script>-->
+

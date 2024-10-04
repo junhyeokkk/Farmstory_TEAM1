@@ -139,6 +139,13 @@ hr {
     border: 1px solid #bebebe;
 }
 
+#resultEmail{
+    position: absolute;
+    left: 284px;
+    top: 15px;
+
+
+}
 .note {
     font-weight: bold;
 }
