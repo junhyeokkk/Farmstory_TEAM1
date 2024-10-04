@@ -57,9 +57,9 @@
                             <td>[[${user.email}]]</td>
                             <td>[[${user.hp}]]</td>
                             <td>
-                                <select name="grade">
-                                    <option value="등급">2</option>
-                                </select>
+
+                                    [[${user.role}]]
+
                             </td>
                             <td>[[${user.regDate}]]</td>
                             <td>
@@ -74,7 +74,7 @@
                         <a><</a>
                     </th:block>
                     <th:block th:each="num:${#numbers.sequence(userPageResponseDTO.start, userPageResponseDTO.end)}">
-                        <a href="#">&#91;[[${num}]]&#93;</a>
+                        <a th:href="@{/admin/a_user(pg=${num})}" th:class="${num == userPageResponseDTO.pg} ? 'num current' : 'num'">&#91;[[${num}]]&#93;</a>
                     </th:block>
                     <th:block th:if="${userPageResponseDTO.next}">
                         <a>></a>
