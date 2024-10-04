@@ -19,7 +19,7 @@
                     <li><a th:href="@{/}" id="home">HOME</a></li>
                     <th:block th:if="${#authentication.principal.equals('anonymousUser')}">
                         <li><a th:href="@{/category/user/login}" id="login">로그인</a></li>
-                        <li><a th:href="@{/category/user/terms}" id="register">회원가입</a></li>
+                        <li><a th:href="@{/user/terms}" id="register">회원가입</a></li>
                         <li><a th:href="@{/article/community/faq(content='list')}" id="faq">고객센터</a></li>
                     </th:block>
                     <th:block th:if="${!#authentication.principal.equals('anonymousUser')}">
