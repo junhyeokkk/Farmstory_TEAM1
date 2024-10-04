@@ -48,8 +48,17 @@
                                 </th:block>
                             </th:block>
 
+
+
+
+
+
+
                             <th:block th:if="${pageResponseDTO.next}">
-                                <a   th:if="${pageResponseDTO.keyword == null}" th:href="@{/article/admin/community/cs(content='cslist',pg=${pageResponseDTO.end +1 })}" class="next" >다음</a>
+                                <a th:if="${pageResponseDTO.keyword == null}" th:href="@{/article/admin/community/cs(content='cslist',pg=${pageResponseDTO.end +1 })}" class="next" >다음</a>
+
+
+
                             </th:block>
                         </div>
                         <div class="paging" th:unless="${#authentication.principal.user.role !='ADMIN'}">
