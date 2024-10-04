@@ -1,5 +1,4 @@
 <link rel="stylesheet" th:href="@{/css/market_list.css}">
-
 <div class="market_list">
   <ul class="tabs">
     <li><a th:href="@{/market/plist}" th:class="${ProductPageResponseDTO.type eq null} ? 'tabs_item item item_current' : 'tabs_item item'" th:text="${ProductPageResponseDTO.type eq null} ? '전체('+ ${ProductPageResponseDTO.total} +')' : '전체'" >전체(10)</a></li>

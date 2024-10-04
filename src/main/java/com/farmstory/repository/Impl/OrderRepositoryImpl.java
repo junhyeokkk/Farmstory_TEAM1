@@ -25,11 +25,12 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
     private QProduct qProduct = QProduct.product;
     private QUser qUser = QUser.user;
     private QOrderItem qOrderItem = QOrderItem.orderItem;
+    private QpDescImgFile qpDescImgFile =  QpDescImgFile.pDescImgFile;
 
     @Override
     public Page<Tuple> selectOrderAllForList(PageRequestDTO requestDTO, Pageable pageable) {
         List<Tuple> orders = queryFactory
-                .select(qOrder, qOrderItem, qUser.name, qProduct)
+                .selectDistinct(qOrder, qUser.name, qProduct)
                 .from(qOrder)
                 .leftJoin(qOrderItem)
                 .on(qOrder.orderNo.eq(qOrderItem.orderNo))
@@ -47,6 +48,34 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
                 .fetchOne();
         log.info("total 나오니?> "  + total);
         log.info("Order 나오니?> "  + orders.toString());
+
+        return new PageImpl<>(orders, pageable, total);
+    }
+
+    @Override
+    public Page<Tuple> selectOrderMyForList(PageRequestDTO requestDTO, Pageable pageable) {
+        List<Tuple> orders = queryFactory
+                .selectDistinct(qOrder, qUser.name, qProduct, qpDescImgFile)
+                .from(qOrder)
+                .leftJoin(qOrderItem)
+                .on(qOrder.orderNo.eq(qOrderItem.orderNo))
+                .leftJoin(qUser)
+                .on(qOrder.uid.eq(qUser.uid))
+                .leftJoin(qProduct)
+                .on(qOrderItem.pNo.eq(qProduct.pNo))
+                .join(qpDescImgFile)
+                .on(qProduct.pNo.eq(qpDescImgFile.pNo))
+                .where(qUser.uid.eq(requestDTO.getUid()))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(qOrder.orderNo.desc())
+                .fetch();
+
+        long total = queryFactory.select(qOrder.count())
+                .from(qOrder)
+                .fetchOne();
+        log.info("myotal 나오니?> "  + total);
+        log.info("myOrder 나오니?> "  + orders.toString());
 
         return new PageImpl<>(orders, pageable, total);
     }
