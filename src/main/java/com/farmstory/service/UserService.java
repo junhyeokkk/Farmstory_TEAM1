@@ -209,6 +209,7 @@ public class UserService {
         if (result) {
             User user = modelMapper.map(userDTO, User.class);
             user.setRegDate(LocalDateTime.parse(userDTO.getRegDate()));
+            user.setName("탈퇴회원");
             log.info("이유저인가>?" + user);
             User savedUser = userRepository.save(user);
             UserDTO resultUser = modelMapper.map(savedUser, UserDTO.class);
