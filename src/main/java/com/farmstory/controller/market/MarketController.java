@@ -126,6 +126,7 @@ public class MarketController {
         log.info("cate : "+cate);
 
         List<CartDTO> cartList = cartService.findCartWithUid();
+        log.info("cartList : "+cartList);
 
         model.addAttribute("cate", cate);
         model.addAttribute("content", content);

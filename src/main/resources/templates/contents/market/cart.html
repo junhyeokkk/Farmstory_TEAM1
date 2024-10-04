@@ -185,7 +185,7 @@
       </tr>
       <tr th:unless="${#lists.size('cartList') eq 0}" th:each="cart : ${cartList}">
         <td><input type="checkbox" class="checkbox"/></td>
-        <td><img th:src="@{'/uploads/product/'+cart.productDTO.p_sName1}" alt="상품 이미지" /></td>
+        <td><img th:src="@{/uploads/product/}+${cart.productDTO.p_sName1}" alt="상품 이미지" /></td>
         <td th:text="${cart.productDTO.prodCate.prodCateName}">과일</td>
         <td th:text="${cart.productDTO.pName}">사과 500g</td>
         <td class="quantity-column">[[${cart.cartProdQty}]]</td>
