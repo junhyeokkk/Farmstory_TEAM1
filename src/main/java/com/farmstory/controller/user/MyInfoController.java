@@ -1,9 +1,12 @@
 package com.farmstory.controller.user;
 
 
+import com.farmstory.dto.CartDTO;
+import com.farmstory.dto.CateDTO;
 import com.farmstory.dto.PassResetDTO;
 import com.farmstory.dto.UserDTO;
 import com.farmstory.security.MyUserDetails;
+import com.farmstory.service.CartService;
 import com.farmstory.service.CategoryService;
 import com.farmstory.service.EmailService;
 import com.farmstory.service.UserService;
@@ -14,9 +17,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Controller
@@ -27,6 +32,7 @@ public class MyInfoController {
     private final UserService userService;
     private final EmailService emailService;
     private final CategoryService categoryService;
+    private final CartService cartService;
 
 
 
@@ -84,7 +90,22 @@ public class MyInfoController {
         }
     }
 
+    @GetMapping("/category/myInfo/cart")
+    public String cart(@RequestParam(value = "content", required = false) String content
+            , Model model){
 
+        CateDTO cate = categoryService.selectCategory("myInfo","cart");
+        log.info("cate : "+cate);
+
+        List<CartDTO> cartList = cartService.findCartWithUid();
+
+        model.addAttribute("cate", cate);
+        model.addAttribute("content", content);
+
+        model.addAttribute("cartList", cartList);
+
+        return "boardIndex";
+    }
 
 
 

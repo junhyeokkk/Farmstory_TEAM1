@@ -25,6 +25,10 @@ public class OrderService {
     private final ModelMapper modelMapper;
     private final OrderItemRepository orderItemRepository;
 
+    public void deleteOrder(int orderNo){
+        orderRepository.deleteById(orderNo);
+    }
+
     public OrderDTO insertOrder(OrderDTO orderDTO) {
 
         Order order = modelMapper.map(orderDTO, Order.class);
