@@ -59,8 +59,10 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
                 .from(qarticle)
                 .join(qcate)
                 .on(qcate.cateNo.eq(qarticle.cateNo))
-                .where(qcate.cateNo.eq(cateNo))
-                .fetchOne();
+                .where(qcate.cateNo.eq(cateNo)
+                .and(qarticle.isNotice.eq(false))
+                 )
+                .fetchOne().intValue();
 
         log.info("total : "+total);
 
@@ -100,13 +102,13 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         long total = queryFactory
                 .select(qarticle.count())
                 .from(qarticle)
-                .join(qcate)
+                .leftJoin(qcate)
                 .on(qcate.cateNo.eq(qarticle.cateNo))
                 .where(qcate.cateNo.eq(cateNo)
                         .and(qarticle.writer.eq(uid))
                         .and(qarticle.isNotice.eq(false))
                 )
-                .fetchOne();
+                .fetchOne().intValue();
 
         log.info("total : "+total);
 

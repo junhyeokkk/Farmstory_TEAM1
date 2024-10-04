@@ -31,6 +31,7 @@ public class PageRequestDTO {
     /////////////////////////////////////////
     private String uid; // admin user list
     private int pNo; // product list
+    private int orderNo;
     /////////////////////////////////////////
 
     // 정렬 요소, 페이지 사이즈 매개변수로 넣기 

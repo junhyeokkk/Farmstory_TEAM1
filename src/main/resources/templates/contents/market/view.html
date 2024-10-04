@@ -26,6 +26,10 @@
         stockInput.value = stock;
         quantity = stock;
       }
+      if(quantity < 1) {
+        stockInput.value = 1;
+        quantity = 1;
+      }
 
       if (!isNaN(price) && !isNaN(quantity)) {
         let total = value * quantity;
@@ -123,7 +127,9 @@
   <!-- 준혁 폼 추가-->
   <form id="cartform" action="/market/orderlist" method="post">
     <div class="product_info">
-      <img th:src="@{/uploads/product/}+${productDTO.p_sName1}" alt="상품 이미지" />
+      <div class="imgContainer">
+        <img th:src="@{'/uploads/product/'+${productDTO.p_sName1}}" alt="상품 이미지" />
+      </div>
       <div class="product_details" th:with="disPrice=${#numbers.formatDecimal(productDTO.price * (1 - productDTO.discount / 100.0),0,0)}">
         <p th:if="${!#authentication.principal.equals('anonymousUser')}" class="uid" hidden>[[${#authentication.principal.user.uid}]]</p>
         <p th:if="${#authentication.principal.equals('anonymousUser')}" class="uid" hidden></p>

@@ -40,6 +40,13 @@ public class ProductService {
         product.setP_sName1(p_sName1);
         product.setP_sName2(p_sName2);
         product.setP_sName3(p_sName3);
+        if(p_sName1 == null){
+            p_sName1 = "404이미지없음.png";
+        }if(p_sName2 == null){
+            p_sName2 = "404이미지없음.png";
+        }if(p_sName3 == null){
+            p_sName3= "404이미지없음.png";
+        }
         product.setProdCate(prodCate);
 
         ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
@@ -90,6 +97,13 @@ public class ProductService {
                     String p_sName1 = (tuple.get(1, String.class));
                     String p_sName2 = (tuple.get(2, String.class));
                     String p_sName3 = (tuple.get(3, String.class));
+            if(p_sName1 == null){
+                p_sName1 = "404이미지없음.png";
+            }if(p_sName2 == null){
+                p_sName2 = "404이미지없음.png";
+            }if(p_sName3 == null){
+                p_sName3= "404이미지없음.png";
+            }
                     prodCate prodCate = tuple.get(4, prodCate.class);
                     product.setP_sName1(p_sName1);
                     product.setP_sName2(p_sName2);
@@ -108,5 +122,14 @@ public class ProductService {
                 .productList(productList)
                 .total(total)
                 .build();
+    }
+
+    // order 후 재고 빼기
+    public void updateProductStock(int pNo, int stock){
+        productRepository.findById(pNo).ifPresent(product -> {
+            int resultstock = product.getStock()-stock;
+            product.setStock(resultstock);
+            productRepository.save(product);
+        });
     }
 }

@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -63,6 +64,13 @@ public class ProductService2 {
             String p_sName1 = (tuple.get(1, String.class));
             String p_sName2 = (tuple.get(2, String.class));
             String p_sName3 = (tuple.get(3, String.class));
+            if(p_sName1 == null){
+                p_sName1 = "404이미지없음.png";
+            }if(p_sName2 == null){
+                p_sName2 = "404이미지없음.png";
+            }if(p_sName3 == null){
+                p_sName3= "404이미지없음.png";
+            }
             prodCate prodCate = tuple.get(4, prodCate.class);
             product.setP_sName1(p_sName1);
             product.setP_sName2(p_sName2);
@@ -88,6 +96,13 @@ public class ProductService2 {
             String p_sName1 = (tuple.get(1, String.class));
             String p_sName2 = (tuple.get(2, String.class));
             String p_sName3 = (tuple.get(3, String.class));
+        if(p_sName1 == null){
+            p_sName1 = "404이미지없음.png";
+        }if(p_sName2 == null){
+            p_sName2 = "404이미지없음.png";
+        }if(p_sName3 == null){
+            p_sName3= "404이미지없음.png";
+        }
             prodCate prodCate = tuple.get(4, prodCate.class);
             product.setP_sName1(p_sName1);
             product.setP_sName2(p_sName2);
@@ -96,5 +111,35 @@ public class ProductService2 {
 
             ProductDTO productDTO = modelMapper.map(product, ProductDTO.class);
             return productDTO;
+    }
+    public List<ProductDTO> mainProduct(){
+        List<Tuple> products = productRepository.MainViewProduct();
+        if(!products.isEmpty()){
+            List<ProductDTO> productList = products.stream().map(tuple -> {
+                Product product = tuple.get(0, Product.class);
+                String p_sName1 = (tuple.get(1, String.class));
+                String p_sName2 = (tuple.get(2, String.class));
+                String p_sName3 = (tuple.get(3, String.class));
+                if(p_sName1 == null){
+                    p_sName1 = "404이미지없음.png";
+                }if(p_sName2 == null){
+                    p_sName2 = "404이미지없음.png";
+                }if(p_sName3 == null){
+                    p_sName3= "404이미지없음.png";
+                }
+                prodCate prodCate = tuple.get(4, prodCate.class);
+                product.setP_sName1(p_sName1);
+                product.setP_sName2(p_sName2);
+                product.setP_sName3(p_sName3);
+                product.setProdCate(prodCate);
+
+                return modelMapper.map(product, ProductDTO.class);
+            }).toList();
+            return productList;
+        }
+        return null;
+    }
+    public void deleteProductById(int pNo) {
+        productRepository.deleteById(pNo);
     }
 }

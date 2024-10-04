@@ -17,101 +17,66 @@
 <body>
 <div id="wrapper">
   <header th:replace="~{include/_header.html}"></header>
+  <script>
+    window.onload = function () {
+      const slides = document.getElementsByClassName("slideImg")
+      let current = 0;
+      let nextCurrent = 1;
 
+      setInterval(() => {
+        slides[current].style.left = '-100%';
+
+        current++;
+
+        current = current % 3;
+
+        slides[current].style.zIndex = 3;
+        slides[current].style.left = '0';
+        nextCurrent = (current + 1) % 3;
+
+        slides[nextCurrent].style.zIndex = 1;
+        slides[nextCurrent].style.left = '100%';
+      }, 4000);
+    }
+  </script>
   <main id="main cf">
     <section class="mainIn cf">
         <section class="main_adver">
-          <div class="slide">
-          </div>
           <img th:src="@{/images/main_slide_img_tit.png}" alt="사람과 자연을 사랑하는 팜스토리 건강한 흙과 친환경 작물만을 연구합니다.">
+          <ul class="slideImgs">
+            <li class="slideImg">
+              <img th:src="@{/images/main_slide_img1.jpg}" alt="사람과 자연을 사랑하는 팜스토리 건강한 흙과 친환경 작물만을 연구합니다.">
+            </li>
+            <li class="slideImg">
+              <img th:src="@{/images/main_slide_img2.jpg}" alt="사람과 자연을 사랑하는 팜스토리 건강한 흙과 친환경 작물만을 연구합니다.">
+            </li>
+            <li class="slideImg">
+              <img th:src="@{/images/main_slide_img3.jpg}" alt="사람과 자연을 사랑하는 팜스토리 건강한 흙과 친환경 작물만을 연구합니다.">
+            </li>
+          </ul>
           <div class="sideAd">
             <img th:src="@{/images/main_banner_txt.png}" alt="Grand Open">
             <img th:src="@{/images/main_banner_tit.png}" alt="팜스토리 오픈기념 30%할인">
             <img th:src="@{/images/main_banner_img.png}" alt="과일">
+            <img th:src="@{/images/main_banner_bg.jpg}" alt="Grand Open">
           </div>
         </section>
 
         <!-- 장보기 -->
         <div class="main_shopping">
           <img th:src="@{/images/main_market_tit.png}" alt="장보기 베스트 상품을 소개합니다.">
-          <article class="shopping_list">
+          <article class="shopping_list" th:each="product:${products}">
             <!-- @@@상품 임시데이터@@@ -->
-            <a th:href="@{/category/market/pview}">
+            <a th:href="@{/market/pview/{pNo}(pNo=${product.pNo})}">
               <div class="product">
-                <img th:src="@{/images/market_item1.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
+                <img th:src="@{/uploads/product/}+${product.p_sName1}" alt="상품이미지">
+                <p class="protype" th:text="${product.prodCate.prodCateName}">과일</p>
+                <p th:text="${product.pName}">사과</p>
                 <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
+                  <span class="price" th:text="${product.price} + '원'">900원</span>
+                  <span class="discount" th:text="${product.discount} + '%↓'">80%↓</span>
                 </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item2.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item3.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item4.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item5.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
-              </div>
-            </a>
-            <a th:href="@{/category/market/pview}">
-              <div class="product">
-                <img th:src="@{/images/market_item6.jpg}" alt="상품이미지">
-                <p class="protype">과일</p>
-                <p>사과</p>
-                <p>500g</p>
-                <div class="pricediscount">
-                  <span class="price">900원</span>
-                  <span class="discount">80%↓</span>
-                </div>
-                <p class="priceResult">3000원</p>
+                <p class="priceResult" th:text="${#numbers.formatDecimal(product.price * (1 - product.discount / 100.0),0,0)} + '원'">3000원</p>
               </div>
             </a>
             <!-- @@@상품 임시데이터 끝@@@ -->

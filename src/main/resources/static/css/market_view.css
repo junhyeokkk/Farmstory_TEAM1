@@ -1,8 +1,14 @@
 
 
 /* main */
+.market_view{
+    width: 762px;
+    height: auto;
+    box-sizing: border-box;
 
-.article h3:nth-of-type(1) {
+}
+
+.market_view > h3:nth-of-type(1) {
     width: 64.2px;
     height: 17px;
     margin-top: 41px;
@@ -11,18 +17,25 @@
     font-weight: 700;
     line-height: 19.36px;
     text-align: left;
+    margin-bottom: 13px;
 }
 
 .product_info {
     width: 762px;
     height: 270px;
+    box-sizing: border-box;
 }
 
-.product_info > img {
+.product_info > .imgContainer {
     width: 240px;
     height: 240px;
     margin-top: 11px;
 }
+.imgContainer img{
+    width: 240px;
+    height: 240px;
+}
+
 
 .product_details > table{
     width: 457.19px;
@@ -146,6 +159,7 @@ input[type='number']::-webkit-inner-spin-button {
     color: #FFFFFF !important;
     margin-left: 559px;
     margin-top: 10px;
+    border: 1px solid #769B0A;
 }
 
 .buy_now {
@@ -161,6 +175,8 @@ input[type='number']::-webkit-inner-spin-button {
     color: #FFFFFF !important;
     margin-left: 662px;
     margin-top: -40px;
+    border: 1px solid #960D1A ;
+
 }
 
 
@@ -177,7 +193,7 @@ input[type='number']::-webkit-inner-spin-button {
 
 .sample > img {
     width: 750px;
-    height: 1387px;
+    height: auto;
     margin-top: 16px;
 }
 

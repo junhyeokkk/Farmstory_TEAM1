@@ -61,6 +61,7 @@ public class ArticleController {
             log.info("end : " +pageResponseDTO.getEnd());
 
             log.info(pageResponseDTO.getDtoList());
+            log.info("pageResponseDTO : "+pageResponseDTO);
             model.addAttribute("notices", notices);
             model.addAttribute("pageResponseDTO",pageResponseDTO);
 
