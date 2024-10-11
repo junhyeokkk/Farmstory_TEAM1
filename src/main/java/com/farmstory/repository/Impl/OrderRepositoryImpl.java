@@ -46,8 +46,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         long total = queryFactory.select(qOrder.count())
                 .from(qOrder)
                 .fetchOne();
-        log.info("total 나오니?> "  + total);
-        log.info("Order 나오니?> "  + orders.toString());
 
         return new PageImpl<>(orders, pageable, total);
     }
@@ -74,8 +72,6 @@ public class OrderRepositoryImpl implements OrderRepositoryCustom {
         long total = queryFactory.select(qOrder.count())
                 .from(qOrder)
                 .fetchOne();
-        log.info("myotal 나오니?> "  + total);
-        log.info("myOrder 나오니?> "  + orders.toString());
 
         return new PageImpl<>(orders, pageable, total);
     }
