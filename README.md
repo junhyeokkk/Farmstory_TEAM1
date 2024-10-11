@@ -74,7 +74,7 @@
 3. Pull Request 제출
 
 ## 배포주소
-- [farmstory](http://52.79.87.164:8080/): farmstory 온라인 농산물 플랫폼 프로젝트 
+- [farmstory](http://3.36.126.38:8080/): farmstory 온라인 농산물 플랫폼 프로젝트 
 
 ---
 
