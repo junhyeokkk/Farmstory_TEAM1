@@ -108,7 +108,7 @@ Farmstory 프로젝트에 대해 궁금한 점이 있으시면 언제든지 연�
 ## 🖼️ 스크린샷
 
 ### 메인 페이지
-<img src="./메인스크린샷.PNG" alt="ERD 다이어그램" width="500px">
+<img src="./메인 스크린샷.PNG" alt="ERD 다이어그램" width="500px">
 
 ### 관리자 페이지
 <img src="./관리자화면.PNG" alt="ERD 다이어그램" width="500px">
