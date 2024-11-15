@@ -43,12 +43,6 @@
 
 ---
 
-## 📂 프로젝트 구조
-📦 src ┣ 📂 main ┃ ┣ 📂 java ┃ ┃ ┣ 📂 com.farmstory.controller ┃ ┃ ┣ 📂 com.farmstory.service ┃ ┃ ┣ 📂 com.farmstory.domain ┃ ┃ ┗ 📂 com.farmstory.repository ┃ ┣ 📂 resources ┃ ┃ ┣ 📂 static ┃ ┃ ┣ 📂 templates ┃ ┃ ┗ application.yml ┣ 📂 test ┣ 📜 README.md
-
-
----
-
 ## 🌟 주요 기능
 
 1. **메인페이지**
