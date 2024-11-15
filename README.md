@@ -108,10 +108,10 @@ Farmstory 프로젝트에 대해 궁금한 점이 있으시면 언제든지 연�
 ## 🖼️ 스크린샷
 
 ### 메인 페이지
-<img src="https://via.placeholder.com/800x400.png?text=Main+Page" alt="Main Page" width="700px">
+<img src="./메인스크린샷.png" alt="ERD 다이어그램" width="500px">
 
 ### 관리자 페이지
-<img src="https://via.placeholder.com/800x400.png?text=Admin+Page" alt="Admin Page" width="700px">
+<img src="./관리자화면.png" alt="ERD 다이어그램" width="500px">
 
 ## 배포주소
 - [farmstory](http://3.36.126.38:8080/): farmstory 온라인 농산물 플랫폼 프로젝트 
