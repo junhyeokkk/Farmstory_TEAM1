@@ -119,6 +119,9 @@ Farmstory 프로젝트에 대해 궁금한 점이 있으시면 언제든지 연�
 ### 관리자 페이지
 <img src="https://via.placeholder.com/800x400.png?text=Admin+Page" alt="Admin Page" width="700px">
 
+## 배포주소
+- [farmstory](http://3.36.126.38:8080/): farmstory 온라인 농산물 플랫폼 프로젝트 
+
 ---
 
 ✨ **Farmstory 프로젝트에 관심을 가져주셔서 감사합니다!** ✨
