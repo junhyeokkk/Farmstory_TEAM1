@@ -84,9 +84,6 @@
    - **Backend**: Spring Boot 애플리케이션 실행
    - **Frontend**: HTML, CSS, JavaScript 로드
 
-3. **배포 주소**
-   - [Farmstory 플랫폼 바로가기](http://3.36.126.38:8080/)
-
 ---
 
 ## 🤝 기여하기
@@ -100,8 +97,7 @@ Farmstory 프로젝트에 기여하고 싶으신 분은 다음 단계를 따라�
 
 ## 📫 문의하기
 Farmstory 프로젝트에 대해 궁금한 점이 있으시면 언제든지 연락해 주세요!
-- **Email**: your_email@example.com
-- **GitHub Issues**: [문의 및 버그 리포트](https://github.com/your-repo/issues)
+- **Email**: loveu9911111@gmail.com
 
 ---
 
@@ -113,8 +109,6 @@ Farmstory 프로젝트에 대해 궁금한 점이 있으시면 언제든지 연�
 ### 관리자 페이지
 <img src="./관리자화면.PNG" alt="ERD 다이어그램" width="500px">
 
-## 배포주소
-- [farmstory](http://3.36.126.38:8080/): farmstory 온라인 농산물 플랫폼 프로젝트 
 
 ---
 
